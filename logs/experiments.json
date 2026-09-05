@@ -401,6 +401,102 @@
         "bugfix",
         "rcj-lab"
       ]
+    },
+    {
+      "date": "2026-09-05",
+      "title": "全生态治理优化（AGENTS.md 重写 / 未提交清理 / 文档同步 / CI 补齐 / 归档）",
+      "summary": "按《RCJ 产品生态全面分析报告-2026-09-05》风险清单逐项落地：①AGENTS.md 重写——仓库地图更新为 7 仓库（rcj-lab/rcj-exam-hub/facetalk/rcj-supportly/rcj-dinner/rcj-shop/rcj-stack），必读清单改为现存文档，铁律保留并修正 experiments.json 路径；②补录本文件 09-03~09-05 条目；③未提交改动清理——rcj-lab 提交角色源图 + 归档已应用的一次性脚本 fix_order.py，facetalk 清理 9 个引用已移除 interview/接口配置的过期自测（保留 11 个实测通过的，含 CI 引用的 4 个），rcj-supportly 还原换行符伪改动，rcj-stack 提交 MANUAL.md；④exam-hub README 修订为 shop 已独立口径；⑤总纲/技术架构文档标注最新生态视图；⑥rcj-supportly/rcj-stack 补齐 CI workflow；⑦projects/ 遗留项目与根目录临时文件归档至 _archive/；⑧rcj-dinner 更换默认 admin 密码。",
+      "type": "chore",
+      "tags": [
+        "all-repos",
+        "governance",
+        "cleanup",
+        "docs"
+      ]
+    },
+    {
+      "date": "2026-09-05",
+      "title": "rcj-shop 打磨收口：README + 学员作品展示 + 首页导航",
+      "summary": "shop.955827.xyz 上线后收口：新增 README（定位/支付/部署说明）；建站服务板块新增学员作品展示（021100.xyz 辅警备考工具箱 + dinner.955827.xyz 情侣点餐，折叠条记忆用户选择，真实截图）；首页导航移除箭头（EN/JA/ZH），Home 指向主站 955827.xyz；meta description 随语言切换；sitemap.xml + robots.txt（放行搜索引擎、拦截 AI 训练爬虫）。提交 3964df0/f648ab1/1229e2c/b7347c4/5198474/caa3477/41dc79a/ea19161。",
+      "type": "feature",
+      "tags": [
+        "shop",
+        "seo",
+        "showcase",
+        "docs"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "title": "rcj-dinner 体验升级：水单小票 + PWA + 打印机动效",
+      "summary": "dinner.955827.xyz 提交后视觉与移动端升级：下单后热敏/外卖小票式「水单」回执（逐行吐纸动效、80mm 打印尺寸修复、后台每单水单+菜品时长快照）；加入 PWA（manifest + service worker + 图标）并适配手机端 UI；首屏标题 clamp 响应式放大。媒体存储默认 D1 base64（3 天清理），R2 可选。提交 8a4d604/ad2499a/58234aa/04411a7/bce6a61/c862c18/e7a67ac/92ba2dc/cc7a91e/043b0e7/026d8da。",
+      "type": "feature",
+      "tags": [
+        "dinner",
+        "pwa",
+        "receipt",
+        "mobile"
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "title": "rcj-dinner 上线：情侣点餐互动系统（白标可售）",
+      "summary": "新增 rcj-dinner 仓库并部署 dinner.955827.xyz：邀请码白名单（localStorage 长期保存，带码链接首访后免码直进）→ 点菜 + 录歌(≤60s) + 参考图 → Resend 双向邮件（主人新单 + 客人回执）→ 后台试听/开始做/换歌/上菜；四层反垃圾（邀请码门禁/邮箱绑定/限流/honeypot）；安全加固（限流收紧 + admin 会话缩短 + 邀请码防误删）；GitHub Actions 自动化（gc-keepalive 每 6 小时清理 + backup 每周全量备份）；一键部署脚本 + README 密钥表。媒体默认 D1 base64、R2 可选。提交 9b3a646~11cdac5/ab633c8/a301aa6/ed08dbc 等。",
+      "type": "feature",
+      "tags": [
+        "dinner",
+        "launch",
+        "whitelabel",
+        "email"
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "title": "exam-hub /shop 完全迁移至 shop.955827.xyz",
+      "summary": "Exam Hub 的 /shop 目录与 PayPal Functions 彻底移除，链接统一指向 shop.955827.xyz：先 301 /shop/* 过渡旧索引，再彻底删除 301 规则与 /shop/ 目录；页脚购物车图标相对死链 shop/ 改为 https://shop.955827.xyz/（af71223）。Shop 已作为独立子域站存在（rcj-shop 仓库，闲鱼置顶 + PayPal live 回落 USD）。提交 fa1d4ef/a64bc12/f997362/9bd4379/af71223。",
+      "type": "refactor",
+      "tags": [
+        "exam",
+        "shop",
+        "migration",
+        "cleanup"
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "title": "rcj-lab 主站微调：购物车跳 shop + b.ai 链接修正",
+      "summary": "955827.xyz 底部购物车图标跳转改为 https://shop.955827.xyz（219db07）；API 导航页 b.ai 入口链接改为 https://chat.b.ai/chat（e56ed31）。09-04 进一步从 sitemap.xml 移除 /api/ 与 /log 非内容端点，避免索引污染（eb13b56）。",
+      "type": "fix",
+      "tags": [
+        "hub",
+        "api",
+        "shop",
+        "seo"
+      ]
+    },
+    {
+      "date": "2026-09-02",
+      "title": "rcj-stack demo 迁移独立 CF 账号 + 操作手册页",
+      "summary": "rcj-stack 模板收口：demo 迁移到专用 Cloudflare 账号并解绑真实 D1（改用空 demo 库）；新增可免费查看的操作手册页 manual.html（首页加入口）；升级 demo landing（hero + 3 模块卡 + feature strip + CTA）；admin demo host 自动填充公开演示密码并自动登录。提交 e1760e0/64d6f91/f932641/ccfd1bf。",
+      "type": "feature",
+      "tags": [
+        "stack",
+        "demo",
+        "template",
+        "docs"
+      ]
+    },
+    {
+      "date": "2026-09-02",
+      "title": "rcj-shop 商业化收口：支付优先级反转 + Sing to Me 重点化",
+      "summary": "shop.955827.xyz 建站期：支付优先级反转（闲鱼置顶主按钮、PayPal 降为次选并标注海外，移除咸鱼 SVG 图标）；Sing to Me 设为购买栏重点（文案去性别/时长限制、默认英文优先、详情折叠）；价格上调至 ¥99/¥299/¥49；Cloudflare-only 定位条（免备案、全球 CDN）；Live Demo 入口指向 rcj-stack demo；客服模块移除并统一由 rcj-supportly 承接（删 widget.js 死代码）。提交 7edfe8c~b1caffd。",
+      "type": "feature",
+      "tags": [
+        "shop",
+        "pay",
+        "sing-to-me",
+        "cleanup"
+      ]
     }
   ]
 }
