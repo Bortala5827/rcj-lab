@@ -5,7 +5,3 @@
 /assets/*
   Cache-Control: public, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
-/solospeak/*
-  Permissions-Policy: microphone=(self)
-/letout/*
-  Permissions-Policy: microphone=(self)

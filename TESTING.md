@@ -32,7 +32,7 @@ projects: [{
 ### 1. Playwright Smoke + 功能（`tests/smoke.spec.ts`）
 覆盖：
 - **页面**：每个目标页可打开、HTTP 状态 < 400、`<title>` 非空、主体有可见内容。
-- **导航**：首页主导航内部链接可达；子路径（`/solospeak/`、`/letout/`、`/training/`）可达且刷新后保持一致。
+- **导航**：首页主导航内部链接可达；子路径（`/training/`）；speak 系列已迁至 speak.955827.xyz可达且刷新后保持一致。
 - **功能（不虚构）**：SoloSpeak / LetOut 的麦克风音频能力（用假设备 `--use-fake-device-for-media-stream`，授权下能获取轨道）。
 - **Console**：`console.error` / `pageerror` 实时收集，失败即报错（明确标记的除外）。
 - **Network**：`requestfailed`、响应 `>= 400` 的失败请求实时收集。
@@ -63,8 +63,8 @@ projects: [{
 | 资产库页 | `/assets.html` | 七段结构 Asset Hub |
 | 归档页 | `/archive.html` | |
 | 原则页 | `/principles.html` | |
-| SoloSpeak 子路径 | `/solospeak/` | 含音频 |
-| LetOut 子路径 | `/letout/` | 含音频 |
+| SoloSpeak | `speak.955827.xyz/solospeak/` | 含音频 |
+| LetOut | `speak.955827.xyz/letout/` | 含音频 |
 | 训练指南内容页 | `/training/` | |
 
 `ECOSYSTEM_LIVE`：生态内独立子站（不同仓库 / 子域），仅本地显式 `TEST_LIVE_ECOSYSTEM=1` 时纳入（CI 默认不命中线上站点）。

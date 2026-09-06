@@ -5,8 +5,8 @@
 
 const TARGETS = [
   { id: 'hub',   name: 'RCJ Lab 主站',   url: 'https://955827.xyz/' },
-  { id: 'solo',  name: 'SoloSpeak',      url: 'https://955827.xyz/solospeak/' },
-  { id: 'letout',name: 'LetOut',         url: 'https://955827.xyz/letout/' },
+  { id: 'solo',  name: 'SoloSpeak',      url: 'https://speak.955827.xyz/solospeak/' },
+  { id: 'letout',name: 'LetOut',         url: 'https://speak.955827.xyz/letout/' },
   { id: 'exam',  name: 'Exam Hub',       url: 'https://exam.955827.xyz/' },
   { id: 'fj',    name: '辅警题库',        url: 'https://exam.955827.xyz/fj' },
   { id: 'xf',    name: '消防题库',        url: 'https://exam.955827.xyz/xf' },

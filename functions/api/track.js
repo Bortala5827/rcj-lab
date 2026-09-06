@@ -1,6 +1,6 @@
 // rcj-lab · 统一访问统计埋点接收端（公开，无需后台登录）
 // POST/GET /api/track?site=xxx  →  写入 rcj-analytics-d1.visits(site, day, ip, n)
-// 所有站点（hub/solospeak/letout/training/aux/xf/facetalk/exam）共用一个库、一张表、一条管道。
+// 所有站点（hub/training/aux/xf/facetalk/exam/speak 系列）共用一个库、一张表、一条管道。
 // Token 仅存服务端 env（CF_API_TOKEN + CF_ACCOUNT_ID），仅供本 Function 写统一库使用。
 
 const SITES = ['hub', 'solospeak', 'letout', 'training', 'aux', 'xf', 'facetalk', 'exam', 'shop'];

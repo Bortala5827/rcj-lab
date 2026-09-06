@@ -1,9 +1,0 @@
-{
-  "name": "LetOut 大声说",
-  "short_name": "LetOut",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#fbf3ee",
-  "theme_color": "#e07850",
-  "description": "低连接时代的情绪出口 —— 说出来、喊出来、唱出来、哭出来、安静一下。"
-}

@@ -14,8 +14,8 @@ anywhere can use it without a language barrier — no account or region lock.
 | Product | Path | What it does |
 | --- | --- | --- |
 | **RCJ Lab** | `/` | Brand lab, personal homepage, and AI / LLM API navigation |
-| **LetOut** (大声说) | `/letout` | "Speak out" — a private emotional voice outlet & journal |
-| **SoloSpeak** (独声) | `/solospeak` | "Solo voice" — a speaking & pronunciation practice tool for yourself |
+| **LetOut** (大声说) | `speak.955827.xyz/letout` | "Speak out" — 已迁至 speak 系列站 |
+| **SoloSpeak** (独声) | `speak.955827.xyz/solospeak` | "Solo voice" — 已迁至 speak 系列站 |
 | **API Portal** | `/api` | Curated navigation of large-model / LLM API providers |
 | **Assets** | `/assets` | Shared asset directory |
 
