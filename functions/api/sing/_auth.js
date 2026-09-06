@@ -35,6 +35,7 @@ export function getCookie(req, name) {
 }
 
 export async function verifyAuth(request, env) {
+  // 1) HMAC cookie（登录后由 login.js 下发，7 天有效）
   const cookie = getCookie(request, 'rcj_admin');
   if (cookie && env.ADMIN_PASSWORD) {
     const [ts, sig] = cookie.split('.');
@@ -42,5 +43,10 @@ export async function verifyAuth(request, env) {
     if (Date.now() - Number(ts) > 7 * DAY) return false; // 7 天过期
     if ((await hmac(ts, env.ADMIN_PASSWORD)) === sig) return true;
   }
+  // 2) 一次性 ADMIN_KEY 深链（与主后台 admin/* 保持一致，避免深链进后台时 sing 列表/音频 401）
+  const url = new URL(request.url);
+  const key = url.searchParams.get('admin') || '';
+  const envKey = String(env.ADMIN_KEY || '').trim();
+  if (envKey && String(key).trim() === envKey) return true;
   return false;
 }

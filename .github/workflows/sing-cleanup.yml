@@ -1,0 +1,23 @@
+name: Sing to Me 自动清理
+
+# 每周一 09:17（北京时间）自动清理已处理超过 30 天的 Sing to Me 请求 + 其 R2 语音。
+# 拒绝( rejected )的条目：音频在拒绝时已被即时删除，这里只清 DB 行，避免无限堆积。
+# 鉴权：复用主后台的 ADMIN_KEY 深链（functions/api/sing/_auth.js 已支持 ?admin=）。
+on:
+  schedule:
+    - cron: "17 1 * * 1"   # UTC 01:17 = 北京 09:17，每周一
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Sing cleanup
+        run: |
+          set -e
+          URL="https://955827.xyz/api/sing?clean=1&admin=${{ secrets.ADMIN_KEY }}"
+          echo "POST $URL"
+          curl -fsS -X GET "$URL" -w "\nHTTP %{http_code}\n" || echo "cleanup call failed (non-fatal)"
