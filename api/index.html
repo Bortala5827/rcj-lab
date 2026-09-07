@@ -602,6 +602,8 @@
 .btn-cart:hover>.icon-cart{transform:scale(1.2)}
 .btn-cart:hover>.icon-cart path{fill:rgb(186,34,233)}
 .quantity{display:none}
+/* 卡片整体可点击（去掉独立申请按钮后） */
+a.featured-card, a.alt-card, a.oc-card { text-decoration: none; color: inherit; }
 </style>
 </head>
 <body>
@@ -679,7 +681,7 @@
     <div class="key-subsection">
       <div class="key-group-title">⭐ 首推 <span class="sub">最稳，一个 Key 覆盖多数需求</span></div>
       <div class="featured-grid">
-        <div class="featured-card" style="--brand:#4D6BFE">
+        <a class="featured-card" style="--brand:#4D6BFE" href="https://platform.deepseek.com/" target="_blank" rel="noopener">
           <div class="fc-head">
             <div class="fc-brand">
               <span class="fc-mark">D</span>
@@ -688,9 +690,8 @@
             <span class="fc-badge">送额度</span>
           </div>
           <p class="fc-desc">DeepSeek-V3 对话 + R1 推理，代码/数学/多模态都能打。</p>
-          <a class="fc-btn" href="https://platform.deepseek.com/" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="featured-card" style="--brand:#7C3AED">
+        </a>
+        <a class="featured-card" style="--brand:#7C3AED" href="https://cloud.siliconflow.cn/i/JXohBRlG" target="_blank" rel="noopener">
           <div class="fc-head">
             <div class="fc-brand">
               <span class="fc-mark">S</span>
@@ -699,9 +700,8 @@
             <span class="fc-badge">送体验金</span>
           </div>
           <p class="fc-desc">Qwen / DeepSeek / GLM 全托管，一个 Key 调用百款模型。</p>
-          <a class="fc-btn" href="https://cloud.siliconflow.cn/i/JXohBRlG" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="featured-card" style="--brand:#FF6B35">
+        </a>
+        <a class="featured-card" style="--brand:#FF6B35" href="https://platform.moonshot.cn/" target="_blank" rel="noopener">
           <div class="fc-head">
             <div class="fc-brand">
               <span class="fc-mark">K</span>
@@ -710,9 +710,8 @@
             <span class="fc-badge">送 ¥15</span>
           </div>
           <p class="fc-desc">kimi-k3，100 万 token 上下文，丢一整本书都能聊。</p>
-          <a class="fc-btn" href="https://platform.moonshot.cn/" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="featured-card" style="--brand:#00A65A">
+        </a>
+        <a class="featured-card" style="--brand:#00A65A" href="https://open.bigmodel.cn/usercenter/apikeys" target="_blank" rel="noopener">
           <div class="fc-head">
             <div class="fc-brand">
               <span class="fc-mark">G</span>
@@ -721,91 +720,75 @@
             <span class="fc-badge">送 2000 万 Tokens</span>
           </div>
           <p class="fc-desc">新用户直送 2000 万 Tokens，glm-4-flash 长期免费无限量，glm-4-plus / glm-4.5 推理写作直接调用。</p>
-          <a class="fc-btn" href="https://open.bigmodel.cn/usercenter/apikeys" target="_blank" rel="noopener">申请 Key</a>
-        </div>
+        </a>
       </div>
 
       <div class="key-group-title">🔄 备选 <span class="sub">国内直连，多一个选择</span></div>
       <div class="alt-grid">
-        <div class="alt-card">
+        <a class="alt-card" href="https://dots.ai/platform/apikeys" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">小红书 dots</span><span class="ac-free">限时免费</span></div>
           <p class="ac-desc">dots-llk 系列，中文日常对话最自然，注册即拿 Key。</p>
-          <a class="ac-btn" href="https://dots.ai/platform/apikeys" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://www.sensenova.cn/token-plan" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">SenseNova</span><span class="ac-free">限时免费</span></div>
           <p class="ac-desc">SenseChat-5 系列，支持多模态，Token Plan 限时免费。</p>
-          <a class="ac-btn" href="https://www.sensenova.cn/token-plan" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://platform.xiaomimimo.com?ref=QJJNSQ" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">小米 MiMo</span><span class="ac-free">送 ¥10</span></div>
           <p class="ac-desc">MiMo-7B 系列，推理强，注册送体验金。</p>
-          <a class="ac-btn" href="https://platform.xiaomimimo.com?ref=QJJNSQ" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://www.scnet.cn/ui/console/index.html#/llm/apikeys" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">国家超算互联网</span><span class="ac-free">注册查看</span></div>
           <p class="ac-desc">DeepSeek / Qwen 等，国家队算力，注册查看免费额度。</p>
-          <a class="ac-btn" href="https://www.scnet.cn/ui/console/index.html#/llm/apikeys" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://platform.stepfun.com/" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">阶跃星辰 StepFun</span><span class="ac-free">送体验金</span></div>
           <p class="ac-desc">step-2 系列，多模态强，图像/视频解析突出。</p>
-          <a class="ac-btn" href="https://platform.stepfun.com/" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://api.minimaxi.com/" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">MiniMax 海螺</span><span class="ac-free">送体验金</span></div>
           <p class="ac-desc">abab6.5 系列 + TTS 语音合成强，多模态全。</p>
-          <a class="ac-btn" href="https://api.minimaxi.com/" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://console.volcengine.com/ark" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">火山方舟</span><span class="ac-free">20+ 模型各赠 50 万</span></div>
           <p class="ac-desc">doubao-pro / DeepSeek-V3 等 20+ 款模型各送 50 万 Tokens，字节大模型平台，一个 Key 调全家桶。</p>
-          <a class="ac-btn" href="https://console.volcengine.com/ark" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://console.cloud.tencent.com/tokenhub/" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">腾讯混元</span><span class="ac-free">28 款共 2800 万 Tokens</span></div>
           <p class="ac-desc">hunyuan-turbos / hunyuan-lite / Hy3 / MiniMax-M3 等，TokenHub 平台 OpenAI 兼容，新用户每模型赠 100 万，有效期 1 年。</p>
-          <a class="ac-btn" href="https://console.cloud.tencent.com/tokenhub/" target="_blank" rel="noopener">申请</a>
-        </div>
-        <div class="alt-card">
+        </a>
+        <a class="alt-card" href="https://bailian.console.aliyun.com/" target="_blank" rel="noopener">
           <div class="ac-head"><span class="ac-name">阿里云百炼</span><span class="ac-free">7000 万 + 全线免费</span></div>
           <p class="ac-desc">通义千问全系（Qwen3.8-Max / Plus / Flash / Coder / VL）全线免费调用，新用户赠 7000 万 Tokens + 100 张生图 + 50 秒视频，有效期 180 天，OpenAI 兼容。</p>
-          <a class="ac-btn" href="https://bailian.console.aliyun.com/" target="_blank" rel="noopener">申请</a>
-        </div>
+        </a>
       </div>
 
       <div class="key-group-title">🌐 海外 <span class="sub">部分需代理 · 一句话简介</span></div>
       <div class="overseas-grid">
-        <div class="oc-card">
+        <a class="oc-card" href="https://chat.b.ai/chat" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">b.ai</span><span class="badge region">国内直连</span></div>
           <p class="oc-desc">聚合网关，免费档可用 deepseek-chat / glm-4 等。</p>
-          <a class="oc-btn" href="https://chat.b.ai/chat" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="oc-card">
+        </a>
+        <a class="oc-card" href="https://apihub.agnes-ai.com" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">Agnes AI</span><span class="badge region">国内直连</span></div>
           <p class="oc-desc">新加坡节点，国内直连，claude / gpt 系多模态+推理。</p>
-          <a class="oc-btn" href="https://apihub.agnes-ai.com" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="oc-card">
+        </a>
+        <a class="oc-card" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">Google Gemini</span><span class="badge region-os">需海外上网</span></div>
           <p class="oc-desc">gemini-2.0-flash 等，AI Studio 申请 Key 即用。</p>
-          <a class="oc-btn" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="oc-card">
+        </a>
+        <a class="oc-card" href="https://console.groq.com/keys" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">Groq</span><span class="badge region-os">需海外上网</span></div>
           <p class="oc-desc">llama-3.3-70b 等，LPU 架构推理极快，免费档够用。</p>
-          <a class="oc-btn" href="https://console.groq.com/keys" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="oc-card">
+        </a>
+        <a class="oc-card" href="https://openrouter.ai/keys" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">OpenRouter</span><span class="badge region">限流明显</span></div>
           <p class="oc-desc">模型最全，免费档可用 deepseek-r1 等但限流明显。</p>
-          <a class="oc-btn" href="https://openrouter.ai/keys" target="_blank" rel="noopener">申请 Key</a>
-        </div>
-        <div class="oc-card">
+        </a>
+        <a class="oc-card" href="https://build.nvidia.com/" target="_blank" rel="noopener">
           <div class="oc-top"><span class="oc-name">NVIDIA NIM</span><span class="badge region">限流明显</span></div>
           <p class="oc-desc">llama / mistral 等，英伟达官方平台，免费额度少限流严。</p>
-          <a class="oc-btn" href="https://build.nvidia.com/" target="_blank" rel="noopener">申请 Key</a>
-        </div>
+        </a>
       </div>
     </div>
 
