@@ -3,6 +3,18 @@
   "experiments": [
     {
       "date": "2026-09-07",
+      "title": "shop 清理构建残留 + supportly 补公开首页",
+      "summary": "shop index.html 全局删除 234 个 data-page-node-id 构建残留属性，减重 9.7KB（125.6KB→115.9KB），标签结构完整、内联 JS 语法通过、浏览器实测渲染正常。supportly 新增 public/index.html 公开首页（产品介绍+核心特性+widget嵌入示例+admin入口，teal风格），补 robots.txt（Disallow /admin.html）和 sitemap.xml。两个仓库均已提交推送。",
+      "type": "chore",
+      "tags": [
+        "shop",
+        "supportly",
+        "performance",
+        "seo"
+      ]
+    },
+    {
+      "date": "2026-09-07",
       "title": "API 导航站：去掉独立申请按钮，卡片整体可点击直达官网",
       "summary": "用户反馈卡片底部独立的申请/申请 Key 按钮多此一举，要求去掉按钮，点击卡片任意位置直接跳转对应官网。实施：首推4张、备选9张、海外6张共19张卡片，外层div改为a标签并携带原按钮href，删除内部按钮元素，CSS补链接样式重置。node --check语法通过，本地Chrome实测渲染正常、19张卡片均为a标签且无残留按钮。",
       "type": "feature",
