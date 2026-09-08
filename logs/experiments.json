@@ -1,6 +1,35 @@
 {
-  "updated": "2026-09-07",
+  "updated": "2026-09-08",
   "experiments": [
+    {
+      "date": "2026-09-08",
+      "title": "新建 rcj-card：声音名片（语音自我介绍 + 二维码嵌入简历）",
+      "summary": "新建 _repos/rcj-card 仓库，定位为求职工具线第三个产品（exam 刷题 → facetalk 对练 → card 投递）。核心流程：用户填写姓名/职位/简介 → 录音（≤60s，复用 rcj-audio-core 录音+实时频谱+自动去静音）→ 生成名片页（波形播放器+头像+简介+二维码）。存储采用 R2 主存音频 + D1 存元数据（r2_key 关联），无 R2 时 fallback 到 D1 base64。纯前端零依赖二维码生成器（自研 QR 算法，byte 模式纠错 M，版本 1-10）。合规定位：个人表达工具，非社交平台，无陌生人内容传播，无需实名。竞品分析：创客贴做的是名片视觉设计模板，我们做的是录音+在线播放+二维码，方向不同。9 个 JS 文件 node --check 全部通过，本地 Chrome 实测：表单渲染正常、二维码生成正常（3290B PNG）、card.html 无 ID 时正确显示'名片不存在'。待部署：需创建 D1 数据库、绑定 R2 bucket、部署到 Cloudflare Pages（card.955827.xyz）。",
+      "type": "feature",
+      "tags": [
+        "rcj-card",
+        "voice-card",
+        "job-tool",
+        "audio",
+        "r2",
+        "d1",
+        "qrcode"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "title": "shop 接入飞书多维表格：教学运营数据收集端（课程排期/报名登记/收款跟进）",
+      "summary": "用户要求把飞书多维表格以克制方式接入 shop.955827.xyz，用于教学运营（会议安排、先听课、后付款）。实施：①飞书新建 Base「RCJ教学运营」三表——课程排期（期次/日期/时间/主题/讲师/会议链接/状态）、报名登记（姓名/微信/手机/意向课程/来源/已听课/报名时间）、收款跟进（学员/关联报名/关联课程/应付/定金/余款/收款状态/后台订单号/交付物，双向 link 关联，定金+余款=应付守恒），写入 mock 并回读验证；报名表单开启匿名分享（anyone+免登录），收款看板按收款状态分组。②shop 首页克制接入：stats-bar 后加一行小字入口「免费公开课·先听课，再决定 →」（data-i18n classEntry，三语），不加卡片/区块。③新建 course.html 单页（三语 i18n：hero/排期卡片/适合谁/转化区回商城；3 期静态排期含状态徽标；报名按钮指向飞书表单分享链接；页脚仅 ©RCJ9527）。验证：两页内联 JS node --check 通过，本机 Chrome 实测 course.html 渲染/三语切换/报名链接正确、首页入口行显示正常（本地 /api/paypal/config 404 与埋点超时为环境预期，非本次改动）。",
+      "type": "feature",
+      "tags": [
+        "shop",
+        "feishu",
+        "lark-base",
+        "course",
+        "teaching",
+        "i18n"
+      ]
+    },
     {
       "date": "2026-09-07",
       "title": "shop 清理构建残留 + supportly 补公开首页",
@@ -518,6 +547,30 @@
         "shop",
         "pay",
         "sing-to-me",
+        "cleanup"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "title": "facetalk 首页文案做减法：删 SEO 说明墙 + 精简关于弹窗",
+      "summary": "移除首页 .pitch 长文案墙（hero 已说清，内联说明属冗余追溯），同步删除对应 CSS；关于弹窗去掉「相遇→试音→匹配→成长」四段叙事与重复安全段，仅留一句 lead + 3 条要点 + 1 条安全说明。目的：从「说明文」回归「工具」的简洁实用。SEO 由 title/meta/OG/JSON-LD 承载，未损。未改任何匹配逻辑与 D1。",
+      "type": "cleanup",
+      "tags": [
+        "facetalk",
+        "ux",
+        "copy",
+        "cleanup"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "title": "facetalk 工具化深化：历史面板折叠 + 去装饰 emoji",
+      "summary": "参照 Linear/Raycast/Tandem 等优秀工具的「界面退到背景、只显动作」原则，对 facetalk 做第二刀减法：(1) 原默认展开的「我的筛选状态」三块历史面板改为整块默认折叠，仅「收到的申请」(双向匹配关键动作) 常驻，且有未处理申请时 JS 自动展开整块+红点；(2) 「我发布的需求/我发出的申请」改为嵌套子折叠，纯历史默认收起，不再铺满屏幕；(3) 移除 8 处区块标题的装饰性 emoji（📊📋📨📤🔍✅⭐ 等），贴合反装饰 icon 偏好；精简 pubHint 双从句为单句。语法校验通过（app.js/i18n.js node --check OK）。未改匹配逻辑与 D1。",
+      "type": "cleanup",
+      "tags": [
+        "facetalk",
+        "ux",
+        "toolification",
         "cleanup"
       ]
     }
