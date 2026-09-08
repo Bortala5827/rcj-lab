@@ -72,6 +72,19 @@
       ]
     },
     {
+      "date": "2026-09-08",
+      "title": "course.html 重写贴合实际（去公考，改 0-1 建站）+ shop 桥接按钮高亮修复",
+      "summary": "用户反馈：①免费公开课内容讲公考申论/辅警面试/结构化面试，非其擅长，要求贴合实际（0-1 搭建网站，内容基本即 exam-hub guides/ 建站教程）；②从课程页点「去定制你的题库」进 shop 后，按钮点了没反应。修复：course.html 三语 i18n + 排期卡片（用 AI 工具 0 代码做网页 / Cloudflare 免费部署 / 绑定域名变品牌）+ 适合谁（想拥站点/建站兴趣/零基础）+ 转化区 CTA「去定制你的站点 →」全部改为建站主题；新增一行配套图文教程链接 exam.955827.xyz/guides。shop 承接横幅文案同步改「欢迎来自免费建站公开课的同学 · 去定制你的站点 →」。按钮无反应根因：桌面端 #buySection 是 position:sticky 侧栏（index.html:148），一直钉在视口，scrollIntoView 已可见→视觉零位移；在桥接 IIFE 加点击高亮脉冲（box-shadow ring 动画 1.3s）+ 仍保留平滑滚动（移动端堆叠能滚）。验证：内联 JS 语法全过；本机 Chrome 实测 course 中文 hero/排期/适合谁均建站主题、带参 shop 横幅显示、点击 bridgeBtn 后 #buySection 带 bridge-flash class（buySectionFlashed:true）。",
+      "type": "fix",
+      "tags": [
+        "shop",
+        "course",
+        "website-building",
+        "feishu-class",
+        "ui-fix"
+      ]
+    },
+    {
       "date": "2026-09-07",
       "title": "shop 清理构建残留 + supportly 补公开首页",
       "summary": "shop index.html 全局删除 234 个 data-page-node-id 构建残留属性，减重 9.7KB（125.6KB→115.9KB），标签结构完整、内联 JS 语法通过、浏览器实测渲染正常。supportly 新增 public/index.html 公开首页（产品介绍+核心特性+widget嵌入示例+admin入口，teal风格），补 robots.txt（Disallow /admin.html）和 sitemap.xml。两个仓库均已提交推送。",
