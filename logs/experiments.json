@@ -3,6 +3,47 @@
   "experiments": [
     {
       "date": "2026-09-08",
+      "title": "rcj-card 管理后台：密码门禁 + 名片列表/删除/R2 音频清理",
+      "summary": "为 rcj-card 新增管理后台。方案：①新增 API functions/api/admin/cards.js——GET 列出全部（?pwd=）；DELETE 单删（同时调 MEDIA.delete(r2_key) 清 R2 音频）；POST 清空全部（遍历所有 r2_key 批量 delete + DELETE FROM cards）。密码从 wrangler.toml [env.production.vars] ADMIN_PASSWORD 读取，前端 JS 存储内存（不持久化 localStorage，关闭页面即清除）。②新增 admin.html——纯中文、noindex 防收录，登录框后展示名片卡片列表（姓名/职位/简介/日期/时长/浏览量，查看链接+删除按钮），清空全部双确认弹窗。③_headers 补充 /admin.html max-age=0 + /api/admin/* private,no-store。验证：本机 Playwright 实测密码 rcj-card-2026 登录成功、列表显示 3 张、删除「测试用户」后变 2 张、R2 对象同步清除。部署地址：https://card.955827.xyz/admin.html（或部署 URL https://9d8ceb6c.rcj-card.pages.dev/admin.html）。",
+      "type": "feature",
+      "tags": [
+        "rcj-card",
+        "admin",
+        "r2-cleanup",
+        "d1",
+        "cloudflare-pages"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "title": "rcj-card 部署上线 card.955827.xyz + 二维码改用在线服务",
+      "summary": "①部署：wrangler 创建 D1 rcj-card-db（1af70849）+ R2 bucket rcj-card-media + Pages 项目 rcj-card，绑定写入 wrangler.toml [env.production]（顶层绑定不继承会告警），自定义域名 card.955827.xyz 加 CNAME（proxied）后生效，API POST/GET 全链路（R2 存音频 + D1 存元数据）与名片页浏览器实测通过。②二维码方案变更：自研 QR 算法 BCH 校验位有 bug 修掉后 jsQR 仍解码失败，margin=4 安静区不足；用户拍板删掉本地 qrcode-generator（20KB）改用在线 API。Google Chart API 已死（404，2019 年下线），改用 qrserver.com（goqr.me，200 image/png 实测可达，quickchart/topscan 国内不可达）。img 标签直链 size=240/280。③两个重要教训：(a) wrangler pages deploy 的 cwd 变了会导致 Functions bundle 不上传（API 返回 HTML 而非 JSON），必须在项目目录内 deploy 并核对输出含 'Uploading Functions bundle'；(b) Cloudflare zone 默认 Browser Cache TTL=14400 覆盖 Pages 的 _headers，导致静态 JS 被浏览器缓存 4 小时——已通过 API 把 zone browser_cache_ttl 改为 0（Respect Existing Headers），并加 _headers 让 /assets/*.js|css 必须 revalidate。验证方式：新部署 URL（e74f7f16.rcj-card.pages.dev）无缓存环境完整实测通过（二维码 img loaded 240x240），自定义域名响应头/内容已确认为新版。",
+      "type": "feature",
+      "tags": [
+        "rcj-card",
+        "deploy",
+        "cloudflare-pages",
+        "browser-cache-ttl",
+        "qrcode",
+        "wrangler-pitfall"
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "title": "shop course 页抖音友好优化 + 商城承接横幅",
+      "summary": "course.html 改为中文默认（抖音受众），hero 副标题从平铺直叙改为痛点钩子（面试没思路/刷题没方向→先听免费公开课）；底部转化区链接带上 ?src=feishu-class，CTA 从\"去商城看看\"改为\"去定制你的专属题库\"。shop index.html 新增 .class-bridge 承接横幅：仅当 URL 含 ?src=feishu-class 时显示\"欢迎来自免费公开课的你 · 先听课再决定，定制题库与建站都在这里 → 去定制你的题库\"，点击平滑滚动到 #buySection，可关闭；无参数访客完全无感。顺手修复头部第一个 application/ld+json 块的尾随逗号（无效 JSON 导致 Google 忽略该结构化数据）。语法校验（JSON-LD + 内联 JS）全部通过，本地 Chrome 实测：course.html 中文 hero 正常、带参进 shop 横幅显示中文、无参 shop 横幅隐藏。",
+      "type": "feature",
+      "tags": [
+        "shop",
+        "course",
+        "douyin",
+        "conversion",
+        "i18n",
+        "seo"
+      ]
+    },
+    {
+      "date": "2026-09-08",
       "title": "新建 rcj-card：声音名片（语音自我介绍 + 二维码嵌入简历）",
       "summary": "新建 _repos/rcj-card 仓库，定位为求职工具线第三个产品（exam 刷题 → facetalk 对练 → card 投递）。核心流程：用户填写姓名/职位/简介 → 录音（≤60s，复用 rcj-audio-core 录音+实时频谱+自动去静音）→ 生成名片页（波形播放器+头像+简介+二维码）。存储采用 R2 主存音频 + D1 存元数据（r2_key 关联），无 R2 时 fallback 到 D1 base64。纯前端零依赖二维码生成器（自研 QR 算法，byte 模式纠错 M，版本 1-10）。合规定位：个人表达工具，非社交平台，无陌生人内容传播，无需实名。竞品分析：创客贴做的是名片视觉设计模板，我们做的是录音+在线播放+二维码，方向不同。9 个 JS 文件 node --check 全部通过，本地 Chrome 实测：表单渲染正常、二维码生成正常（3290B PNG）、card.html 无 ID 时正确显示'名片不存在'。待部署：需创建 D1 数据库、绑定 R2 bucket、部署到 Cloudflare Pages（card.955827.xyz）。",
       "type": "feature",
