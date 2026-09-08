@@ -117,6 +117,12 @@
     .mini-diff b { color: var(--ink-2); font-weight: 600; }
     .mini-eyebrow { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; margin: 10px 0 4px; }
 
+    /* 语言切换器（米色圆润，与全站一致） */
+    .lang-sw { display: flex; gap: 6px; padding: 10px 4px 2px; border-top: 1px solid var(--line); margin-top: 8px; }
+    .lang-sw button { border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); border-radius: 999px; padding: 5px 13px; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .18s, background .18s, color .18s; }
+    .lang-sw button:hover { border-color: var(--ink-4); }
+    .lang-sw button.on { background: #1e88e5; color: #fff; border-color: transparent; }
+
     @media (max-width: 720px) {
       .series-head { flex-direction: column; align-items: flex-start; gap: 4px; }
     }
@@ -154,8 +160,13 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="nav-menu" aria-label="站点导航">
-        <a href="/log.html">LOG <span style="font-size:10.5px;color:var(--signal);font-weight:700;letter-spacing:.06em;margin-left:4px;">实验日志</span></a>
-        <a href="/principles">原则</a>
+        <a href="/log.html">LOG <span style="font-size:10.5px;color:var(--signal);font-weight:700;letter-spacing:.06em;margin-left:4px;" data-i18n="navLogTag">实验日志</span></a>
+        <a href="/principles" data-i18n="navPrinciples">原则</a>
+        <div class="lang-sw" role="group" aria-label="Language">
+          <button type="button" data-lang="zh">中文</button>
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="ja">日本語</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -167,7 +178,7 @@
       <div class="hero-glow"></div>
       <div class="container hero-inner">
         <p class="eyebrow">RCJ LAB · Independent AI Product Studio</p>
-        <h1>把想法，<br />做成顺手的小工具</h1>
+        <h1 data-i18n="heroTitle">把想法，<br />做成顺手的小工具</h1>
       </div>
     </section>
 
@@ -182,7 +193,7 @@
         <div class="series-block reveal">
           <div class="series-head">
             <span class="series-label">Exam Hub</span>
-            <span class="series-sub">职业考试智能训练系统</span>
+            <span class="series-sub" data-i18n="examSub">职业考试智能训练系统</span>
           </div>
           <div class="mini-list">
             <a class="mini-item" data-color="exam" href="https://exam.955827.xyz" target="_blank" rel="noopener">
@@ -190,22 +201,22 @@
               <span class="mini-text">
                 <span class="mini-head">
                   <span class="mini-name">Exam Hub</span>
-                  <span class="mini-badge">考试训练</span>
+                  <span class="mini-badge" data-i18n="examBadge">考试训练</span>
                 </span>
-                <span class="mini-desc">结构化面试 · 辅警真题 · 消防结构化</span>
-                <span class="mini-diff"><b>差异</b> · 真题库 · 答题录音 · 即时复盘</span>
+                <span class="mini-desc" data-i18n="examDesc">结构化面试 · 辅警真题 · 消防结构化</span>
+                <span class="mini-diff" data-i18n="examDiff"><b>差异</b> · 真题库 · 答题录音 · 即时复盘</span>
               </span>
             </a>
-            <span class="mini-eyebrow">匹配与筛选工具</span>
+            <span class="mini-eyebrow" data-i18n="matchEyebrow">匹配与筛选工具</span>
             <a class="mini-item" data-color="connect" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
               <img class="mini-img" data-magnetic src="/assets/roles/facetalk.thumb.png?v=20260814r1" alt="FaceTalk" loading="lazy" />
               <span class="mini-text">
                 <span class="mini-head">
                   <span class="mini-name">FaceTalk</span>
-                  <span class="mini-badge">面试连接</span>
+                  <span class="mini-badge" data-i18n="ftBadge">面试连接</span>
                 </span>
-                <span class="mini-desc">免社交的面试口语对练工具</span>
-                <span class="mini-diff"><b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚</span>
+                <span class="mini-desc" data-i18n="ftDesc">免社交的面试口语对练工具</span>
+                <span class="mini-diff" data-i18n="ftDiff"><b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚</span>
               </span>
             </a>
           </div>
@@ -214,7 +225,7 @@
         <div class="series-block reveal">
           <div class="series-head">
             <span class="series-label">Dinner for You</span>
-            <span class="series-sub">情侣点餐互动系统</span>
+            <span class="series-sub" data-i18n="dinnerSub">情侣点餐互动系统</span>
           </div>
           <div class="mini-list">
             <a class="mini-item" data-color="dinner" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
@@ -222,10 +233,10 @@
               <span class="mini-text">
                 <span class="mini-head">
                   <span class="mini-name">Dinner for You</span>
-                  <span class="mini-badge">情侣互动</span>
+                  <span class="mini-badge" data-i18n="dinnerBadge">情侣互动</span>
                 </span>
-                <span class="mini-desc">她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜</span>
-                <span class="mini-diff"><b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票</span>
+                <span class="mini-desc" data-i18n="dinnerDesc">她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜</span>
+                <span class="mini-diff" data-i18n="dinnerDiff"><b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票</span>
               </span>
             </a>
           </div>
@@ -263,7 +274,7 @@
       <div class="footer-row">
         <span class="footer-copy">© 2026 RCJ9527</span>
         <span class="footer-sep">·</span>
-        <span class="footer-powered">Powered by Cloudflare Pages</span>
+        <span class="footer-powered" data-i18n="footerPowered">Powered by Cloudflare Pages</span>
       </div>
     </div>
   </footer>
@@ -325,6 +336,77 @@
       }
     });
   }
+})();
+</script>
+<script>
+/* ============ 三语切换（zh/en/ja，借鉴 facetalk i18n 模式，单文件内联版） ============ */
+(function(){
+  'use strict';
+  var LANGS = ['zh', 'en', 'ja'];
+  var KEY = 'rcj_lang';
+  var DICT = {
+    pageTitle: {
+      zh: 'RCJ Lab · 个人产品实验室',
+      en: 'RCJ Lab · Personal Product Studio',
+      ja: 'RCJ Lab · 個人プロダクトラボ'
+    },
+    metaDesc: {
+      zh: 'RCJ Lab 个人产品实验室：用 AI + Vibe Coding 把想法做成顺手的小工具。',
+      en: 'RCJ Lab — an independent AI product studio turning ideas into handy little tools.',
+      ja: 'RCJ Lab 個人プロダクトラボ：AI と Vibe Coding でアイデアを手になじむツールに。'
+    },
+    navLogTag: { zh: '实验日志', en: 'Lab log', ja: '実験ログ' },
+    navPrinciples: { zh: '原则', en: 'Principles', ja: '原則' },
+    heroTitle: {
+      zh: '把想法，<br />做成顺手的小工具',
+      en: 'Ideas,<br />into handy little tools',
+      ja: 'アイデアを、<br />手になじむツールに'
+    },
+    examSub: { zh: '职业考试智能训练系统', en: 'Vocational exam training system', ja: '職業試験トレーニングシステム' },
+    examBadge: { zh: '考试训练', en: 'Exams', ja: '試験対策' },
+    examDesc: { zh: '结构化面试 · 辅警真题 · 消防结构化', en: 'Structured interviews · police exams · fire service', ja: '構造化面接 · 警察過去問 · 消防構造化' },
+    examDiff: { zh: '<b>差异</b> · 真题库 · 答题录音 · 即时复盘', en: '<b>Edge</b> · real question bank · voice recording · instant review', ja: '<b>差異</b> · 本物の過去問 · 録音練習 · その場で復習' },
+    matchEyebrow: { zh: '匹配与筛选工具', en: 'Matching & Screening Tools', ja: 'マッチング・ふるい分けツール' },
+    ftBadge: { zh: '面试连接', en: 'Interview pairing', ja: '面接マッチング' },
+    ftDesc: { zh: '免社交的面试口语对练工具', en: 'Social-free speaking practice for interviews', ja: '社交ゼロの面接スピーキング練習' },
+    ftDiff: { zh: '<b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚', en: '<b>Edge</b> · mutual screening · real voice · burn after reading', ja: '<b>差異</b> · 双向マッチング · 実際の音声 · 既読後すぐ消去' },
+    dinnerSub: { zh: '情侣点餐互动系统', en: "Couple's interactive dinner ordering", ja: 'カップル注文インタラクション' },
+    dinnerBadge: { zh: '情侣互动', en: 'For couples', ja: 'カップル' },
+    dinnerDesc: { zh: '她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜', en: 'She enters an invite code → picks dishes + records a song → chef serves', ja: '招待コード入力 → 料理を選んで歌を録音 → オーナーが調理' },
+    dinnerDiff: { zh: '<b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票', en: '<b>Edge</b> · invite-code whitelist · two-way email alerts · printable receipt', ja: '<b>差異</b> · 招待コード制 · 双方向メール通知 · 印刷可能な領収書' },
+    footerPowered: { zh: 'Powered by Cloudflare Pages', en: 'Powered by Cloudflare Pages', ja: 'Powered by Cloudflare Pages' }
+  };
+  function detect() {
+    try { var s = localStorage.getItem(KEY); if (s && LANGS.indexOf(s) >= 0) return s; } catch (e) {}
+    var l = (navigator.language || 'zh-CN').toLowerCase();
+    if (l.indexOf('ja') === 0) return 'ja';
+    if (l.indexOf('zh') === 0) return 'zh';
+    return 'en';
+  }
+  var lang = detect();
+  function apply(l) {
+    if (LANGS.indexOf(l) < 0) l = 'zh';
+    lang = l;
+    try { localStorage.setItem(KEY, l); } catch (e) {}
+    document.documentElement.setAttribute('lang', l === 'zh' ? 'zh-CN' : l);
+    document.title = DICT.pageTitle[l];
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', DICT.metaDesc[l]);
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var k = nodes[i].getAttribute('data-i18n');
+      if (DICT[k] && DICT[k][l]) nodes[i].innerHTML = DICT[k][l];
+    }
+    var btns = document.querySelectorAll('.lang-sw button');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].classList.toggle('on', btns[j].getAttribute('data-lang') === l);
+    }
+  }
+  var sw = document.querySelectorAll('.lang-sw button');
+  for (var i = 0; i < sw.length; i++) {
+    sw[i].addEventListener('click', function () { apply(this.getAttribute('data-lang')); });
+  }
+  apply(lang);
 })();
 </script>
 <script>
