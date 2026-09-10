@@ -95,6 +95,7 @@
     .mini-item[data-color="connect"] { border-left-color: #14b8a6; }  /* 青绿 · 面试连接 */
     .mini-item[data-color="exam"] { border-left-color: #1e88e5; }     /* 蓝 · 考试训练 */
     .mini-item[data-color="dinner"] { border-left-color: #b87333; }   /* 棕 · 情侣点餐 */
+    .mini-item[data-color="card"] { border-left-color: #8b5cf6; }    /* 紫 · 声音名片 */
     .mini-img { width: 46px; height: 46px; border-radius: 12px; object-fit: cover; flex: 0 0 auto; background: var(--bg-soft); box-shadow: 0 4px 12px rgba(15,23,42,.06); will-change: transform; }
     .mini-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
     .mini-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -111,6 +112,7 @@
     .mini-item[data-color="connect"] .mini-badge { color: #0f766e; background: #e6f7f4; border-color: #c2ebe4; }
     .mini-item[data-color="exam"] .mini-badge { color: #1565c0; background: #e8f1fc; border-color: #c7def6; }
     .mini-item[data-color="dinner"] .mini-badge { color: #8b4513; background: #fef5e7; border-color: #f5e0c8; }
+    .mini-item[data-color="card"] .mini-badge { color: #6d28d9; background: #f3f0ff; border-color: #ddd0f8; }
     .mini-desc { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
     /* 差异化短句：用 · 分隔的关键差异点 */
     .mini-diff { font-size: 12.5px; color: var(--ink-3); line-height: 1.4; margin-top: 2px; }
@@ -207,7 +209,15 @@
                 <span class="mini-diff" data-i18n="examDiff"><b>差异</b> · 真题库 · 答题录音 · 即时复盘</span>
               </span>
             </a>
-            <span class="mini-eyebrow" data-i18n="matchEyebrow">匹配与筛选工具</span>
+          </div>
+        </div>
+        <!-- FaceTalk -->
+        <div class="series-block reveal">
+          <div class="series-head">
+            <span class="series-label">FaceTalk</span>
+            <span class="series-sub" data-i18n="ftSub">免社交的面试口语对练</span>
+          </div>
+          <div class="mini-list">
             <a class="mini-item" data-color="connect" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
               <img class="mini-img" data-magnetic src="/assets/roles/facetalk.thumb.png?v=20260814r1" alt="FaceTalk" loading="lazy" />
               <span class="mini-text">
@@ -237,6 +247,26 @@
                 </span>
                 <span class="mini-desc" data-i18n="dinnerDesc">她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜</span>
                 <span class="mini-diff" data-i18n="dinnerDiff"><b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <!-- voicecard -->
+        <div class="series-block reveal">
+          <div class="series-head">
+            <span class="series-label">voicecard</span>
+            <span class="series-sub" data-i18n="cardSub">声音名片</span>
+          </div>
+          <div class="mini-list">
+            <a class="mini-item" data-color="card" href="https://card.955827.xyz" target="_blank" rel="noopener">
+              <img class="mini-img" data-magnetic src="/assets/roles/card.jpg?v=20260908" alt="voicecard" loading="lazy" />
+              <span class="mini-text">
+                <span class="mini-head">
+                  <span class="mini-name">voicecard</span>
+                  <span class="mini-badge" data-i18n="cardBadge">求职工具</span>
+                </span>
+                <span class="mini-desc" data-i18n="cardDesc">录一段语音 → 生成链接 → 贴进简历</span>
+                <span class="mini-diff" data-i18n="cardDiff"><b>差异</b> · 60s 语音自我介绍 · QR 码分享 · R2 存储</span>
               </span>
             </a>
           </div>
@@ -366,7 +396,7 @@
     examBadge: { zh: '考试训练', en: 'Exams', ja: '試験対策' },
     examDesc: { zh: '结构化面试 · 辅警真题 · 消防结构化', en: 'Structured interviews · police exams · fire service', ja: '構造化面接 · 警察過去問 · 消防構造化' },
     examDiff: { zh: '<b>差异</b> · 真题库 · 答题录音 · 即时复盘', en: '<b>Edge</b> · real question bank · voice recording · instant review', ja: '<b>差異</b> · 本物の過去問 · 録音練習 · その場で復習' },
-    matchEyebrow: { zh: '匹配与筛选工具', en: 'Matching & Screening Tools', ja: 'マッチング・ふるい分けツール' },
+    ftSub: { zh: '免社交的面试口语对练', en: 'Social-free interview speaking practice', ja: '社交ゼロの面接スピーキング練習' },
     ftBadge: { zh: '面试连接', en: 'Interview pairing', ja: '面接マッチング' },
     ftDesc: { zh: '免社交的面试口语对练工具', en: 'Social-free speaking practice for interviews', ja: '社交ゼロの面接スピーキング練習' },
     ftDiff: { zh: '<b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚', en: '<b>Edge</b> · mutual screening · real voice · burn after reading', ja: '<b>差異</b> · 双向マッチング · 実際の音声 · 既読後すぐ消去' },
@@ -374,6 +404,10 @@
     dinnerBadge: { zh: '情侣互动', en: 'For couples', ja: 'カップル' },
     dinnerDesc: { zh: '她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜', en: 'She enters an invite code → picks dishes + records a song → chef serves', ja: '招待コード入力 → 料理を選んで歌を録音 → オーナーが調理' },
     dinnerDiff: { zh: '<b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票', en: '<b>Edge</b> · invite-code whitelist · two-way email alerts · printable receipt', ja: '<b>差異</b> · 招待コード制 · 双方向メール通知 · 印刷可能な領収書' },
+    cardSub: { zh: '声音名片', en: 'Voice business card', ja: 'ボイスカード' },
+    cardBadge: { zh: '求职工具', en: 'Job seeking', ja: '就職ツール' },
+    cardDesc: { zh: '录一段语音 → 生成链接 → 贴进简历', en: 'Record a voice clip → get a link → attach to resume', ja: '音声を録音 → リンク生成 → 履歴書に貼る' },
+    cardDiff: { zh: '<b>差异</b> · 60s 语音自我介绍 · QR 码分享 · R2 存储', en: '<b>Edge</b> · 60s voice intro · QR sharing · R2 storage', ja: '<b>差異</b> · 60秒音声自己紹介 · QR共有 · R2ストレージ' },
     footerPowered: { zh: 'Powered by Cloudflare Pages', en: 'Powered by Cloudflare Pages', ja: 'Powered by Cloudflare Pages' }
   };
   function detect() {
