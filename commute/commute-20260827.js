@@ -378,15 +378,6 @@
   async function bootstrap() {
     requestAnimationFrame(() => document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-in')));
 
-    const burger = $('navBurger'), menu = $('navMenu');
-    if (burger && menu) {
-      burger.addEventListener('click', () => {
-        const open = burger.getAttribute('aria-expanded') === 'true';
-        burger.setAttribute('aria-expanded', open ? 'false' : 'true');
-        menu.classList.toggle('open', !open);
-      });
-    }
-
     $('mBtnStart').addEventListener('click', onStart);
     $('mBtnArrive').addEventListener('click', onArrive);
     $('mBtnCancel').addEventListener('click', onCancel);

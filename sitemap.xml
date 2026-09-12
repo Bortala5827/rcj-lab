@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- 主站 (仅 955827.xyz 自身页面；blog 为私人手记 noindex 不收录；
+  <!-- 主站 (仅 955827.xyz 自身页面；/note 为私人手记 noindex 不收录；
        FaceTalk 已迁至 facetalk.955827.xyz/sitemap.xml，此处不再放跨域 URL) -->
   <url>
     <loc>https://955827.xyz/</loc>

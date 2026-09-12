@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0f172a" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>创始人手记 · RCJ Lab</title>
-  <meta name="description" content="创始人的私人手记，随手记下一些想法。" />
+  <title>手记 · RCJ Lab</title>
+  <meta name="description" content="私下手记，随手记下一些想法。" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231e88e5'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='system-ui' font-size='28' font-weight='800' fill='white'%3ER%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="/assets/hub.v2.css?v=20260822a" />
   <style>
@@ -55,12 +55,8 @@
         <span class="mark">R</span>
         <span class="wm-text">RCJ Lab</span>
       </a>
-      <button class="nav-hamburger" aria-label="菜单" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-menu" aria-label="站点导航">
-        <a href="/log.html">LOG <span style="font-size:10.5px;color:var(--signal);font-weight:700;letter-spacing:.06em;margin-left:4px;">实验日志</span></a>
-        <a href="/principles">原则</a>
+      <nav class="nav-actions" aria-label="站点导航">
+        <a class="nav-link" href="https://blog.955827.xyz">Blog</a>
       </nav>
     </div>
   </header>
@@ -68,7 +64,7 @@
   <main class="container">
     <div class="note-wrap">
       <div class="note-hero">
-        <h1>创始人手记</h1>
+        <h1>手记</h1>
         <p>随手记下一些想法，简短即可。</p>
       </div>
 
@@ -230,7 +226,7 @@
       if (!ALL_NOTES.length) { alert('还没有手记可导出'); return; }
       const stamp = new Date().toISOString().slice(0, 10);
       if (fmt === 'json') {
-        download('创始人手记-' + stamp + '.json', JSON.stringify(ALL_NOTES, null, 2), 'application/json');
+        download('手记-' + stamp + '.json', JSON.stringify(ALL_NOTES, null, 2), 'application/json');
       } else {
         const md = ALL_NOTES.slice().reverse().map((n) => {
           const d = new Date(n.created_at);
@@ -238,7 +234,7 @@
           const ts = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
           return '## ' + ts + '\n\n' + n.text + '\n';
         }).join('\n---\n\n');
-        download('创始人手记-' + stamp + '.md', '# 创始人手记\n\n' + md, 'text/markdown');
+        download('手记-' + stamp + '.md', '# 手记\n\n' + md, 'text/markdown');
       }
     }
 
@@ -284,36 +280,5 @@
 
     load();
   </script>
-<script>
-(function(){
-  var ham = document.querySelector('.nav-hamburger');
-  var menu = document.querySelector('.nav-menu');
-  if (ham && menu) {
-    ham.addEventListener('click', function(e){
-      e.stopPropagation();
-      var open = menu.classList.toggle('open');
-      ham.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', function(e){
-      if (!menu.contains(e.target) && !ham.contains(e.target)) {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-    menu.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      });
-    });
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-})();
-</script>
 </body>
 </html>

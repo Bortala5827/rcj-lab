@@ -119,11 +119,7 @@
     .mini-diff b { color: var(--ink-2); font-weight: 600; }
     .mini-eyebrow { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; margin: 10px 0 4px; }
 
-    /* 语言切换器（米色圆润，与全站一致） */
-    .lang-sw { display: flex; gap: 6px; padding: 10px 4px 2px; border-top: 1px solid var(--line); margin-top: 8px; }
-    .lang-sw button { border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); border-radius: 999px; padding: 5px 13px; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .18s, background .18s, color .18s; }
-    .lang-sw button:hover { border-color: var(--ink-4); }
-    .lang-sw button.on { background: #1e88e5; color: #fff; border-color: transparent; }
+    /* 语言：按浏览器语言自动匹配（不再提供手动切换器） */
 
     @media (max-width: 720px) {
       .series-head { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -158,17 +154,8 @@
         <span class="mark">R</span>
         <span class="wm-text">RCJ Lab</span>
       </a>
-      <button class="nav-hamburger" aria-label="菜单" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-menu" aria-label="站点导航">
-        <a href="/log.html">LOG <span style="font-size:10.5px;color:var(--signal);font-weight:700;letter-spacing:.06em;margin-left:4px;" data-i18n="navLogTag">实验日志</span></a>
-        <a href="/principles" data-i18n="navPrinciples">原则</a>
-        <div class="lang-sw" role="group" aria-label="Language">
-          <button type="button" data-lang="zh">中文</button>
-          <button type="button" data-lang="en">EN</button>
-          <button type="button" data-lang="ja">日本語</button>
-        </div>
+      <nav class="nav-actions" aria-label="站点导航">
+        <a class="nav-link" href="https://blog.955827.xyz">Blog</a>
       </nav>
     </div>
   </header>
@@ -337,35 +324,6 @@
   }
   if (document.readyState !== 'loading') init();
   else document.addEventListener('DOMContentLoaded', init);
-
-  /* ============ 三横杠菜单（纯 class 切换，无动画冲突） ============ */
-  var ham = document.querySelector('.nav-hamburger');
-  var menu = document.querySelector('.nav-menu');
-  if (ham && menu) {
-    ham.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var open = menu.classList.toggle('open');
-      ham.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', function(e) {
-      if (!menu.contains(e.target) && !ham.contains(e.target)) {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-    menu.querySelectorAll('a').forEach(function(a) {
-      a.addEventListener('click', function() {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      });
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
 })();
 </script>
 <script>
@@ -385,8 +343,6 @@
       en: 'RCJ Lab — an independent AI product studio turning ideas into handy little tools.',
       ja: 'RCJ Lab 個人プロダクトラボ：AI と Vibe Coding でアイデアを手になじむツールに。'
     },
-    navLogTag: { zh: '实验日志', en: 'Lab log', ja: '実験ログ' },
-    navPrinciples: { zh: '原则', en: 'Principles', ja: '原則' },
     heroTitle: {
       zh: '把想法，<br />做成顺手的小工具',
       en: 'Ideas,<br />into handy little tools',
@@ -431,14 +387,6 @@
       var k = nodes[i].getAttribute('data-i18n');
       if (DICT[k] && DICT[k][l]) nodes[i].innerHTML = DICT[k][l];
     }
-    var btns = document.querySelectorAll('.lang-sw button');
-    for (var j = 0; j < btns.length; j++) {
-      btns[j].classList.toggle('on', btns[j].getAttribute('data-lang') === l);
-    }
-  }
-  var sw = document.querySelectorAll('.lang-sw button');
-  for (var i = 0; i < sw.length; i++) {
-    sw[i].addEventListener('click', function () { apply(this.getAttribute('data-lang')); });
   }
   apply(lang);
 })();

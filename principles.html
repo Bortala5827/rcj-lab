@@ -16,12 +16,8 @@
         <span class="mark">R</span>
         <span class="wm-text">RCJ Lab</span>
       </a>
-      <button class="nav-hamburger" aria-label="菜单" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-menu" aria-label="站点导航">
-        <a href="/log.html">LOG <span style="font-size:10.5px;color:var(--signal);font-weight:700;letter-spacing:.06em;margin-left:4px;">实验日志</span></a>
-        <a href="/principles" class="active">原则</a>
+      <nav class="nav-actions" aria-label="站点导航">
+        <a class="nav-link" href="https://blog.955827.xyz">Blog</a>
       </nav>
     </div>
   </header>
@@ -105,36 +101,5 @@
       </div>
     </div>
   </footer>
-<script>
-(function(){
-  var ham = document.querySelector('.nav-hamburger');
-  var menu = document.querySelector('.nav-menu');
-  if (ham && menu) {
-    ham.addEventListener('click', function(e){
-      e.stopPropagation();
-      var open = menu.classList.toggle('open');
-      ham.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', function(e){
-      if (!menu.contains(e.target) && !ham.contains(e.target)) {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-    menu.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      });
-    });
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') {
-        menu.classList.remove('open');
-        ham.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-})();
-</script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// rcj-lab · 创始人手记（在线便签 API）
+// rcj-lab · 手记（在线便签 API，/note 页面专用）
 // GET    /api/notes           -> 全部便签（按时间倒序，公开读）
 // POST   /api/notes           -> 新增 {text}（需登录，自动记时间）
 // DELETE /api/notes?id=xx     -> 删除（需登录）
