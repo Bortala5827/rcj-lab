@@ -245,6 +245,7 @@ const SCENE_ROUTING = {
   "learn": ["agnes", "groq", "dots", "bai", "sensenova"],    // 高质量：你懂的知识卡/发散
   "api":   ["groq", "bai", "agnes", "dots", "sensenova"],    // 低需求：API 导航，速度优先
   "shop":  ["agnes", "groq", "dots"],                          // 定制顾问
+  "blog":  ["agnes", "groq", "dots", "bai", "sensenova"],    // 博客猫娘「团子」：质量优先 + failover
 };
 
 // ── 工具函数 ────────────────────────────────────────────────
@@ -372,7 +373,10 @@ export async function onRequestPost({ request, env, context }) {
     track.scene = scene;
     track.project = sceneToProject(scene);
 
-    const sysPrompt = getSystemPrompt(scene);
+    // 允许调用方透传自己的 system 人格（如博客的猫娘「团子」），优先于场景默认人格；
+    // 不传则回退到场景默认人格。向后兼容：原有 scene 调用方行为不变。
+    const callerSystem = (typeof body.system === "string" && body.system.trim()) ? body.system : "";
+    const sysPrompt = callerSystem || getSystemPrompt(scene);
     const finalMessages = [{ role: "system", content: sysPrompt }].concat(messages);
     const channels = getChannels(env);
 
