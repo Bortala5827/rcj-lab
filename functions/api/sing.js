@@ -37,6 +37,46 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: cors() });
 }
 
+// 通知站长（邮件 + Telegram）。返回失败原因数组（空=全部成功），不再静默吞错
+async function notifyOwnerAndTg(env, email) {
+  const errs = [];
+  if (env.RESEND_API_KEY) {
+    try {
+      const t = new Date(Date.now() + 8 * 3600 * 1000);
+      const p = n => String(n).padStart(2, '0');
+      const bt = `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}`;
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + env.RESEND_API_KEY, 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({
+          from: 'RCJ 商店 <noreply@955827.xyz>', to: ['1430115702@qq.com'],
+          subject: '【RCJ 0元购】有人来唱歌啦',
+          html: `<p>时间（北京）：${bt}</p><p>邮箱：${email}</p><p>档位：0元购 · Sing to Me</p><p>去 955827.xyz/admin → 订单提醒 审核语音。</p>`,
+        }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { const m = d.message || ('HTTP ' + r.status); errs.push('email:' + m); console.error('[sing] Resend 发送失败', r.status, d); }
+    } catch (e) { errs.push('email:' + e.message); console.error('[sing] Resend 异常', e); }
+  } else { errs.push('email:RESEND_API_KEY未配置'); }
+
+  const tgToken = env.TG_BOT_TOKEN, tgChat = env.TG_CHAT_ID;
+  if (tgToken && tgChat) {
+    try {
+      const t2 = new Date(Date.now() + 8 * 3600 * 1000);
+      const p2 = n => String(n).padStart(2, '0');
+      const bt2 = `${t2.getUTCFullYear()}-${p2(t2.getUTCMonth() + 1)}-${p2(t2.getUTCDate())} ${p2(t2.getUTCHours())}:${p2(t2.getUTCMinutes())}`;
+      const r = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ chat_id: tgChat, text: `【RCJ 0元购】有人来唱歌啦 🎤\n🕒 ${bt2}\n邮箱：${email}\n档位：0元购 · Sing to Me\n去 955827.xyz/admin → 订单提醒 审核语音。`, parse_mode: 'HTML' }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) { const m = d.description || ('HTTP ' + r.status); errs.push('tg:' + m); console.error('[sing] Telegram 发送失败', r.status, d); }
+    } catch (e) { errs.push('tg:' + e.message); console.error('[sing] Telegram 异常', e); }
+  }
+  return errs;
+}
+
 export async function onRequest({ request, env }) {
   const url = new URL(request.url);
 
@@ -80,6 +120,13 @@ export async function onRequest({ request, env }) {
       created INTEGER NOT NULL, decided_at INTEGER DEFAULT 0, ip TEXT DEFAULT ''
     )`);
     if (r && r.error) return json({ ok: false, error: '建表失败' }, 500);
+    // 幂等补列：notify_err（通知失败原因，便于后台排查）
+    {
+      const pr = await d1(env, 'SELECT notify_err FROM sing_requests LIMIT 0');
+      if (pr && pr.error && /no such column/i.test(pr.error)) {
+        await d1(env, "ALTER TABLE sing_requests ADD COLUMN notify_err TEXT DEFAULT ''");
+      }
+    }
 
     // 语音存 R2
     let audioKey = '';
@@ -113,35 +160,12 @@ export async function onRequest({ request, env }) {
         await d1(env, 'ALTER TABLE orders ADD COLUMN cny_amount REAL');
       }
       await d1(env, `INSERT OR REPLACE INTO orders (id, source, item, sku, payer_email, contact_email, amount, currency, cny_amount, paypal_order_id, status, note, created) VALUES ('${id}','sing','Sing to Me','sing','${email.replace(/'/g, "''")}','',0,'CNY',0,'','enrolled','0元购报名',${now})`);
-      if (env.RESEND_API_KEY) {
-        const t = new Date(Date.now() + 8 * 3600 * 1000);
-        const p = n => String(n).padStart(2, '0');
-        const bt = `${t.getUTCFullYear()}-${p(t.getUTCMonth() + 1)}-${p(t.getUTCDate())} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}`;
-        try {
-          await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: { Authorization: 'Bearer ' + env.RESEND_API_KEY, 'Content-Type': 'application/json; charset=utf-8' },
-            body: JSON.stringify({
-              from: 'RCJ 商店 <noreply@955827.xyz>', to: ['1430115702@qq.com'],
-              subject: '【RCJ 0元购】有人来唱歌啦',
-              html: `<p>时间（北京）：${bt}</p><p>邮箱：${email}</p><p>档位：0元购 · Sing to Me</p><p>去 955827.xyz/admin → 订单提醒 审核语音。</p>`,
-            }),
-          });
-        } catch (e) {}
-      }
-      // Telegram 提醒（无密钥则跳过）
-      const tgToken = env.TG_BOT_TOKEN, tgChat = env.TG_CHAT_ID;
-      if (tgToken && tgChat) {
-        try {
-          const t2 = new Date(Date.now() + 8 * 3600 * 1000);
-          const p2 = n => String(n).padStart(2, '0');
-          const bt2 = `${t2.getUTCFullYear()}-${p2(t2.getUTCMonth() + 1)}-${p2(t2.getUTCDate())} ${p2(t2.getUTCHours())}:${p2(t2.getUTCMinutes())}`;
-          await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            body: JSON.stringify({ chat_id: tgChat, text: `【RCJ 0元购】有人来唱歌啦 🎤\n🕒 ${bt2}\n邮箱：${email}\n档位：0元购 · Sing to Me\n去 955827.xyz/admin → 订单提醒 审核语音。`, parse_mode: 'HTML' }),
-          });
-        } catch (e) {}
+      // 通知站长：逐路记录成败，失败写回 notify_err（不再静默吞掉）
+      const errs = await notifyOwnerAndTg(env, email);
+      if (errs.length) {
+        const msg = errs.join('; ').replace(/'/g, "''");
+        await d1(env, `UPDATE sing_requests SET notify_err='${msg}' WHERE id='${id}'`);
+        console.warn('[sing] 通知未完成送达:', msg);
       }
     } catch (e) { /* 通知失败不影响报名成功 */ }
 
@@ -162,6 +186,7 @@ export async function onRequest({ request, env }) {
       return json({ ok: true, list: rows.map(x => ({
         id: x.id, email: x.email, tier: x.tier, materials: (x.materials || '[]'),
         status: x.status, created: Number(x.created), decidedAt: Number(x.decided_at), audioKey: x.audio_key || '',
+        notifyErr: (x.notify_err || ''),
       })) });
     }
     // 审核操作

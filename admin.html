@@ -687,6 +687,7 @@ async function renderSingRequests(){
     html+='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">';
     html+='<div><b>'+esc(x.email)+'</b> <span class="tag">'+esc(tierLabel[x.tier]||x.tier)+'</span> <span style="color:'+sm[1]+'">'+sm[0]+'</span></div>';
     html+='<span class="small muted">'+fmtTime(x.created)+'</span></div>';
+    html+= x.notifyErr ? '<div class="small" style="margin-top:6px;color:#b45309">通知未达：'+esc(x.notifyErr)+'</div>' : '<div class="small" style="margin-top:6px;color:#16a34a">通知已送达</div>';
     html+='<div class="small" style="margin:6px 0">想要：'+esc(mats)+'</div>';
     if(x.audioKey) html+='<audio controls preload="none" src="/api/sing/audio/'+encodeURIComponent(x.id)+'" style="width:100%;margin:6px 0" onerror="__singAudioErr(this)"></audio>';
     else html+='<div class="small muted">（无录音 · 已清除）</div>';
