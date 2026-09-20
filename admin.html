@@ -580,6 +580,47 @@ function renderAux(){
 
 // runMigrate 已废弃：aux-police-exam-d1 已删除，迁移脚本在后端直接返回「无需迁移」（见 functions/api/admin/migrate.js）。
 
+// ---------- 通知通道自检（真实发送，逐通道报成败）----------
+window.runNotifyTest = async function(){
+  var btn=document.getElementById('ntBtn'), msg=document.getElementById('ntMsg'), box=document.getElementById('ntResult');
+  if(!btn||!box) return;
+  btn.disabled=true; if(msg) msg.textContent='发送中，约 3 秒后出结果…'; box.innerHTML='';
+  try{
+    var r=await fetch('/api/admin/notify-test',{method:'POST',cache:'no-store'});
+    if(r.status===401){ showLogin(); return; }
+    var d=null; try{ d=await r.json(); }catch(_){}
+    if(!d||!d.ok){
+      box.innerHTML='<div class="err-box">'+esc((d&&d.error)||('HTTP '+r.status))+'</div>';
+      if(msg) msg.textContent=''; return;
+    }
+    var LABEL={shop:'shop 订单提醒', supportly:'客服提醒（supportly）'};
+    var html='';
+    (d.targets||[]).forEach(function(t){
+      var name=t.target||'?';
+      html+='<div style="border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:10px">'
+        +'<div class="small" style="font-weight:700;margin-bottom:6px">'+esc(LABEL[name]||name)+'</div>';
+      if(t.ok===false||t.error){
+        html+='<div class="small" style="color:var(--danger)">× '+esc(t.error||'调用失败')+'</div>';
+      } else {
+        (t.channels||[]).forEach(function(c){
+          var tone=c.status==='ok'?'var(--ok)':(c.status==='fail'?'var(--danger)':'var(--muted)');
+          var mark=c.status==='ok'?'正常':(c.status==='fail'?'失败':'未配置');
+          html+='<div class="small" style="display:flex;gap:10px;align-items:baseline;padding:2px 0">'
+            +'<span style="color:'+tone+';font-weight:700;min-width:48px">'+mark+'</span>'
+            +'<span style="min-width:112px">'+esc(c.label||c.id)+'</span>'
+            +'<span class="muted">'+esc(c.detail||'')+'</span></div>';
+        });
+      }
+      html+='</div>';
+    });
+    box.innerHTML=html||'<div class="empty">无结果</div>';
+    if(msg) msg.textContent=d.failed?('有 '+d.failed+' 个通道失败'):(d.unreachable?('有 '+d.unreachable+' 个站点未响应'):'全部通道正常');
+  }catch(e){
+    box.innerHTML='<div class="err-box">'+esc(e&&e.message?e.message:'网络错误')+'</div>';
+    if(msg) msg.textContent='';
+  }finally{ btn.disabled=false; }
+};
+
 // ---------- 站点状态 ----------
 async function renderHealth(){
   const c=document.getElementById('content');
@@ -642,6 +683,12 @@ async function renderHealth(){
   html+='<div class="panel" style="margin-top:16px"><h3>🎤 Sing to Me <span class="tag">0元购 · 用户为我唱歌</span></h3>'
     +'<p class="small muted">用户在 shop 为我唱一首歌，我送她资料。点此审核录音、标记通过 / 已发。</p>'
     +'<div style="margin-top:10px"><button class="btn" onclick="switchPage(\'sing\')">去审核 →</button></div></div>';
+
+  // ===== 通知通道自检（一键验证提醒是否真的在发）=====
+  html+='<div class="panel" style="margin-top:16px"><h3>通知通道自检</h3>'
+    +'<p class="small muted">真实发一条测试提醒到 shop 订单与客服（supportly）的每个通道：Telegram / 邮件 / 飞书。<br>改完 secret 后点一下就知道有没有生效，不必等真实订单来验证。</p>'
+    +'<div style="margin-top:10px"><button class="btn" id="ntBtn" onclick="runNotifyTest()">发送测试通知</button> <span class="small muted" id="ntMsg"></span></div>'
+    +'<div id="ntResult" style="margin-top:12px"></div></div>';
 
   html+='<div style="margin-top:14px"><button class="btn" onclick="renderHealth()">↻ 重新探测</button></div></div>';
   c.innerHTML=html;
