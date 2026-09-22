@@ -2,5 +2,7 @@
 /archive.html / 301
 /blog /note 301
 /blog/* /note/:splat 301
+/commute/* / 301
+/commute / 301
 /solospeak/* https://speak.955827.xyz/solospeak/:splat 301
 /letout/* https://speak.955827.xyz/letout/:splat 301
