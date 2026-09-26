@@ -111,7 +111,8 @@
         "feishu-class",
         "ui-fix"
       ]
-    },    {
+    },
+    {
       "date": "2026-09-08",
       "title": "移除 shop 免费课承接横幅：克制互链，不重复造轮子",
       "summary": "用户反馈 shop 首页的「欢迎来自免费建站公开课的同学 · 去定制你的站点 →」承接横幅冗余且链接误导人（刚听完免费课就推「定制站点」、点击后只是滚动到购买侧栏，像诱导）。修复：删除 #classBridge 横幅、相关 .class-bridge/.bridge-flash 样式、桥接 IIFE 及三语 bridgeText/bridgeBtn 键，回归最简互链：shop 首页只保留一行 muted「免费公开课 · 先听课，再决定 →」入口；course.html 底部 CTA 从 `/?src=feishu-class` 改为 `/`，去掉已无意义的来源参数。同时把 course.html 英文字典从公考/面试文案统一为建站主题（与中/日一致）。验证：grep 确认 index.html 中 classBridge/bridgeText/bridgeBtn/class-bridge/feishu-class/bridge-flash 全部零残留；node --check 内联 JS 0 错误；本机 Chrome 实测 shop 首页无横幅、course.html 英文内容已改为 site-building 主题、CTA 指向 /。",
@@ -668,6 +669,13 @@
         "toolification",
         "cleanup"
       ]
+    },
+    {
+      "date": "2026-09-26",
+      "title": "rcj-blog 便签墙 + 照片墙暖纸风重设计",
+      "change": "新增 /board 留言墙（aibrium 暖纸手作便签风，/api/notes 边缘函数 D1 存储 + 60s 限频 + ADMIN_PASS 删除接口，后台新增便签管理页）；/photowall 重设计为暖米渐变 + 衬线字体 + 拍立得白框卡片；Navbar 手机端转盘修复（链接层移出 onPan 盘面，规避 framer-motion 指针捕获吞 tap 导致点击不跳转）",
+      "result": "tsc 通过（改动文件零报错）；SQL 流程用 node:sqlite 本地验证 6 项全过；线上验收待 CF Pages 构建后进行",
+      "lesson": "framer-motion onPan 的指针捕获会吞掉子元素 tap 的 click，可交互子元素必须放在手势层之外；用户机器内存有限，XHBlogs 本地编译类验证一律改走 CF 云端构建"
     }
   ]
 }
