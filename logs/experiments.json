@@ -1,6 +1,19 @@
 {
-  "updated": "2026-09-25",
+  "updated": "2026-09-26",
   "experiments": [
+    {
+      "date": "2026-09-26",
+      "title": "rcj-blog 首页封面去重 + 生活碎片相册轮播 + 缺省封面轮换池",
+      "summary": "用户反馈首页轮播三篇文章封面全是同一张：根因是三篇 posts frontmatter 都复制模板带着 cover: /cover-default.svg。①手绘 3 张主题 SVG 封面（1200×630 渐变+线条图形：rcj-stack 靛蓝层叠方块 / Pages+D1 青绿数据库圆柱 / rcj-shop 上线暖橙价签），frontmatter 分别指向；②新增 AlbumPosterCarousel.tsx——首页「生活碎片」照片墙海报从静态封面升级为相册图片 4s 交叉淡入轮播（duration-1000 ease-in-out、全部堆叠预载防闪、右上 6 个指示点、单图退化静态），page.tsx 换用；③防复发：page.tsx pickCover()——frontmatter 没写 cover 或仍是默认值时按 slug 哈希（DJBX+imul+位混淆）从 4 张中性封面池（新增 indigo/teal/amber 三张无文章专属词 SVG + 原 default）稳定分配；坑：h ^= h>>>16 产出带符号 int32，负数取模得负索引致 FALLBACK_COVERS[-1]=undefined（16 个测试 slug 中 3 个中招），补 >>>0 后 16 slug 分布 4 桶无 undefined。验证：3 张 SVG XML 解析通过；dev SSR 实测首页输出 6 相册图+6 指示点+3 张不同封面；tsc 对改动文件干净（项目仅剩 FriendsBoard 存量 framer-motion Variants 报错）。事故记录：git commit 未带 pathspec 把用户暂存区 WIP（chatters 重命名/benben.png 删旧换新/siamese-cat）误提交（f192b47），git reset --soft 撤销后用 pathspec 限定 11 文件重提（de8b668）——PowerShell 不支持 heredoc，ParserError 会连累同命令行前段的 git add 一起作废，注意。另：本机代理（127.0.0.1:10808）未开导致 github 推送阻塞，改动先落本地提交。",
+      "type": "feature",
+      "tags": [
+        "rcj-blog",
+        "carousel",
+        "svg-cover",
+        "hash-rotation",
+        "nextjs"
+      ]
+    },
     {
       "date": "2026-09-25",
       "title": "rcj-blog 奔奔智能化 v2/v3：多轮记忆 + 文章知识注入 + 社交图标行",
