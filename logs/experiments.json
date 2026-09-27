@@ -683,6 +683,13 @@
       "change": "lightbox 从孤图模式升级为相册浏览模式：点开照片携带整组列表，左右箭头 + 键盘方向键 + 手机横滑（48px 阈值）循环切换，底部 n/total 计数徽章，切图弹入动画",
       "result": "tsc 通过，已推送 c8d418b 由 CF 云端构建",
       "lesson": ""
+    },
+    {
+      "date": "2026-09-27",
+      "title": "rcj-blog 像素奔奔点亮 + tsc 归零收债",
+      "change": "PixelBenben canvas 渲染器落地（benbenFrames 24×24 七帧三序列），CyberCat 弃用 PNG 雪碧图，状态映射 pet→happy/think→think/默认 idle；FriendsBoard spring 类型收窄后 tsc 全项目首次零报错；sitemap 补 /board；首页相册轮播首图 eager 其余 lazy",
+      "result": "tsc ALL GREEN，提交 542719d 已推送 CF 构建",
+      "lesson": "npx 报 not the tsc command 时先查 node_modules 完整性——本次 node_modules 曾整体缺失，npm i --legacy-peer-deps 重装 678 包后恢复"
     }
   ]
 }
