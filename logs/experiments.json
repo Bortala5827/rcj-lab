@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-26",
+  "updated": "2026-09-27",
   "experiments": [
     {
       "date": "2026-09-26",
@@ -676,6 +676,13 @@
       "change": "新增 /board 留言墙（aibrium 暖纸手作便签风，/api/notes 边缘函数 D1 存储 + 60s 限频 + ADMIN_PASS 删除接口，后台新增便签管理页）；/photowall 重设计为暖米渐变 + 衬线字体 + 拍立得白框卡片；Navbar 手机端转盘修复（链接层移出 onPan 盘面，规避 framer-motion 指针捕获吞 tap 导致点击不跳转）",
       "result": "tsc 通过（改动文件零报错）；SQL 流程用 node:sqlite 本地验证 6 项全过；线上验收待 CF Pages 构建后进行",
       "lesson": "framer-motion onPan 的指针捕获会吞掉子元素 tap 的 click，可交互子元素必须放在手势层之外；用户机器内存有限，XHBlogs 本地编译类验证一律改走 CF 云端构建"
+    },
+    {
+      "date": "2026-09-27",
+      "title": "rcj-blog 照片墙光箱支持连续浏览",
+      "change": "lightbox 从孤图模式升级为相册浏览模式：点开照片携带整组列表，左右箭头 + 键盘方向键 + 手机横滑（48px 阈值）循环切换，底部 n/total 计数徽章，切图弹入动画",
+      "result": "tsc 通过，已推送 c8d418b 由 CF 云端构建",
+      "lesson": ""
     }
   ]
 }
