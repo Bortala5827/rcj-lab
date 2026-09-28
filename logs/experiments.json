@@ -1,6 +1,18 @@
 {
-  "updated": "2026-09-27",
+  "updated": "2026-09-28",
   "experiments": [
+    {
+      "date": "2026-09-28",
+      "title": "rcj-blog 导航精简：10 项砍到 7 项，QQ 频道挪进首页社交图标行",
+      "summary": "用户反馈导航栏菜单过多（首页/项目/归档/照片墙/留言墙/音乐/后台/友链/加入频道/关于 共 10 项，PC 顶部一排拥挤，手机转盘 36° 一格过密）。处理：①Navbar navLinks 砍 3 项——「项目」（首页已有 /projects 大卡片入口，不重复）、「后台」（管理员入口走直链 /admin + 服务端密码门，不暴露公共导航）、「加入频道」（外链不属于博客内容）；②「加入频道」不删——挪到首页 ProfileCard 社交图标行（飞书/闲鱼/QQ频道/邮箱 四件套），siteConfig.social 新增 qqChannel 集中配置，图标用 heroicons chat-bubble-oval-left-ellipsis 单色 path 随 hover 变色，与既有图标行风格一致；③坑：砍掉唯一带 external:true 的项后 TS 把 navLinks 数组元素类型收窄为 {name;href}，下游 link.external 访问报 TS2339，补显式类型标注 { external?: boolean } 保留外链处理能力。手机转盘项数 10→7（间隔 36°→51.4°）自动重排。验证：npx tsc --noEmit 全绿（含存量 FriendsBoard 报错也已清零）。",
+      "type": "refactor",
+      "tags": [
+        "rcj-blog",
+        "navbar",
+        "information-architecture",
+        "social-icons"
+      ]
+    },
     {
       "date": "2026-09-26",
       "title": "rcj-blog 首页封面去重 + 生活碎片相册轮播 + 缺省封面轮换池",
