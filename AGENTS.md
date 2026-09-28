@@ -1,6 +1,6 @@
 # RCJ Lab · 仓库规则
 
-主站 955827.xyz，含 SoloSpeak、LetOut、API 汇总页、资产库、实验日志。
+主站 955827.xyz，含 SoloSpeak、LetOut、API 汇总页、资产库。
 
 ## 不要做
 
@@ -15,12 +15,10 @@
 - `api/index.html` — API 汇总页
 - `solospeak/` `letout/` — 子路径产品
 - `assets.html` — 资产库（只展示高价值资产）
-- `log.html` + `logs/experiments.json` — 实验日志
 - `assets/skills/` — 可复用 Skill（18个，资产页只展示核心的）
 - `assets/rcj-assets/` — 交互/媒体/技能资产（新位置）
 
 ## 推送前
 
 1. 本机 Chrome 打开核心页验证
-2. 如改了功能，更新 `logs/experiments.json`
-3. 按 `../../RCJ-网站上线检查清单.md` 过一遍
+2. 按 `../../RCJ-网站上线检查清单.md` 过一遍

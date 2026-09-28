@@ -16,7 +16,6 @@ anywhere can use it without a language barrier — no account or region lock.
 | **RCJ Lab** | `/` | Brand lab, personal homepage, and AI / LLM API navigation |
 | **API Portal** | `/api` | Curated navigation of large-model / LLM API providers |
 | **Assets** | `/assets` | Shared asset directory |
-| **Experiment Log** | `/log.html` | Experiment log & build journal |
 | **Principles** | `/principles` | Operating principles |
 
 All front-end surfaces are **trilingual (EN / 日本語 / 中文)** and switch languages
@@ -42,7 +41,7 @@ with a single click.
 npx wrangler pages dev .
 ```
 
-Edit `index.html`, `assets/`, or `log.html` → commit to `main` →
+Edit `index.html` or `assets/` → commit to `main` →
 Cloudflare Pages deploys automatically. Hard-refresh (Ctrl / Cmd+F5) to clear cache.
 
 ## Part of the RCJ ecosystem
