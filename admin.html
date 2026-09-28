@@ -23,11 +23,6 @@
     .focus-card .fc-sub  { font-size:11px; color:#9ca3af; margin-top:6px; }
     .focus-card.hot { background:linear-gradient(135deg,#fef3c7,#fde68a); border-color:#f59e0b; }
     .focus-card.hot .fc-num { color:#92400e; }
-    /* 通勤合并后的 tab */
-    .commute-tabs { display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid var(--line); padding-bottom:10px; }
-    .commute-tabs button { padding:6px 14px; border:1px solid var(--line); background:#fff; border-radius:20px; font-size:13px; cursor:pointer; }
-    .commute-tabs button.active { background:#0d9488; color:#fff; border-color:#0d9488; }
-
     :root{
       --bg:#f1f5f9; --surface:#fff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0;
       --sb:#0f172a; --sb2:#1e293b; --sb-text:#cbd5e1; --sb-muted:#64748b;
@@ -220,6 +215,7 @@
       <div class="sb-item active" data-page="health"><span class="ico">🩺</span>站点状态</div>
       <div class="sb-item" data-page="traffic"><span class="ico">📊</span>访问分析</div>
       <div class="sb-item" data-page="support"><span class="ico">💬</span>客服系统</div>
+      <div class="sb-item" data-page="blog"><span class="ico">📝</span>博客管理</div>
       <div class="sb-item" data-page="aux"><span class="ico">🛡️</span>辅警题库</div>
       <div class="sb-item" data-page="facetalk"><span class="ico">💬</span>FaceTalk</div>
       <div class="sb-item" data-page="orders"><span class="ico">💰</span>订单提醒</div>
@@ -332,16 +328,32 @@ window.switchPage = function(p){
 function renderPage(p){
   if(!DATA){ document.getElementById('content').innerHTML='<div class="loading">读取中…</div>'; return; }  if(p==='overview') renderOverview();
   else if(p==='health') renderHealth();
+  else if(p==='blog') renderBlog();
   else if(p==='facetalk') renderFaceTalk();
   else if(p==='aux') renderAux();
   else if(p==='sites') renderSites();
-  else if(p==='commute') { if(commuteTab==='chat') renderCommuteChat(); else renderCommute(); }
   else if(p==='wall') renderWallMgmt();
   else if(p==='ai') renderAI();
   else if(p==='support') renderSupport();
   else if(p==='traffic') renderTraffic();
   else if(p==='sing') renderSingRequests();
   else if(p==='orders') renderOrders();
+}
+
+// ---------- 博客管理（iframe 嵌入 blog.955827.xyz/admin）----------
+function renderBlog(){
+  const c=document.getElementById('content');
+  c.innerHTML=
+    '<div class="panel" style="padding:0;overflow:hidden">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)">'+
+        '<div><h3 style="margin:0">📝 博客管理 <span class="tag">blog.955827.xyz/admin</span></h3></div>'+
+        '<div style="display:flex;gap:8px">'+
+          '<button class="btn" onclick="document.getElementById(\'blogFrame\').contentWindow.location.reload()">↻ 刷新</button>'+
+          '<button class="btn" onclick="window.open(\'https://blog.955827.xyz/admin\',\'_blank\')" target="_blank">↗ 新窗口</button>'+
+        '</div>'+
+      '</div>'+
+      '<iframe id="blogFrame" src="https://blog.955827.xyz/admin" style="width:100%;height:calc(100vh - 200px);border:none;background:#fff"></iframe>'+
+    '</div>';
 }
 
 // 邮件/直达链接：站外跳转进客服管理并定位到具体会话
@@ -788,66 +800,6 @@ function renderSites(){
   document.getElementById('content').innerHTML=html;
 }
 
-// ---------- 此刻通勤（commute 场景管理）----------
-async function renderCommute(){
-  const c=document.getElementById('content');
-  c.innerHTML='<div class="loading">读取中…</div>';
-  let snap=null;
-  try{
-    const r=await fetch('/api/moment',{method:'GET',headers:{Accept:'application/json'}});
-    const j=await r.json();
-    if(j.ok) snap=j;
-  }catch(_){}
-  const st=snap&&snap.stats?snap.stats:{};
-  const active=snap?Number(snap.active)||0:0;
-  const cards=[
-    ['hub',active,'此刻正在通勤','最近 2h 内未结束'],
-    ['hub',st.doneToday||0,'今日完成',''],
-    ['hub',fmtDur(st.minSec),'最短',''],
-    ['hub',fmtDur(st.maxSec),'最长',''],
-    ['hub',fmtDur(st.avgSec),'平均',''],
-  ];
-  let html='<div class="stats">';
-  cards.forEach(x=>html+='<div class="stat '+x[0]+'"><div class="stat-num">'+x[1]+'</div><div class="stat-label">'+x[2]+'</div>'+(x[3]?'<div class="stat-sub">'+x[3]+'</div>':'')+'</div>');
-  html+='</div>';
-
-  html+='<div class="panel"><h3>🚇 通勤 · 此刻通勤数据</h3>'
-    +'<div class="commute-tabs">'
-    +'<button class="'+(commuteTab==='moment'?'active':'')+'" onclick="setCommuteTab(\'moment\')">此刻通勤数据</button>'
-    +'<button class="'+(commuteTab==='chat'?'active':'')+'" onclick="setCommuteTab(\'chat\')">通勤聊天</button>'
-    +'</div>'
-    +'<p class="small muted">场景名为 <code>commute</code>，主表存 rcj-analytics-d1 的 <code>moments</code>，连带 <code>commute_chat</code>（聊天）和 <code>commute_chat_rl</code>（限流）。清空会一并删除，<b>不可逆</b>。聊天逐条删除请切到「通勤聊天」tab。</p>'
-    +'<div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
-    +'<button class="btn" onclick="loadCommute()">↻ 刷新</button>'
-    +'<button class="btn primary" onclick="clearCommute()">🗑 清空全部记录</button>'
-    +'<span class="small muted" id="commuteMsg"></span>'
-    +'</div></div>';
-
-  c.innerHTML=html;
-}
-function loadCommute(){ renderCommute(); }
-async function clearCommute(){
-  if(!confirm('确认清空 commute 全部记录？此操作不可恢复。')) return;
-  const msg=document.getElementById('commuteMsg');
-  if(msg){ msg.textContent='处理中…'; msg.style.color='var(--muted)'; }
-  try{
-    // 后台已登录（带 rcj_admin cookie），直接清空；无需手动填 key
-    const r=await fetch('/api/moment?clear=commute',{method:'GET',credentials:'same-origin'});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok && j.ok){
-      if(msg){ msg.textContent='✓ 已清空'; msg.style.color='var(--ok)'; }
-      renderCommute();
-    } else if(r.status===403){
-      if(msg){ msg.textContent='✗ 未登录，请先在后台登录'; msg.style.color='var(--danger)'; }
-      showLogin();
-    } else {
-      if(msg){ msg.textContent='✗ '+(j.error||('HTTP '+r.status)); msg.style.color='var(--danger)'; }
-    }
-  }catch(e){
-    if(msg){ msg.textContent='✗ 网络错误'; msg.style.color='var(--danger)'; }
-  }
-}
-
 // ---------- 留言管理（FaceTalk wall 表） ----------
 function renderWallMgmt(){
   const c=document.getElementById('content');
@@ -901,95 +853,6 @@ async function delWall(id){
   }
 }
 
-// ---------- 通勤聊天（commute 页面 chat 表） ----------
-let _ccCache = [];
-// 通勤板块内的子视图：'moment'（此刻通勤数据） / 'chat'（通勤聊天）
-let commuteTab = 'moment';
-function setCommuteTab(tab){
-  commuteTab = tab;
-  if(tab === 'chat') renderCommuteChat();
-  else renderCommute();
-}
-async function renderCommuteChat(){
-  const c=document.getElementById('content');
-  c.innerHTML='<div class="loading">读取中…</div>';
-  try{
-    const r=await fetch('/api/admin/commute-chat?list=1',{credentials:'same-origin'});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok || !j.ok){ c.innerHTML='<div class="err-box">'+(j.error||('HTTP '+r.status))+'</div>'; return; }
-    _ccCache=j.items||[];
-    drawCommuteChat();
-  }catch(e){
-    c.innerHTML='<div class="err-box">网络错误</div>';
-  }
-}
-function drawCommuteChat(){
-  const c=document.getElementById('content');
-  const list=_ccCache||[];
-  let html='<div class="panel"><h3>🚇 通勤 · 聊天记录</h3>'
-    +'<div class="commute-tabs">'
-    +'<button class="'+(commuteTab==='moment'?'active':'')+'" onclick="setCommuteTab(\'moment\')">此刻通勤数据</button>'
-    +'<button class="'+(commuteTab==='chat'?'active':'')+'" onclick="setCommuteTab(\'chat\')">通勤聊天</button>'
-    +'</div>'
-    +'<p class="small muted">commute 页「此刻同行」聊天记录，存 rcj-analytics-d1 · commute_chat 表，共 '+list.length+' 条（最近 100）。</p>'
-    +'<div style="margin:14px 0;display:flex;gap:10px;flex-wrap:wrap">'
-    +'<button class="btn" onclick="renderCommuteChat()">↻ 刷新</button>'
-    +'<button class="btn primary" onclick="clearCommuteChat()">🗑 清空全部聊天</button>'
-    +'<span class="small muted" id="ccMsg"></span>'
-    +'</div>';
-  if(!list.length){ html+='<div class="empty">暂无聊天记录</div></div>'; c.innerHTML=html; return; }
-  html+='<div style="border:1px solid var(--line);border-radius:10px;overflow:hidden">';
-  list.forEach(w=>{
-    html+='<div style="display:grid;grid-template-columns:1fr auto;padding:10px 14px;border-bottom:1px solid var(--line);gap:12px;align-items:start">'
-      +'<div><div class="small muted">'+fmtTime(w.created_at)+' <span style="font-family:ui-monospace,monospace">· '+esc(w.client_id||'')+'</span></div>'
-      +'<div class="small" style="margin-top:4px;white-space:pre-wrap;word-break:break-word">'+esc(w.text||'')+'</div></div>'
-      +'<div><button class="btn small" onclick="delCommuteChat(\''+esc(w.id)+'\')">删除</button></div>'
-      +'</div>';
-  });
-  html+='</div></div>';
-  c.innerHTML=html;
-}
-async function delCommuteChat(id){
-  if(!id) return;
-  if(!confirm('确认删除这条聊天？')) return;
-  const msg=document.getElementById('ccMsg');
-  if(msg){ msg.textContent='处理中…'; msg.style.color='var(--muted)'; }
-  try{
-    const r=await fetch('/api/admin/commute-chat?del='+encodeURIComponent(id),{credentials:'same-origin'});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok && j.ok){
-      if(msg){ msg.textContent='✓ 已删除 '+j.deleted+' 条'; msg.style.color='var(--ok)'; }
-      renderCommuteChat();
-    } else if(r.status===401){
-      if(msg){ msg.textContent='✗ 未登录'; msg.style.color='var(--danger)'; }
-      showLogin();
-    } else {
-      if(msg){ msg.textContent='✗ '+(j.error||('HTTP '+r.status)); msg.style.color='var(--danger)'; }
-    }
-  }catch(e){
-    if(msg){ msg.textContent='✗ 网络错误'; msg.style.color='var(--danger)'; }
-  }
-}
-async function clearCommuteChat(){
-  if(!confirm('确认清空全部通勤聊天（含限流计数）？')) return;
-  const msg=document.getElementById('ccMsg');
-  if(msg){ msg.textContent='处理中…'; msg.style.color='var(--muted)'; }
-  try{
-    const r=await fetch('/api/admin/commute-chat?delAll=1',{credentials:'same-origin'});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok && j.ok){
-      if(msg){ msg.textContent='✓ 已清空 '+j.deleted.chat+' 条聊天'; msg.style.color='var(--ok)'; }
-      renderCommuteChat();
-    } else if(r.status===401){
-      if(msg){ msg.textContent='✗ 未登录'; msg.style.color='var(--danger)'; }
-      showLogin();
-    } else {
-      if(msg){ msg.textContent='✗ '+(j.error||('HTTP '+r.status)); msg.style.color='var(--danger)'; }
-    }
-  }catch(e){
-    if(msg){ msg.textContent='✗ 网络错误'; msg.style.color='var(--danger)'; }
-  }
-}
 async function delWallIp(){
   const ip=document.getElementById('wallIpInput').value.trim();
   if(!ip) return;
