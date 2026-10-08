@@ -360,7 +360,9 @@
 (function(){
   function showAll(){ [].forEach.call(document.querySelectorAll('.reveal'), function(e){ e.classList.add('visible'); }); }
   function init(){
-    if (window.RCJMotion) {
+    // 移动端（<900px）跳过 GSAP 动画层：ScrollTrigger 在窄屏快速滚动时已知会触发页面崩溃/闪退，
+    // 直接静态展示全部内容，功能与布局不受影响。
+    if (window.RCJMotion && window.innerWidth >= 900) {
       var M = window.RCJMotion;
       // Layer 1 · 优雅出现（文字遮罩上浮 + 副标题）
       M.textReveal('.hero-inner h1', { delay: 0.25 });
