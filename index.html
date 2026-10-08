@@ -35,33 +35,69 @@
   <link rel="stylesheet" href="/assets/hub.v2.css?v=20260820a" />
   <link rel="stylesheet" href="/assets/rcj-motion.css?v=20260814r1" />
   <style>
-    /* 首页层级结构：母体 → 系列 → 子项 */
-    .series-block { margin-bottom: 44px; }
-    .series-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
-    .series-label { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
-    .series-sub { font-size: 13px; color: var(--ink-2); }
-    .btn-cart {
+    /* ============== 中枢首页 · 生态产品矩阵（2026-10-08 改版） ============== */
+
+    /* Hero 副行：一句话点明生态角色 */
+    .hero-sub {
+      margin-top: 20px; font-size: 15px; color: var(--ink-2); line-height: 1.7;
+    }
+    .hero-sub b { color: var(--ink); font-weight: 700; }
+
+    /* 产品图标行（Google 式：一眼看到生态全貌） */
+    .icon-row {
+      margin: 44px auto 0; max-width: 820px;
+      display: flex; flex-wrap: wrap; gap: 12px 14px; justify-content: center;
+    }
+    .icon-chip { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 66px; }
+    .icon-dot {
+      width: 56px; height: 56px; border-radius: 18px;
       display: flex; align-items: center; justify-content: center;
-      width: 50px; height: 50px; border-radius: 10px; border: none;
-      background-color: transparent; position: relative; margin: 0 auto;
-      cursor: pointer; text-decoration: none;
+      font-size: 24px; color: #fff;
+      box-shadow: 0 6px 18px rgba(15,23,42,.12);
+      transition: transform .22s cubic-bezier(.22,.61,.36,1), box-shadow .22s;
     }
-    .btn-cart::after {
-      content: attr(data-quantity); width: fit-content; height: fit-content;
-      position: absolute; font-size: 15px; color: white;
-      font-family: 'Lucida Sans', sans-serif; opacity: 0; visibility: hidden;
-      transition: .2s linear; top: 115%;
+    .icon-chip:hover .icon-dot { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(15,23,42,.18); }
+    .icon-chip span { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+
+    /* 分区标题：Current Projects + 副说明 */
+    .section-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+    .section-head .sub { font-size: 13px; color: var(--ink-3); }
+
+    /* 产品分组 */
+    .group { margin-top: 34px; }
+    .group-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 700; color: var(--ink-2);
+      letter-spacing: .05em; margin-bottom: 16px;
     }
-    .icon-cart { width: 24.38px; height: 30.52px; transition: .2s linear; }
-    .icon-cart path { fill: rgb(240, 8, 8); transition: .2s linear; }
-    .btn-cart:hover > .icon-cart { transform: scale(1.2); }
-    .btn-cart:hover > .icon-cart path { fill: rgb(186, 34, 233); }
-    .btn-cart:hover::after { visibility: visible; opacity: 1; top: 105%; }
-    .quantity { display: none; }
+    .group-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
+    /* 产品卡片矩阵 */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      display: flex; flex-direction: column; gap: 10px;
+      background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 20px; text-decoration: none; color: inherit;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .22s cubic-bezier(.22,.61,.36,1);
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(15,23,42,.10); border-color: var(--ink-4); }
+    .card-top { display: flex; align-items: center; gap: 12px; }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex: 0 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: #fff; box-shadow: 0 4px 12px rgba(15,23,42,.10);
+    }
+    .card-name { font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+    .card-badge {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
+      padding: 2px 8px; border-radius: 999px; width: fit-content;
+      background: var(--bg-soft); color: var(--ink-3); border: 1px solid var(--line); white-space: nowrap;
+    }
+    .card-desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+    .card-diff { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+    .card-diff b { color: var(--ink-2); font-weight: 600; }
 
-    /* 滚动进入视口逐块浮现（由 RCJMotion.revealOnScroll 接管 opacity 动画；
-       clearProps 完成后不回退；无 JS 时引擎内部 showAll 设 inline opacity:1 兜底） */
+    /* 滚动进入视口逐块浮现（由 RCJMotion.revealOnScroll 接管；无 JS 时引擎 showAll 兜底） */
     .reveal.visible { opacity: 1; }
 
     /* ============== Closing Scene：让网站不是突然结束 ============== */
@@ -84,66 +120,34 @@
       animation: closing-pulse 2.8s ease-in-out infinite;
     }
     @keyframes closing-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-    @media (prefers-reduced-motion: reduce) { .closing-mark .dot { animation: none; } }
 
-    /* 产品卡片列表 + 角色图缩略图 + 每项独特色彩（产品性格） */
-    .mini-list { display: grid; gap: 10px; }
-    .mini-item { display: flex; flex-direction: row; align-items: center; gap: 14px; padding: 13px 18px; background: var(--bg); border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: var(--radius); text-decoration: none; transition: border-color .2s ease, box-shadow .2s ease, border-left-color .2s ease; }
-    .mini-item:hover { border-color: var(--ink-4); box-shadow: 0 10px 26px rgba(15,23,42,.10); }
-    .mini-item[data-color="speak"] { border-left-color: #6366f1; }   /* 靛蓝 · 独处表达 */
-    .mini-item[data-color="emotion"] { border-left-color: #f59e0b; }  /* 琥珀 · 情绪释放 */
-    .mini-item[data-color="connect"] { border-left-color: #14b8a6; }  /* 青绿 · 面试连接 */
-    .mini-item[data-color="exam"] { border-left-color: #1e88e5; }     /* 蓝 · 考试训练 */
-    .mini-item[data-color="dinner"] { border-left-color: #b87333; }   /* 棕 · 情侣点餐 */
-    .mini-item[data-color="card"] { border-left-color: #8b5cf6; }    /* 紫 · 声音名片 */
-    .mini-img { width: 46px; height: 46px; border-radius: 12px; object-fit: cover; flex: 0 0 auto; background: var(--bg-soft); box-shadow: 0 4px 12px rgba(15,23,42,.06); will-change: transform; }
-    .mini-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
-    .mini-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-    .mini-name { font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
-    /* 差异化徽章：一眼看出产品不同定位 */
-    .mini-badge {
-      font-size: 10.5px; font-weight: 700; letter-spacing: .04em;
-      padding: 2px 8px; border-radius: 999px;
-      background: var(--bg-soft); color: var(--ink-3);
-      border: 1px solid var(--line); white-space: nowrap;
+    /* ============== 灵动性（2026-08-19 · 纯动效层，不改逻辑） ============== */
+    .hero-glow { animation: heroBreath 14s ease-in-out infinite; will-change: transform, opacity; }
+    @keyframes heroBreath {
+      0%, 100%   { opacity: .8;  transform: translateX(-50%) scale(1); }
+      28.57%     { opacity: 1;   transform: translateX(-50%) scale(1.045); }
+      57.14%     { opacity: 1;   transform: translateX(-50%) scale(1.045); }
     }
-    .mini-item[data-color="speak"] .mini-badge { color: #6366f1; background: #eef0fe; border-color: #d8dcfb; }
-    .mini-item[data-color="emotion"] .mini-badge { color: #b45309; background: #fef3e2; border-color: #f7d6b1; }
-    .mini-item[data-color="connect"] .mini-badge { color: #0f766e; background: #e6f7f4; border-color: #c2ebe4; }
-    .mini-item[data-color="exam"] .mini-badge { color: #1565c0; background: #e8f1fc; border-color: #c7def6; }
-    .mini-item[data-color="dinner"] .mini-badge { color: #8b4513; background: #fef5e7; border-color: #f5e0c8; }
-    .mini-item[data-color="card"] .mini-badge { color: #6d28d9; background: #f3f0ff; border-color: #ddd0f8; }
-    .mini-desc { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
-    /* 差异化短句：用 · 分隔的关键差异点 */
-    .mini-diff { font-size: 12.5px; color: var(--ink-3); line-height: 1.4; margin-top: 2px; }
-    .mini-diff b { color: var(--ink-2); font-weight: 600; }
-    .mini-eyebrow { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; margin: 10px 0 4px; }
+    .hero-grid { animation: gridDrift 90s linear infinite; will-change: background-position; }
+    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 56px 56px; } }
 
-    /* 语言：按浏览器语言自动匹配（不再提供手动切换器） */
-
-    @media (max-width: 720px) {
-      .series-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+    /* 响应式：平板 2 列 / 手机 1 列，图标与间距收窄 */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .icon-row { margin-top: 34px; gap: 12px 10px; }
+      .icon-chip { width: 60px; gap: 6px; }
+      .icon-dot { width: 48px; height: 48px; font-size: 20px; border-radius: 14px; }
+      .card { padding: 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; }
       .hero-glow, .hero-grid { animation: none; }
-      .mini-item, .mini-item:hover, .mini-img { transform: none !important; transition: none !important; }
+      .card, .card:hover, .icon-dot { transform: none !important; transition: none !important; }
     }
-
-    /* ============== 灵动性增强（2026-08-19 · 纯动效层，不改逻辑） ============== */
-    /* hero 光晕缓慢呼吸：按给定规格 吸气4s→屏住4s→呼气6s（14s 整段） */
-    .hero-glow { animation: heroBreath 14s ease-in-out infinite; will-change: transform, opacity; }
-    @keyframes heroBreath {
-      0%, 100%   { opacity: .8;  transform: translateX(-50%) scale(1); }
-      28.57%     { opacity: 1;   transform: translateX(-50%) scale(1.045); } /* 吸 4s */
-      57.14%     { opacity: 1;   transform: translateX(-50%) scale(1.045); } /* 屏 4s */
-    }
-    /* hero 网格极缓慢漂移：一个单元(56px)循环，几乎不可察觉的"活着"感 */
-    .hero-grid { animation: gridDrift 90s linear infinite; will-change: background-position; }
-    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 56px 56px; } }
-    /* 产品卡 hover 轻微上浮（灵动但不抢戏） */
-    .mini-item { transition: border-color .2s ease, box-shadow .2s ease, border-left-color .2s ease, transform .25s cubic-bezier(.22,.61,.36,1); }
-    .mini-item:hover { transform: translateY(-2px); }
   </style>
 </head>
 <body class="hub">
@@ -168,6 +172,19 @@
       <div class="container hero-inner">
         <p class="eyebrow">RCJ LAB · Independent AI Product Studio</p>
         <h1 data-i18n="heroTitle">把想法，<br />做成顺手的小工具</h1>
+        <p class="hero-sub" data-i18n="heroSub">独立 AI 产品工作室 · 旗下 <b>9 个产品</b>，全部跑在 <b>Cloudflare 边缘</b></p>
+        <!-- 产品图标行：一眼看到生态全貌 -->
+        <div class="icon-row">
+          <div class="icon-chip"><div class="icon-dot" style="background:#1e88e5;">📚</div><span>Exam Hub</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#14b8a6;">🎙️</div><span>FaceTalk</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#8b5cf6;">🪪</div><span>voicecard</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#f97316;">✍️</div><span>Blog</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#6366f1;">🗣️</div><span>Speak</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#b87333;">🍽️</div><span>Dinner</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#ef4444;">🛍️</div><span>Shop</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#10b981;">💬</div><span>Support</span></div>
+          <div class="icon-chip"><div class="icon-dot" style="background:#f6821f;">🧱</div><span>Stack</span></div>
+        </div>
       </div>
     </section>
 
@@ -176,101 +193,128 @@
       <div class="container">
         <header class="section-head reveal">
           <h2>Current Projects</h2>
+          <span class="sub" data-i18n="projectsSub">内容 · 工具 · 服务，一个中枢全看清</span>
         </header>
 
-        <!-- Exam Hub -->
-        <div class="series-block reveal">
-          <div class="series-head">
-            <span class="series-label">Exam Hub</span>
-            <span class="series-sub" data-i18n="examSub">职业考试智能训练系统</span>
-          </div>
-          <div class="mini-list">
-            <a class="mini-item" data-color="exam" href="https://exam.955827.xyz" target="_blank" rel="noopener">
-              <img class="mini-img" data-magnetic src="/assets/roles/exam.thumb.png?v=20260817b" alt="Exam Hub" loading="lazy" />
-              <span class="mini-text">
-                <span class="mini-head">
-                  <span class="mini-name">Exam Hub</span>
-                  <span class="mini-badge" data-i18n="examBadge">考试训练</span>
-                </span>
-                <span class="mini-desc" data-i18n="examDesc">结构化面试 · 辅警真题 · 消防结构化</span>
-                <span class="mini-diff" data-i18n="examDiff"><b>差异</b> · 真题库 · 答题录音 · 即时复盘</span>
-              </span>
+        <!-- 学习与求职 -->
+        <div class="group reveal">
+          <div class="group-title" data-i18n="groupLearn">学习与求职</div>
+          <div class="grid">
+            <a class="card" data-color="exam" href="https://exam.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#1e88e5;">📚</div>
+                <div>
+                  <div class="card-name">Exam Hub</div>
+                  <div class="card-badge" data-i18n="examBadge">考试训练</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="examDesc">职业考试智能训练系统：题库 · 知识卡 · 面试 · 教程</p>
+              <p class="card-diff" data-i18n="examDiff"><b>差异</b> · 真题库 · 答题录音 · 即时复盘</p>
+            </a>
+            <a class="card" data-color="connect" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#14b8a6;">🎙️</div>
+                <div>
+                  <div class="card-name">FaceTalk</div>
+                  <div class="card-badge" data-i18n="ftBadge">面试连接</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="ftDesc">免社交的面试口语对练：60 秒试音 · 双向互选</p>
+              <p class="card-diff" data-i18n="ftDiff"><b>差异</b> · 真实语音 · 阅后即焚 · PWA</p>
+            </a>
+            <a class="card" data-color="card" href="https://card.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#8b5cf6;">🪪</div>
+                <div>
+                  <div class="card-name">voicecard</div>
+                  <div class="card-badge" data-i18n="cardBadge">求职工具</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="cardDesc">录一段语音 → 生成链接 → 贴进简历</p>
+              <p class="card-diff" data-i18n="cardDiff"><b>差异</b> · 60s 语音 · QR 分享 · R2 存储</p>
             </a>
           </div>
         </div>
-        <!-- FaceTalk -->
-        <div class="series-block reveal">
-          <div class="series-head">
-            <span class="series-label">FaceTalk</span>
-            <span class="series-sub" data-i18n="ftSub">免社交的面试口语对练</span>
-          </div>
-          <div class="mini-list">
-            <a class="mini-item" data-color="connect" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
-              <img class="mini-img" data-magnetic src="/assets/roles/facetalk.thumb.png?v=20260814r1" alt="FaceTalk" loading="lazy" />
-              <span class="mini-text">
-                <span class="mini-head">
-                  <span class="mini-name">FaceTalk</span>
-                  <span class="mini-badge" data-i18n="ftBadge">面试连接</span>
-                </span>
-                <span class="mini-desc" data-i18n="ftDesc">免社交的面试口语对练工具</span>
-                <span class="mini-diff" data-i18n="ftDiff"><b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚</span>
-              </span>
-            </a>
-          </div>
-        </div>
-        <!-- Dinner for You -->
-        <div class="series-block reveal">
-          <div class="series-head">
-            <span class="series-label">Dinner for You</span>
-            <span class="series-sub" data-i18n="dinnerSub">情侣点餐互动系统</span>
-          </div>
-          <div class="mini-list">
-            <a class="mini-item" data-color="dinner" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
-              <img class="mini-img" data-magnetic src="/assets/roles/dinner.thumb.png?v=20260907" alt="Dinner for You" loading="lazy" />
-              <span class="mini-text">
-                <span class="mini-head">
-                  <span class="mini-name">Dinner for You</span>
-                  <span class="mini-badge" data-i18n="dinnerBadge">情侣互动</span>
-                </span>
-                <span class="mini-desc" data-i18n="dinnerDesc">她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜</span>
-                <span class="mini-diff" data-i18n="dinnerDiff"><b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票</span>
-              </span>
-            </a>
-          </div>
-        </div>
-        <!-- voicecard -->
-        <div class="series-block reveal">
-          <div class="series-head">
-            <span class="series-label">voicecard</span>
-            <span class="series-sub" data-i18n="cardSub">声音名片</span>
-          </div>
-          <div class="mini-list">
-            <a class="mini-item" data-color="card" href="https://card.955827.xyz" target="_blank" rel="noopener">
-              <img class="mini-img" data-magnetic src="/assets/roles/card.jpg?v=20260908" alt="voicecard" loading="lazy" />
-              <span class="mini-text">
-                <span class="mini-head">
-                  <span class="mini-name">voicecard</span>
-                  <span class="mini-badge" data-i18n="cardBadge">求职工具</span>
-                </span>
-                <span class="mini-desc" data-i18n="cardDesc">录一段语音 → 生成链接 → 贴进简历</span>
-                <span class="mini-diff" data-i18n="cardDiff"><b>差异</b> · 60s 语音自我介绍 · QR 码分享 · R2 存储</span>
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
 
-            <!-- ============== Store ============== -->
-    <section class="directions">
-      <div class="container">
-        <a class="btn-cart reveal" href="https://shop.955827.xyz/" target="_blank" rel="noopener" aria-label="Store" data-quantity="0">
-          <svg class="icon-cart" viewBox="0 0 24.38 30.52" height="30.52" width="24.38" xmlns="http://www.w3.org/2000/svg">
-            <title>icon-cart</title>
-            <path transform="translate(-3.62 -0.85)" d="M28,27.3,26.24,7.51a.75.75,0,0,0-.76-.69h-3.7a6,6,0,0,0-12,0H6.13a.76.76,0,0,0-.76.69L3.62,27.3v.07a4.29,4.29,0,0,0,4.52,4H23.48a4.29,4.29,0,0,0,4.52-4ZM15.81,2.37a4.47,4.47,0,0,1,4.46,4.45H11.35a4.47,4.47,0,0,1,4.46-4.45Zm7.67,27.48H8.13a2.79,2.79,0,0,1-3-2.45L6.83,8.34h3V11a.76.76,0,0,0,1.52,0V8.34h8.92V11a.76.76,0,0,0,1.52,0V8.34h3L26.48,27.4a2.79,2.79,0,0,1-3,2.44Zm0,0"></path>
-          </svg>
-          <span class="quantity"></span>
-        </a>
+        <!-- 内容与生活 -->
+        <div class="group reveal">
+          <div class="group-title" data-i18n="groupLife">内容与生活</div>
+          <div class="grid">
+            <a class="card" href="https://blog.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#f97316;">✍️</div>
+                <div>
+                  <div class="card-name">Blog</div>
+                  <div class="card-badge" data-i18n="blogBadge">个人博客</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="blogDesc">Bortala 的宝藏之地：随笔 · 开发笔记 · 作品橱窗</p>
+              <p class="card-diff" data-i18n="blogDiff"><b>差异</b> · 项目墙 · 友链 · 光影画廊</p>
+            </a>
+            <a class="card" href="https://speak.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#6366f1;">🗣️</div>
+                <div>
+                  <div class="card-name">Speak</div>
+                  <div class="card-badge" data-i18n="speakBadge">讲话系列</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="speakDesc">讲话相关系列产品：SoloSpeak · LetOut</p>
+              <p class="card-diff" data-i18n="speakDiff"><b>差异</b> · 独处表达 · 情绪释放</p>
+            </a>
+            <a class="card" data-color="dinner" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#b87333;">🍽️</div>
+                <div>
+                  <div class="card-name">Dinner for You</div>
+                  <div class="card-badge" data-i18n="dinnerBadge">情侣互动</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="dinnerDesc">情侣点餐互动：她输邀请码 → 选菜 + 录歌 → 站长上菜</p>
+              <p class="card-diff" data-i18n="dinnerDiff"><b>差异</b> · 邀请码白名单 · 双向邮件 · 可打印小票</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- 服务与变现 -->
+        <div class="group reveal">
+          <div class="group-title" data-i18n="groupServe">服务与变现</div>
+          <div class="grid">
+            <a class="card" href="https://shop.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#ef4444;">🛍️</div>
+                <div>
+                  <div class="card-name">Shop</div>
+                  <div class="card-badge" data-i18n="shopBadge">变现窗口</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="shopDesc">定制题库（Anki / 离线 HTML）· 代建站服务</p>
+              <p class="card-diff" data-i18n="shopDiff"><b>差异</b> · 闲鱼 + PayPal live</p>
+            </a>
+            <a class="card" href="https://support.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#10b981;">💬</div>
+                <div>
+                  <div class="card-name">Support</div>
+                  <div class="card-badge" data-i18n="supportBadge">客服系统</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="supportDesc">轻量客服：聊天 widget + Telegram 通道，可全局调用</p>
+              <p class="card-diff" data-i18n="supportDiff"><b>差异</b> · 轻量 · 自托管 · 白标</p>
+            </a>
+            <a class="card" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#f6821f;">🧱</div>
+                <div>
+                  <div class="card-name">Stack</div>
+                  <div class="card-badge" data-i18n="stackBadge">开源模板</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="stackDesc">零月费 SaaS 套件模板：Payments + Support + Analytics</p>
+              <p class="card-diff" data-i18n="stackDiff"><b>差异</b> · MIT 开源 · 可整站交付</p>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -280,7 +324,7 @@
     <div class="container">
       <div class="closing-mark">
         <span class="dot"></span>
-        <span>RCJ LAB · STILL BUILDING</span>
+        <span data-i18n="closingMark">MORE TOOLS BREWING · 持续构建中</span>
       </div>
     </div>
   </section>
@@ -313,9 +357,6 @@
       M.parallax('.hero-inner', { yPercent: -26, opacity: 0.1, trigger: '.hero' });
       // Layer 2 · 区块 / 条目滚动浮现（轻微不抢戏：y/blur/duration 都调小）
       M.revealOnScroll('.reveal', { y: 20, blur: 4, duration: 0.6, ease: 'power2.out' });
-      // Layer 2b · 磁吸 + 按压（仅关键 CTA：产品卡片图标）
-      M.magnetic('[data-magnetic]');
-      M.press('[data-magnetic]');
       // Layer 3 · Hero 柔光随指针游走（引擎 spotlight）
       M.spotlight('.hero');
     } else {
@@ -348,22 +389,55 @@
       en: 'Ideas,<br />into handy little tools',
       ja: 'アイデアを、<br />手になじむツールに'
     },
+    heroSub: {
+      zh: '独立 AI 产品工作室 · 旗下 <b>9 个产品</b>，全部跑在 <b>Cloudflare 边缘</b>',
+      en: 'An independent AI product studio · <b>9 products</b>, all running on the <b>Cloudflare edge</b>',
+      ja: '独立系 AI プロダクトスタジオ · <b>9 つの製品</b>、すべて <b>Cloudflare エッジ</b> で稼働'
+    },
+    projectsSub: {
+      zh: '内容 · 工具 · 服务，一个中枢全看清',
+      en: 'Content · tools · services — one hub, all in view',
+      ja: 'コンテンツ · ツール · サービス — 1 つのハブですべて把握'
+    },
+    groupLearn: { zh: '学习与求职', en: 'Study & Career', ja: '学習と就職' },
+    groupLife: { zh: '内容与生活', en: 'Content & Life', ja: 'コンテンツと生活' },
+    groupServe: { zh: '服务与变现', en: 'Services & Monetization', ja: 'サービスと収益化' },
     examSub: { zh: '职业考试智能训练系统', en: 'Vocational exam training system', ja: '職業試験トレーニングシステム' },
     examBadge: { zh: '考试训练', en: 'Exams', ja: '試験対策' },
-    examDesc: { zh: '结构化面试 · 辅警真题 · 消防结构化', en: 'Structured interviews · police exams · fire service', ja: '構造化面接 · 警察過去問 · 消防構造化' },
+    examDesc: { zh: '职业考试智能训练系统：题库 · 知识卡 · 面试 · 教程', en: 'Vocational exam training: bank · cards · interviews · tutorials', ja: '職業試験トレーニング：問題集 · 知識カード · 面接 · チュートリアル' },
     examDiff: { zh: '<b>差异</b> · 真题库 · 答题录音 · 即时复盘', en: '<b>Edge</b> · real question bank · voice recording · instant review', ja: '<b>差異</b> · 本物の過去問 · 録音練習 · その場で復習' },
     ftSub: { zh: '免社交的面试口语对练', en: 'Social-free interview speaking practice', ja: '社交ゼロの面接スピーキング練習' },
     ftBadge: { zh: '面试连接', en: 'Interview pairing', ja: '面接マッチング' },
-    ftDesc: { zh: '免社交的面试口语对练工具', en: 'Social-free speaking practice for interviews', ja: '社交ゼロの面接スピーキング練習' },
-    ftDiff: { zh: '<b>差异</b> · 双向筛选 · 真实语音 · 阅后即焚', en: '<b>Edge</b> · mutual screening · real voice · burn after reading', ja: '<b>差異</b> · 双向マッチング · 実際の音声 · 既読後すぐ消去' },
+    ftDesc: { zh: '免社交的面试口语对练：60 秒试音 · 双向互选', en: 'Social-free speaking practice: 60s audition · mutual matching', ja: '社交ゼロの面接練習：60秒オーディション · 双向マッチング' },
+    ftDiff: { zh: '<b>差异</b> · 真实语音 · 阅后即焚 · PWA', en: '<b>Edge</b> · real voice · burn after reading · PWA', ja: '<b>差異</b> · 実際の音声 · 既読後消去 · PWA' },
     dinnerSub: { zh: '情侣点餐互动系统', en: "Couple's interactive dinner ordering", ja: 'カップル注文インタラクション' },
     dinnerBadge: { zh: '情侣互动', en: 'For couples', ja: 'カップル' },
-    dinnerDesc: { zh: '她输邀请码 → 选菜 + 录歌 + 提交 → 站长审核上菜', en: 'She enters an invite code → picks dishes + records a song → chef serves', ja: '招待コード入力 → 料理を選んで歌を録音 → オーナーが調理' },
-    dinnerDiff: { zh: '<b>差异</b> · 邀请码白名单 · 双向邮件通知 · 可打印小票', en: '<b>Edge</b> · invite-code whitelist · two-way email alerts · printable receipt', ja: '<b>差異</b> · 招待コード制 · 双方向メール通知 · 印刷可能な領収書' },
+    dinnerDesc: { zh: '情侣点餐互动：她输邀请码 → 选菜 + 录歌 → 站长上菜', en: 'She enters an invite code → picks dishes + records a song → chef serves', ja: '招待コード入力 → 料理を選んで歌を録音 → オーナーが調理' },
+    dinnerDiff: { zh: '<b>差异</b> · 邀请码白名单 · 双向邮件 · 可打印小票', en: '<b>Edge</b> · invite-code whitelist · two-way email alerts · printable receipt', ja: '<b>差異</b> · 招待コード制 · 双方向メール通知 · 印刷可能な領収書' },
     cardSub: { zh: '声音名片', en: 'Voice business card', ja: 'ボイスカード' },
     cardBadge: { zh: '求职工具', en: 'Job seeking', ja: '就職ツール' },
     cardDesc: { zh: '录一段语音 → 生成链接 → 贴进简历', en: 'Record a voice clip → get a link → attach to resume', ja: '音声を録音 → リンク生成 → 履歴書に貼る' },
-    cardDiff: { zh: '<b>差异</b> · 60s 语音自我介绍 · QR 码分享 · R2 存储', en: '<b>Edge</b> · 60s voice intro · QR sharing · R2 storage', ja: '<b>差異</b> · 60秒音声自己紹介 · QR共有 · R2ストレージ' },
+    cardDiff: { zh: '<b>差异</b> · 60s 语音 · QR 分享 · R2 存储', en: '<b>Edge</b> · 60s voice intro · QR sharing · R2 storage', ja: '<b>差異</b> · 60秒音声自己紹介 · QR共有 · R2ストレージ' },
+    blogBadge: { zh: '个人博客', en: 'Blog', ja: 'ブログ' },
+    blogDesc: { zh: 'Bortala 的宝藏之地：随笔 · 开发笔记 · 作品橱窗', en: "Bortala's treasure trove: essays · dev notes · showcase", ja: 'Bortala の宝の地：エッセイ · 開発メモ · 作品展示' },
+    blogDiff: { zh: '<b>差异</b> · 项目墙 · 友链 · 光影画廊', en: '<b>Edge</b> · project wall · friends · gallery', ja: '<b>差異</b> · プロジェクト · 友リンク · ギャラリー' },
+    speakBadge: { zh: '讲话系列', en: 'Speaking', ja: 'スピーチ' },
+    speakDesc: { zh: '讲话相关系列产品：SoloSpeak · LetOut', en: 'Speech series: SoloSpeak · LetOut', ja: 'スピーチ関連シリーズ：SoloSpeak · LetOut' },
+    speakDiff: { zh: '<b>差异</b> · 独处表达 · 情绪释放', en: '<b>Edge</b> · solo expression · emotional release', ja: '<b>差異</b> · 一人の表現 · 感情解放' },
+    shopBadge: { zh: '变现窗口', en: 'Store', ja: 'ストア' },
+    shopDesc: { zh: '定制题库（Anki / 离线 HTML）· 代建站服务', en: 'Custom question banks (Anki / offline HTML) · done-for-you websites', ja: 'カスタム問題集（Anki / オフライン HTML）· サイト代行' },
+    shopDiff: { zh: '<b>差异</b> · 闲鱼 + PayPal live', en: '<b>Edge</b> · Xianyu + PayPal live', ja: '<b>差異</b> · 閑魚 + PayPal live' },
+    supportBadge: { zh: '客服系统', en: 'Support', ja: 'サポート' },
+    supportDesc: { zh: '轻量客服：聊天 widget + Telegram 通道，可全局调用', en: 'Lightweight support: chat widget + Telegram, reusable across sites', ja: '軽量サポート：チャットウィジェット + Telegram、全サイトで再利用可' },
+    supportDiff: { zh: '<b>差异</b> · 轻量 · 自托管 · 白标', en: '<b>Edge</b> · lightweight · self-hosted · white-label', ja: '<b>差異</b> · 軽量 · 自前ホスト · ホワイトラベル' },
+    stackBadge: { zh: '开源模板', en: 'Open source', ja: 'オープンソース' },
+    stackDesc: { zh: '零月费 SaaS 套件模板：Payments + Support + Analytics', en: 'Zero-monthly-fee SaaS kit: Payments + Support + Analytics', ja: '月額ゼロの SaaS キット：Payments + Support + Analytics' },
+    stackDiff: { zh: '<b>差异</b> · MIT 开源 · 可整站交付', en: '<b>Edge</b> · MIT license · whole-site delivery', ja: '<b>差異</b> · MIT ライセンス · 全サイト納品' },
+    closingMark: {
+      zh: 'MORE TOOLS BREWING · 持续构建中',
+      en: 'MORE TOOLS BREWING',
+      ja: 'MORE TOOLS BREWING · 構築中'
+    },
     footerPowered: { zh: 'Powered by Cloudflare Pages', en: 'Powered by Cloudflare Pages', ja: 'Powered by Cloudflare Pages' }
   };
   function detect() {
