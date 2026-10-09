@@ -58,6 +58,7 @@
     }
     .icon-chip:hover .icon-dot { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(15,23,42,.18); }
     .icon-chip span { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+    .icon-chip { text-decoration: none; }
 
     /* 分区标题：Current Projects + 副说明 */
     .section-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
@@ -172,19 +173,19 @@
       <div class="container hero-inner">
         <p class="eyebrow">RCJ LAB · Independent AI Product Studio</p>
         <h1 data-i18n="heroTitle">把想法，<br />做成顺手的小工具</h1>
-        <p class="hero-sub" data-i18n="heroSub">独立 AI 产品工作室 · 旗下 <b>9 个产品</b>，全部跑在 <b>Cloudflare 边缘</b></p>
+        <p class="hero-sub" data-i18n="heroSub">独立 AI 产品工作室 · 旗下 <b>10 个产品</b>，全部跑在 <b>Cloudflare 边缘</b></p>
         <!-- 产品图标行：一眼看到生态全貌 -->
-        <div class="icon-row">
-          <div class="icon-chip"><div class="icon-dot" style="background:#1e88e5;">📚</div><span>Exam Hub</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#14b8a6;">🎙️</div><span>FaceTalk</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#8b5cf6;">🪪</div><span>voicecard</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#f97316;">✍️</div><span>Blog</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#6366f1;">🗣️</div><span>Speak</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#b87333;">🍽️</div><span>Dinner</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#ef4444;">🛍️</div><span>Shop</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#d946ef;">🎵</div><span>Voice</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#10b981;">💬</div><span>Support</span></div>
-          <div class="icon-chip"><div class="icon-dot" style="background:#f6821f;">🧱</div><span>Stack</span></div>
+        <div class="icon-row reveal">
+          <a class="icon-chip" href="https://exam.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#1e88e5;">📚</div><span>Exam Hub</span></a>
+          <a class="icon-chip" href="https://facetalk.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#14b8a6;">🎙️</div><span>FaceTalk</span></a>
+          <a class="icon-chip" href="https://voice.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#d946ef;">🎵</div><span>Voice</span></a>
+          <a class="icon-chip" href="https://blog.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#f97316;">✍️</div><span>Blog</span></a>
+          <a class="icon-chip" href="https://speak.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#6366f1;">🗣️</div><span>Speak</span></a>
+          <a class="icon-chip" href="https://dinner.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#b87333;">🍽️</div><span>Dinner</span></a>
+          <a class="icon-chip" href="https://shop.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#ef4444;">🛍️</div><span>Shop</span></a>
+          <a class="icon-chip" href="https://support.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#10b981;">💬</div><span>Support</span></a>
+          <a class="icon-chip" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener"><div class="icon-dot" style="background:#f6821f;">🧱</div><span>Stack</span></a>
+          <a class="icon-chip" href="https://card.955827.xyz" target="_blank" rel="noopener"><div class="icon-dot" style="background:#8b5cf6;">🪪</div><span>voicecard</span></a>
         </div>
       </div>
     </section>
@@ -281,17 +282,6 @@
         <div class="group reveal">
           <div class="group-title" data-i18n="groupServe">服务与变现</div>
           <div class="grid">
-            <a class="card" href="https://shop.955827.xyz" target="_blank" rel="noopener">
-              <div class="card-top">
-                <div class="card-icon" style="background:#ef4444;">🛍️</div>
-                <div>
-                  <div class="card-name">Shop</div>
-                  <div class="card-badge" data-i18n="shopBadge">变现窗口</div>
-                </div>
-              </div>
-              <p class="card-desc" data-i18n="shopDesc">定制题库（Anki / 离线 HTML）· 代建站服务</p>
-              <p class="card-diff" data-i18n="shopDiff"><b>差异</b> · 闲鱼 + PayPal live</p>
-            </a>
             <a class="card" href="https://voice.955827.xyz" target="_blank" rel="noopener">
               <div class="card-top">
                 <div class="card-icon" style="background:#d946ef;">🎵</div>
@@ -303,6 +293,18 @@
               <p class="card-desc" data-i18n="voiceDesc">华语女声 · 原声清唱展示与定制：试听 + 歌词 + 商城下单</p>
               <p class="card-diff" data-i18n="voiceDiff"><b>差异</b> · 三语 · 试听片段 · 跳商城下单</p>
             </a>
+            <a class="card" href="https://shop.955827.xyz" target="_blank" rel="noopener">
+              <div class="card-top">
+                <div class="card-icon" style="background:#ef4444;">🛍️</div>
+                <div>
+                  <div class="card-name">Shop</div>
+                  <div class="card-badge" data-i18n="shopBadge">变现窗口</div>
+                </div>
+              </div>
+              <p class="card-desc" data-i18n="shopDesc">定制题库（Anki / 离线 HTML）· 代建站服务</p>
+              <p class="card-diff" data-i18n="shopDiff"><b>差异</b> · 闲鱼 + PayPal live</p>
+            </a>
+            
             <a class="card" href="https://support.955827.xyz" target="_blank" rel="noopener">
               <div class="card-top">
                 <div class="card-icon" style="background:#10b981;">💬</div>
