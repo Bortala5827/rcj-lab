@@ -3,7 +3,7 @@
 // 所有站点（hub/training/aux/xf/facetalk/exam/speak 系列）共用一个库、一张表、一条管道。
 // Token 仅存服务端 env（CF_API_TOKEN + CF_ACCOUNT_ID），仅供本 Function 写统一库使用。
 
-const SITES = ['hub', 'solospeak', 'letout', 'training', 'aux', 'xf', 'facetalk', 'exam', 'shop'];
+const SITES = ['hub', 'solospeak', 'letout', 'training', 'aux', 'xf', 'facetalk', 'exam', 'shop', 'voice'];
 const ANALYTICS_DB = 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828'; // rcj-analytics-d1
 
 function cors() {
