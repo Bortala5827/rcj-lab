@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#fbfaf6" />
   <meta name="baidu-site-verification" content="codeva-40LTzpn5C7" />
   <meta name="bytedance-verification-code" content="Mkh+s4SDJ3anPs13BmdV" />
-  <title>RCJ Lab · 把想法，做成顺手的小工具</title>
+  <title>RCJ Lab · Independent Digital Studio</title>
   <link rel="canonical" href="https://955827.xyz/" />
-  <meta name="description" content="RCJ Lab 独立数字产品工作室：把想法做成顺手的小工具。备考、面试、声音、内容与生活——十个真实产品，极速直达。" />
+  <meta name="description" content="RCJ Lab — an independent digital studio turning ideas into handy little tools. Exam prep, speaking, voice, content & life — ten real products, served fast." />
   <!-- Open Graph / 社交分享 -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="RCJ Lab" />
-  <meta property="og:title" content="RCJ Lab · 把想法，做成顺手的小工具" />
-  <meta property="og:description" content="独立数字产品工作室：把想法做成顺手的小工具。备考、面试、声音、内容与生活——十个真实产品，极速直达。" />
+  <meta property="og:title" content="RCJ Lab · Independent Digital Studio" />
+  <meta property="og:description" content="An independent digital studio turning ideas into handy little tools. Exam prep, speaking, voice, content & life — ten real products, served fast." />
   <meta property="og:url" content="https://955827.xyz/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RCJ Lab · 把想法，做成顺手的小工具" />
-  <meta name="twitter:description" content="独立数字产品工作室：把想法做成顺手的小工具。备考、面试、声音、内容与生活——十个真实产品，极速直达。" />
+  <meta name="twitter:title" content="RCJ Lab · Independent Digital Studio" />
+  <meta name="twitter:description" content="An independent digital studio turning ideas into handy little tools. Exam prep, speaking, voice, content & life — ten real products, served fast." />
   <meta property="og:image" content="https://955827.xyz/assets/og-cover.png" />
   <meta name="twitter:image" content="https://955827.xyz/assets/og-cover.png" />
   <script type="application/ld+json">
@@ -26,7 +26,7 @@
     "@type": "WebSite",
     "name": "RCJ Lab",
     "url": "https://955827.xyz/",
-    "description": "RCJ Lab 独立数字产品工作室：把想法做成顺手的小工具。",
+    "description": "RCJ Lab — an independent digital studio turning ideas into handy little tools.",
     "author": {
       "@type": "Person",
       "name": "RCJ9527"
@@ -88,10 +88,7 @@
     .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; }
     .wm-name { font-weight: 800; font-size: 15px; letter-spacing: -.01em; }
     .wm-sub { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--ink-3); text-transform: uppercase; margin-top: 1px; }
-    .nav { display: flex; gap: 22px; margin-left: auto; font-size: 14px; font-weight: 600; }
-    .nav a { color: var(--ink-2); transition: color .15s ease; }
-    .nav a:hover { color: var(--accent); }
-    .lang { display: flex; gap: 2px; font-family: var(--mono); font-size: 11px; }
+    .lang { display: flex; gap: 2px; margin-left: auto; font-family: var(--mono); font-size: 11px; }
     .lang button {
       border: 0; background: none; color: var(--ink-3); cursor: pointer;
       padding: 4px 7px; border-radius: 7px; font-family: inherit; transition: color .15s ease;
@@ -235,7 +232,6 @@
     @media (max-width: 640px) {
       .header-inner { gap: 12px; min-height: 58px; }
       .wm-sub { display: none; }
-      .nav { gap: 14px; font-size: 13px; }
       .lang { font-size: 10px; }
       .lang button { padding: 3px 5px; }
       .hero { padding: 68px 0 64px; }
@@ -249,7 +245,6 @@
       .site-footer { padding: 22px 0 28px; }
     }
     @media (max-width: 420px) {
-      .nav { gap: 10px; font-size: 12px; }
       .lang button { padding: 3px 4px; }
       .header-inner { gap: 8px; }
     }
@@ -271,14 +266,9 @@
           <span class="wm-sub">Independent Digital Studio</span>
         </span>
       </a>
-      <nav class="nav" aria-label="站点导航">
-        <a href="#work" data-i18n="navWork">作品</a>
-        <a href="#lab" data-i18n="navLab">实验室</a>
-        <a href="https://blog.955827.xyz" target="_blank" rel="noopener" data-i18n="navBlog">Blog</a>
-      </nav>
       <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="zh" class="active">ZH</button>
-        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="en" class="active">EN</button>
+        <button type="button" data-lang="zh">ZH</button>
         <button type="button" data-lang="ja">JP</button>
       </div>
     </div>
@@ -490,7 +480,7 @@
   /* ============ 三语切换（zh / en / ja，单文件字典）+ 轻量滚动显现 ============ */
   (function () {
     'use strict';
-    var LANGS = ['zh', 'en', 'ja'];
+    var LANGS = ['en', 'zh', 'ja'];
     var KEY = 'rcj_lang';
     var DICT = {
       pageTitle: {
@@ -503,9 +493,6 @@
         en: 'RCJ Lab — an independent digital studio turning ideas into handy little tools. Exam prep, speaking, voice, content & life — ten real products, served fast.',
         ja: 'RCJ Lab 独立系デジタルスタジオ：アイデアを手になじむツールに。試験対策、スピーキング、ボイス、コンテンツ・生活——10 の本物のプロダクトを軽快に。'
       },
-      navWork: { zh: '作品', en: 'Work', ja: '作品' },
-      navLab: { zh: '实验室', en: 'Lab', ja: 'ラボ' },
-      navBlog: { zh: 'Blog', en: 'Blog', ja: 'Blog' },
       heroTitle: {
         zh: '把想法，做成顺手的小工具。',
         en: 'Ideas, into handy little tools.',
@@ -587,13 +574,11 @@
     };
 
     function detect() {
+      // 已保存的选择优先；未选择时默认 EN（品牌主语言）
       try {
         var s = localStorage.getItem(KEY);
         if (s && LANGS.indexOf(s) >= 0) return s;
       } catch (e) {}
-      var l = (navigator.language || 'zh-CN').toLowerCase();
-      if (l.indexOf('ja') === 0) return 'ja';
-      if (l.indexOf('zh') === 0) return 'zh';
       return 'en';
     }
 
