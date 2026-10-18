@@ -142,30 +142,29 @@
       background-position: 23px 71px, 131px 13px;
       animation: twinkle 6.5s ease-in-out infinite reverse, drift 60s linear infinite;
     }
-    /* 漂浮发光冷星：呼吸 + 缓漂（区别于 blog 的萤火虫/暖粉调） */
-    .cosmos .float-stars { position: absolute; inset: 0; }
-    .cosmos .float-stars::before, .cosmos .float-stars::after {
-      content: ""; position: absolute; top: 0; left: 0; width: 3px; height: 3px; border-radius: 50%;
-      background: #eef2ff; filter: drop-shadow(0 0 5px rgba(190, 205, 255, .85));
-    }
-    .cosmos .float-stars::before {
-      box-shadow: 12vw 18vh #bfe0ff, 22vw 64vh #dcd6ff, 33vw 30vh #ffffff, 45vw 12vh #cfe8ff, 58vw 70vh #dcd6ff, 66vw 24vh #ffffff, 78vw 52vh #bfe0ff;
-      animation: float-a 12s ease-in-out infinite, breathe 3.8s ease-in-out infinite;
-    }
-    .cosmos .float-stars::after {
-      box-shadow: 88vw 15vh #dcd6ff, 16vw 82vh #ffffff, 38vw 78vh #bfe0ff, 52vw 40vh #ffffff, 72vw 84vh #dcd6ff, 92vw 66vh #ffffff, 8vw 40vh #cfe8ff;
-      animation: float-b 15s ease-in-out infinite, breathe 4.6s ease-in-out infinite reverse;
+    /* 随机相位冷光星点（借鉴 blog 萤火虫：外层缓漂 + 内层独立呼吸，各自随机相位/大小/周期） */
+    .cosmos .stardust { position: absolute; inset: 0; overflow: hidden; mix-blend-mode: screen; }
+    .sd-travel { position: absolute; top: var(--y); left: var(--x); will-change: transform; }
+    .sd-dot {
+      width: var(--s); height: var(--s); border-radius: 50%;
+      background: var(--c); filter: blur(.4px);
+      box-shadow: 0 0 8px 2px var(--glow), 0 0 18px 5px var(--glow-soft);
+      animation: sd-breathe var(--bd) ease-in-out infinite;
+      animation-delay: var(--bdelay);
     }
     @keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
     @keyframes drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-120px, 80px, 0); } }
     @keyframes nebulaDrift { 0% { background-position: 0% 0%, 100% 0%, 0% 100%; } 100% { background-position: 100% 100%, 0% 100%, 100% 0%; } }
-    @keyframes float-a { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(6vw, -9vh); } 66% { transform: translate(-3vw, -6vh); } }
-    @keyframes float-b { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-7vw, 6vh); } 66% { transform: translate(5vw, 9vh); } }
-    @keyframes breathe { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+    @keyframes sd-breathe { 0%, 100% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.15); } }
+    @keyframes sd-f1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(10vw, -14vh); } 66% { transform: translate(-5vw, -18vh); } }
+    @keyframes sd-f2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-11vw, 9vh); } 66% { transform: translate(8vw, 14vh); } }
+    @keyframes sd-f3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(14vw, 13vh); } 66% { transform: translate(-9vw, 5vh); } }
+    @keyframes sd-f4 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-14vw, -9vh); } 66% { transform: translate(9vw, -14vh); } }
     @keyframes bandSlide { from { transform: translateX(-5%); } to { transform: translateX(5%); } }
     @keyframes bandGlow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
     @media (prefers-reduced-motion: reduce) {
-      .cosmos, .cosmos::before, .cosmos::after, .cosmos .stars-b, .cosmos .float-stars::before, .cosmos .float-stars::after { animation: none; }
+      .cosmos, .cosmos::before, .cosmos::after, .cosmos .stars-b,
+      .cosmos .stardust .sd-travel, .cosmos .stardust .sd-dot { animation: none; }
     }
 
     /* ---------- Hero（特斯拉式全屏大画幅，透明叠在星空上） ---------- */
@@ -291,7 +290,7 @@
     .pcol-title { font-size: 12.5px; font-weight: 800; letter-spacing: .08em; color: var(--ink-2); text-transform: uppercase; padding: 0 22px 12px; }
     .prow-list { list-style: none; }
     .prow {
-      display: grid; grid-template-columns: 8px 1fr 18px; column-gap: 12px;
+      display: grid; grid-template-columns: 8px 1fr; column-gap: 12px;
       align-items: start; padding: 13px 22px; border-top: 1px solid var(--line);
       transition: background .16s ease;
     }
@@ -300,8 +299,6 @@
     .prow:hover .dot { transform: scale(1.6); }
     .prow-name { grid-column: 2; grid-row: 1; font-weight: 700; font-size: 14.5px; letter-spacing: -.01em; }
     .prow-desc { grid-column: 2; grid-row: 2; color: var(--ink-3); font-size: 12.5px; }
-    .prow-arrow { grid-column: 3; grid-row: 1 / span 2; align-self: center; color: var(--ink-3); font-size: 12px; transition: color .15s ease, transform .18s ease; }
-    .prow:hover .prow-arrow { color: var(--accent); transform: translateX(4px); }
 
     /* ---------- 实验室（About） ---------- */
     #lab { background: linear-gradient(180deg, rgba(106, 92, 255, .1), rgba(106, 92, 255, .04) 62%, transparent); }
@@ -410,10 +407,10 @@
     </div>
   </header>
 
-  <!-- 全站固定深空背景：流动雾 + 密星 + 漂浮冷星（透明叠在内容之下） -->
+  <!-- 全站固定深空背景：流动雾 + 密星 + 紫光带 + 随机相位冷光星点（透明叠在内容之下） -->
   <div class="cosmos" aria-hidden="true">
     <div class="stars-b"></div>
-    <div class="float-stars"></div>
+    <div class="stardust" id="stardust"></div>
   </div>
 
   <main>
@@ -426,7 +423,7 @@
         <p class="hero-sub" data-i18n="heroSub">从真实需求出发，用代码与 AI 构建轻量产品。这里展示已经做出来的东西，也记录仍在探索的想法。</p>
         <p class="hero-now"><span class="live-dot" aria-hidden="true"></span><span data-i18n="heroNow">NOW · 声音定制 Voice · FaceTalk · 持续构建中</span></p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="#work"><span data-i18n="ctaWork">探索精选作品</span><span aria-hidden="true">&nbsp;↗</span></a>
+          <a class="btn btn-primary" href="#work"><span data-i18n="ctaWork">探索精选作品</span></a>
           <a class="btn btn-ghost" href="#lab"><span data-i18n="ctaLab">了解 RCJ Lab</span></a>
         </div>
       </div>
@@ -449,7 +446,7 @@
             <p class="feature-tag">01 / Matching Tool</p>
             <h3 class="feature-name">FaceTalk</h3>
             <p class="feature-desc" data-i18n="ftDesc">让练习搭档的选择，从 60 秒试音开始。双向试音、互相评价，帮助需要练习表达的人找到合适的练习搭档。</p>
-            <span class="feature-cta"><span data-i18n="ftCta">体验产品</span><span aria-hidden="true">&nbsp;↗</span></span>
+            <span class="feature-cta"><span data-i18n="ftCta">体验产品</span></span>
           </div>
           <div class="feature-visual" aria-hidden="true">
             <p class="visual-label">60s Voice Match</p>
@@ -466,13 +463,13 @@
             <p class="feature-tag">02 / Learning</p>
             <h3 class="mini-name">Exam Hub</h3>
             <p class="mini-desc" data-i18n="ehDesc">备考资料、题目练习、知识卡片与面试表达训练。</p>
-            <span class="feature-cta"><span data-i18n="ehCta">开始使用</span><span aria-hidden="true">&nbsp;↗</span></span>
+            <span class="feature-cta"><span data-i18n="ehCta">开始使用</span></span>
           </a>
           <a class="mini-card reveal" style="--mc:#f59e0b" href="https://voice.955827.xyz" target="_blank" rel="noopener">
             <p class="feature-tag">03 / Voice</p>
             <h3 class="mini-name">Voice</h3>
             <p class="mini-desc" data-i18n="voDesc">华语女声清唱试听与声音定制：试听 + 歌词 + 下单。</p>
-            <span class="feature-cta"><span data-i18n="voCta">试听声音</span><span aria-hidden="true">&nbsp;↗</span></span>
+            <span class="feature-cta"><span data-i18n="voCta">试听声音</span></span>
           </a>
         </div>
       </div>
@@ -499,19 +496,16 @@
                 <span class="dot" style="--c:#1e88e5" aria-hidden="true"></span>
                 <span class="prow-name">Exam Hub</span>
                 <span class="prow-desc" data-i18n="pExam">题库 · 知识卡 · 面试 · 教程</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#14b8a6" aria-hidden="true"></span>
                 <span class="prow-name">FaceTalk</span>
                 <span class="prow-desc" data-i18n="pFace">60 秒试音 · 双向互选 · 阅后即焚</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://card.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#8b5cf6" aria-hidden="true"></span>
                 <span class="prow-name">voicecard</span>
                 <span class="prow-desc" data-i18n="pCard">录一段语音，生成链接，贴进简历</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
             </ul>
           </div>
@@ -523,19 +517,16 @@
                 <span class="dot" style="--c:#f97316" aria-hidden="true"></span>
                 <span class="prow-name">Blog</span>
                 <span class="prow-desc" data-i18n="pBlog">随笔 · 开发笔记 · 作品橱窗</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://speak.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#6366f1" aria-hidden="true"></span>
                 <span class="prow-name">Speak</span>
                 <span class="prow-desc" data-i18n="pSpeak">SoloSpeak · LetOut 讲话系列</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#b87333" aria-hidden="true"></span>
                 <span class="prow-name">Dinner for You</span>
                 <span class="prow-desc" data-i18n="pDinner">邀请码点餐 · 录歌 · 双向邮件</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
             </ul>
           </div>
@@ -547,25 +538,21 @@
                 <span class="dot" style="--c:#d946ef" aria-hidden="true"></span>
                 <span class="prow-name">Voice</span>
                 <span class="prow-desc" data-i18n="pVoice">华语女声 · 清唱试听 · 声音定制</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://shop.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#ef4444" aria-hidden="true"></span>
                 <span class="prow-name">Shop</span>
                 <span class="prow-desc" data-i18n="pShop">定制题库 · 代建站服务</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://support.955827.xyz" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#10b981" aria-hidden="true"></span>
                 <span class="prow-name">Support</span>
                 <span class="prow-desc" data-i18n="pSupport">聊天 widget · Telegram 通道</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
               <li><a class="prow" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener">
                 <span class="dot" style="--c:#f6821f" aria-hidden="true"></span>
                 <span class="prow-name">Stack</span>
                 <span class="prow-desc" data-i18n="pStack">零月费 SaaS 套件 · MIT 开源</span>
-                <span class="prow-arrow" aria-hidden="true">↗</span>
               </a></li>
             </ul>
           </div>
@@ -605,7 +592,7 @@
           </div>
         </header>
         <p class="blog-line reveal" data-i18n="blogLine">近期文章、构建记录与产品思考。</p>
-        <a class="btn btn-primary reveal" href="https://blog.955827.xyz" target="_blank" rel="noopener"><span data-i18n="blogCta">进入 Blog</span><span aria-hidden="true">&nbsp;↗</span></a>
+        <a class="btn btn-primary reveal" href="https://blog.955827.xyz" target="_blank" rel="noopener"><span data-i18n="blogCta">进入 Blog</span></a>
       </div>
     </section>
   </main>
@@ -622,6 +609,47 @@
   /* ============ 三语切换（zh / en / ja，单文件字典）+ 轻量滚动显现 ============ */
   (function () {
     'use strict';
+
+    /* 随机相位冷光星点：各自随机位置/大小/呼吸周期/漂浮轨迹（借鉴 blog 萤火虫）；reduced-motion 不生成 */
+    (function buildStardust() {
+      var box = document.getElementById('stardust');
+      if (!box) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var PALETTE = [
+        { c: '#eef2ff', glow: 'rgba(238,242,255,.85)', soft: 'rgba(190,205,255,.35)' },
+        { c: '#bfe0ff', glow: 'rgba(150,200,255,.8)', soft: 'rgba(120,170,255,.3)' },
+        { c: '#dcd6ff', glow: 'rgba(196,180,255,.8)', soft: 'rgba(160,140,255,.3)' }
+      ];
+      var N = window.innerWidth < 640 ? 26 : 40;
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < N; i++) {
+        var p = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+        var travel = document.createElement('div');
+        travel.className = 'sd-travel';
+        var size = 2 + Math.random() * 3;
+        var bd = 3 + Math.random() * 5;
+        var bdelay = -(Math.random() * 10);
+        var fd = 16 + Math.random() * 18;
+        var fdelay = -(Math.random() * 20);
+        var path = 'sd-f' + (1 + Math.floor(Math.random() * 4));
+        travel.style.setProperty('--x', (Math.random() * 100) + '%');
+        travel.style.setProperty('--y', (Math.random() * 100) + '%');
+        travel.style.animation = path + ' ' + fd + 's ease-in-out infinite';
+        travel.style.animationDelay = fdelay + 's';
+        var dot = document.createElement('div');
+        dot.className = 'sd-dot';
+        dot.style.setProperty('--s', size + 'px');
+        dot.style.setProperty('--c', p.c);
+        dot.style.setProperty('--glow', p.glow);
+        dot.style.setProperty('--glow-soft', p.soft);
+        dot.style.setProperty('--bd', bd + 's');
+        dot.style.setProperty('--bdelay', bdelay + 's');
+        travel.appendChild(dot);
+        frag.appendChild(travel);
+      }
+      box.appendChild(frag);
+    })();
+
     var LANGS = ['en', 'zh', 'ja'];
     var KEY = 'rcj_lang';
     var DICT = {
