@@ -78,6 +78,7 @@
     a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     ::selection { background: var(--accent); color: #fff; }
     .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+    main { position: relative; z-index: 1; }
     section[id] { scroll-margin-top: 70px; }
 
     /* ---------- 顶部导航（纯 CSS 吸顶） ---------- */
@@ -101,11 +102,9 @@
     .lang button:hover { color: var(--ink); }
     .lang button.active { color: var(--accent); background: var(--accent-soft); font-weight: 700; }
 
-    /* ---------- Hero（特斯拉式全屏大画幅 + 纯 CSS 动态星空，零图片） ---------- */
-    .hero {
-      position: relative; overflow: hidden; text-align: center;
-      min-height: 100vh; display: flex; align-items: center;
-      padding: 120px 0 100px;
+    /* ---------- 全站固定深空背景（手机长滚动也连贯，不再分段黑块） ---------- */
+    .cosmos {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
       background:
         radial-gradient(60% 50% at 22% 16%, rgba(106, 92, 255, .18), transparent 62%),
         radial-gradient(55% 45% at 82% 32%, rgba(96, 120, 255, .14), transparent 62%),
@@ -113,43 +112,48 @@
       background-size: 200% 200%, 200% 200%, 220% 220%;
       animation: nebulaDrift 28s ease-in-out infinite alternate;
     }
-    /* 密星层：慢闪 */
-    .hero::before {
-      content: ""; position: absolute; inset: 0; pointer-events: none;
-      background-image: radial-gradient(rgba(255, 255, 255, .5) 1px, transparent 1.4px);
-      background-size: 30px 30px;
+    /* 密星层：慢闪（多层不同周期+错位叠加，打散网格坐标纸感） */
+    .cosmos::before {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(rgba(255, 255, 255, .55) 1px, transparent 1.6px),
+        radial-gradient(rgba(255, 255, 255, .38) 1px, transparent 1.5px),
+        radial-gradient(rgba(224, 220, 255, .45) 1.4px, transparent 2.2px);
+      background-size: 233px 233px, 371px 371px, 503px 503px;
+      background-position: 0 0, 61px 117px, 149px 37px;
       opacity: .5;
       animation: twinkle 4.8s ease-in-out infinite;
     }
     /* 横向紫光带（呼应深空光带） */
-    .hero::after {
-      content: ""; position: absolute; inset: 0; pointer-events: none;
+    .cosmos::after {
+      content: ""; position: absolute; inset: 0;
       background:
         linear-gradient(90deg, transparent, rgba(138, 124, 255, .16) 30%, rgba(196, 180, 255, .26) 50%, rgba(138, 124, 255, .16) 70%, transparent);
-      background-repeat: no-repeat;
-      background-position: center 44%;
-      background-size: 100% 130px;
-      filter: blur(26px);
+      background-repeat: no-repeat; background-position: center 44%;
+      background-size: 100% 130px; filter: blur(26px);
     }
-    /* 错相密星 + 极慢漂移 */
-    .stars-b {
-      position: absolute; inset: -8%; pointer-events: none;
-      background-image: radial-gradient(rgba(220, 214, 255, .45) 1px, transparent 1.3px);
-      background-size: 47px 47px;
+    /* 错相密星 + 极慢漂移（另一组周期，进一步打散） */
+    .cosmos .stars-b {
+      position: absolute; inset: -8%;
+      background-image:
+        radial-gradient(rgba(220, 214, 255, .45) 1px, transparent 1.4px),
+        radial-gradient(rgba(255, 255, 255, .3) 1px, transparent 1.5px);
+      background-size: 197px 197px, 431px 431px;
+      background-position: 23px 71px, 131px 13px;
       opacity: .4;
       animation: twinkle 6.5s ease-in-out infinite reverse, drift 140s linear infinite;
     }
     /* 漂浮发光冷星：呼吸 + 缓漂（区别于 blog 的萤火虫/暖粉调） */
-    .float-stars { position: absolute; inset: 0; pointer-events: none; }
-    .float-stars::before, .float-stars::after {
+    .cosmos .float-stars { position: absolute; inset: 0; }
+    .cosmos .float-stars::before, .cosmos .float-stars::after {
       content: ""; position: absolute; top: 0; left: 0; width: 3px; height: 3px; border-radius: 50%;
       background: #eef2ff; filter: drop-shadow(0 0 5px rgba(190, 205, 255, .85));
     }
-    .float-stars::before {
+    .cosmos .float-stars::before {
       box-shadow: 12vw 18vh #bfe0ff, 22vw 64vh #dcd6ff, 33vw 30vh #ffffff, 45vw 12vh #cfe8ff, 58vw 70vh #dcd6ff, 66vw 24vh #ffffff, 78vw 52vh #bfe0ff;
       animation: float-a 19s ease-in-out infinite, breathe 4.2s ease-in-out infinite;
     }
-    .float-stars::after {
+    .cosmos .float-stars::after {
       box-shadow: 88vw 15vh #dcd6ff, 16vw 82vh #ffffff, 38vw 78vh #bfe0ff, 52vw 40vh #ffffff, 72vw 84vh #dcd6ff, 92vw 66vh #ffffff, 8vw 40vh #cfe8ff;
       animation: float-b 23s ease-in-out infinite, breathe 5.4s ease-in-out infinite reverse;
     }
@@ -160,7 +164,14 @@
     @keyframes float-b { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-7vw, 6vh); } 66% { transform: translate(5vw, 9vh); } }
     @keyframes breathe { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
     @media (prefers-reduced-motion: reduce) {
-      .hero, .hero::before, .stars-b, .float-stars::before, .float-stars::after { animation: none; }
+      .cosmos, .cosmos::before, .cosmos .stars-b, .cosmos .float-stars::before, .cosmos .float-stars::after { animation: none; }
+    }
+
+    /* ---------- Hero（特斯拉式全屏大画幅，透明叠在星空上） ---------- */
+    .hero {
+      position: relative; z-index: 1; text-align: center;
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 120px 0 100px;
     }
     .hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
     .hero-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--accent-bright); text-transform: uppercase; font-weight: 700; }
@@ -398,11 +409,15 @@
     </div>
   </header>
 
+  <!-- 全站固定深空背景：流动雾 + 密星 + 漂浮冷星（透明叠在内容之下） -->
+  <div class="cosmos" aria-hidden="true">
+    <div class="stars-b"></div>
+    <div class="float-stars"></div>
+  </div>
+
   <main>
     <!-- ============== Hero ============== -->
     <section class="hero" id="top">
-      <div class="stars-b" aria-hidden="true"></div>
-      <div class="float-stars" aria-hidden="true"></div>
       <div class="container hero-inner">
         <p class="hero-eyebrow">Independent Digital Studio</p>
         <h1 class="hero-title" data-i18n="heroTitle">把想法，做成顺手的小工具。</h1>
