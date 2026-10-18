@@ -101,23 +101,45 @@
     .lang button:hover { color: var(--ink); }
     .lang button.active { color: var(--accent); background: var(--accent-soft); font-weight: 700; }
 
-    /* ---------- Hero（特斯拉式居中大标题，无大图） ---------- */
-    .hero { position: relative; padding: 128px 0 104px; overflow: hidden; text-align: center; }
+    /* ---------- Hero（特斯拉式全屏大画幅 + 纯 CSS 动态星空，零图片） ---------- */
+    .hero {
+      position: relative; overflow: hidden; text-align: center;
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 120px 0 100px;
+      background: radial-gradient(120% 90% at 50% 0%, #161428 0%, #0f0d1a 46%, #0a0a0f 100%);
+    }
+    /* 星点层 A：慢闪 */
     .hero::before {
-      content: ""; position: absolute; inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, .13) 1px, transparent 1px);
-      background-size: 26px 26px;
-      opacity: .7;
-      -webkit-mask-image: linear-gradient(180deg, #000, transparent 72%);
-      mask-image: linear-gradient(180deg, #000, transparent 72%);
-      pointer-events: none;
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255, 255, 255, .55) 1px, transparent 1.4px);
+      background-size: 30px 30px;
+      opacity: .5;
+      animation: twinkle 4.8s ease-in-out infinite;
     }
+    /* 横向紫光带（呼应深空光带）+ 顶部紫雾 */
     .hero::after {
-      content: ""; position: absolute; width: 680px; height: 680px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(106, 92, 255, .22), transparent 62%);
-      top: -220px; right: -160px; pointer-events: none;
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent, rgba(138, 124, 255, .16) 30%, rgba(196, 180, 255, .26) 50%, rgba(138, 124, 255, .16) 70%, transparent);
+      background-repeat: no-repeat;
+      background-position: center 44%;
+      background-size: 100% 130px;
+      filter: blur(26px);
     }
-    .hero-inner { position: relative; display: flex; flex-direction: column; align-items: center; }
+    /* 星点层 B：错相闪烁 + 极慢漂移 */
+    .stars-b {
+      position: absolute; inset: -8%; pointer-events: none;
+      background-image: radial-gradient(rgba(220, 214, 255, .5) 1px, transparent 1.3px);
+      background-size: 47px 47px;
+      opacity: .4;
+      animation: twinkle 6.5s ease-in-out infinite reverse, drift 140s linear infinite;
+    }
+    @keyframes twinkle { 0%, 100% { opacity: .35; } 50% { opacity: .8; } }
+    @keyframes drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-70px, 46px, 0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before, .stars-b { animation: none; }
+    }
+    .hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
     .hero-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--accent-bright); text-transform: uppercase; font-weight: 700; }
     .hero-title {
       margin-top: 26px;
@@ -321,6 +343,7 @@
   <main>
     <!-- ============== Hero ============== -->
     <section class="hero" id="top">
+      <div class="stars-b" aria-hidden="true"></div>
       <div class="container hero-inner">
         <p class="hero-eyebrow">Independent Digital Studio</p>
         <h1 class="hero-title" data-i18n="heroTitle">把想法，做成顺手的小工具。</h1>
