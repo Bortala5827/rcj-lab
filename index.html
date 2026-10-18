@@ -155,7 +155,7 @@
     @keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
     @keyframes drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-120px, 80px, 0); } }
     @keyframes nebulaDrift { 0% { background-position: 0% 0%, 100% 0%, 0% 100%; } 100% { background-position: 100% 100%, 0% 100%, 100% 0%; } }
-    @keyframes sd-breathe { 0%, 100% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.15); } }
+    @keyframes sd-breathe { 0%, 100% { opacity: .18; transform: scale(.4); } 50% { opacity: 1; transform: scale(1.3); } }
     @keyframes sd-f1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(10vw, -14vh); } 66% { transform: translate(-5vw, -18vh); } }
     @keyframes sd-f2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-11vw, 9vh); } 66% { transform: translate(8vw, 14vh); } }
     @keyframes sd-f3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(14vw, 13vh); } 66% { transform: translate(-9vw, 5vh); } }
@@ -620,16 +620,19 @@
         { c: '#bfe0ff', glow: 'rgba(150,200,255,.8)', soft: 'rgba(120,170,255,.3)' },
         { c: '#dcd6ff', glow: 'rgba(196,180,255,.8)', soft: 'rgba(160,140,255,.3)' }
       ];
-      var N = window.innerWidth < 640 ? 26 : 40;
+      var w = window.innerWidth;
+      var desktop = w >= 640;
+      // 大屏光点更密、更大、闪得更快，避免稀疏到肉眼看不出动
+      var N = w < 640 ? 26 : (w >= 1600 ? 90 : 64);
       var frag = document.createDocumentFragment();
       for (var i = 0; i < N; i++) {
         var p = PALETTE[Math.floor(Math.random() * PALETTE.length)];
         var travel = document.createElement('div');
         travel.className = 'sd-travel';
-        var size = 2 + Math.random() * 3;
-        var bd = 3 + Math.random() * 5;
+        var size = desktop ? (2.5 + Math.random() * 4) : (2 + Math.random() * 3);
+        var bd = desktop ? (2.5 + Math.random() * 3.5) : (3 + Math.random() * 5);
         var bdelay = -(Math.random() * 10);
-        var fd = 16 + Math.random() * 18;
+        var fd = desktop ? (14 + Math.random() * 14) : (16 + Math.random() * 18);
         var fdelay = -(Math.random() * 20);
         var path = 'sd-f' + (1 + Math.floor(Math.random() * 4));
         travel.style.setProperty('--x', (Math.random() * 100) + '%');
