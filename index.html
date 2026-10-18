@@ -33,7 +33,7 @@
     }
   }
   </script>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236a5cff'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='system-ui' font-size='34' font-weight='800' fill='white'%3ER%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5b355'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='system-ui' font-size='34' font-weight='800' fill='%2313101a'%3ER%3C/text%3E%3C/svg%3E" />
   <script>document.documentElement.classList.add('js');</script>
   <style>
     /* ============================================================
@@ -42,24 +42,25 @@
        约束：首屏不依赖 JS；无大型图片/动画库；尊重 prefers-reduced-motion
        ============================================================ */
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --ink: #f4f4f6;
-      --ink-2: #b9bac4;
-      --ink-3: #868791;
+      --bg: #0b0d16;
+      --surface: #131627;
+      --ink: #f4f1ea;
+      --ink-2: #c2bdb2;
+      --ink-3: #8f8a7e;
       --line: rgba(255, 255, 255, .1);
-      --accent: #6a5cff;
-      --accent-bright: #8f82ff;
-      --accent-deep: #4438c9;
-      --accent-soft: rgba(106, 92, 255, .12);
-      --accent-line: rgba(106, 92, 255, .35);
+      --accent: #f5b355;
+      --accent-bright: #ffd78a;
+      --accent-deep: #d9912f;
+      --accent-soft: rgba(245, 179, 85, .12);
+      --accent-line: rgba(245, 179, 85, .38);
       --amber: #f59e0b;
       --amber-soft: rgba(245, 158, 11, .1);
-      --red: #e82127;
+      --fire: #f7c566;
+      --red: #e8513c;
       --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
       --serif: Georgia, "Times New Roman", "Noto Serif SC", "Songti SC", "SimSun", serif;
-      --radius: 14px;
+      --radius: 16px;
       --maxw: 1100px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,9 +107,9 @@
     .cosmos {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
       background:
-        radial-gradient(60% 50% at 22% 16%, rgba(106, 92, 255, .18), transparent 62%),
-        radial-gradient(55% 45% at 82% 32%, rgba(96, 120, 255, .14), transparent 62%),
-        linear-gradient(165deg, #161428, #0e0d1c 45%, #0a0a0f);
+        radial-gradient(60% 50% at 22% 16%, rgba(245, 179, 85, .16), transparent 62%),
+        radial-gradient(55% 45% at 82% 32%, rgba(140, 180, 255, .12), transparent 62%),
+        linear-gradient(165deg, #10162a, #0b0e1c 45%, #0b0d16);
       background-size: 200% 200%, 200% 200%, 220% 220%;
       animation: nebulaDrift 28s ease-in-out infinite alternate;
     }
@@ -118,16 +119,16 @@
       background-image:
         radial-gradient(rgba(255, 255, 255, .55) 1px, transparent 1.6px),
         radial-gradient(rgba(255, 255, 255, .38) 1px, transparent 1.5px),
-        radial-gradient(rgba(224, 220, 255, .45) 1.4px, transparent 2.2px);
+        radial-gradient(rgba(255, 226, 178, .5) 1.4px, transparent 2.2px);
       background-size: 233px 233px, 371px 371px, 503px 503px;
       background-position: 0 0, 61px 117px, 149px 37px;
       animation: twinkle 4.2s ease-in-out infinite;
     }
-    /* 横向紫光带：缓慢横移 + 明暗呼吸（原本静止，现为可见动效） */
+    /* 横向暖光带：缓慢横移 + 明暗呼吸（萤火虫暖黄，原本静止，现为可见动效） */
     .cosmos::after {
       content: ""; position: absolute; inset: 0;
       background:
-        linear-gradient(90deg, transparent, rgba(138, 124, 255, .16) 30%, rgba(196, 180, 255, .26) 50%, rgba(138, 124, 255, .16) 70%, transparent);
+        linear-gradient(90deg, transparent, rgba(245, 179, 85, .14) 30%, rgba(255, 215, 138, .24) 50%, rgba(245, 179, 85, .14) 70%, transparent);
       background-repeat: no-repeat; background-position: center 44%;
       background-size: 100% 130px; filter: blur(26px);
       animation: bandSlide 16s ease-in-out infinite alternate, bandGlow 7s ease-in-out infinite;
@@ -136,7 +137,7 @@
     .cosmos .stars-b {
       position: absolute; inset: -8%;
       background-image:
-        radial-gradient(rgba(220, 214, 255, .45) 1px, transparent 1.4px),
+        radial-gradient(rgba(255, 224, 176, .45) 1px, transparent 1.4px),
         radial-gradient(rgba(255, 255, 255, .3) 1px, transparent 1.5px);
       background-size: 197px 197px, 431px 431px;
       background-position: 23px 71px, 131px 13px;
@@ -162,9 +163,24 @@
     @keyframes sd-f4 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-14vw, -9vh); } 66% { transform: translate(9vw, -14vh); } }
     @keyframes bandSlide { from { transform: translateX(-5%); } to { transform: translateX(5%); } }
     @keyframes bandGlow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+
+    /* ---------- 萤火虫光点层（暖黄，缓缓上浮 + 左右漂移，纯装饰不挡交互） ---------- */
+    .fireflies { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .fireflies i {
+      position: absolute; bottom: -12px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 238, 196, .98) 0%, rgba(247, 212, 138, .5) 42%, rgba(247, 212, 138, 0) 74%);
+      opacity: 0; will-change: transform, opacity;
+      animation: ffRise var(--t, 11s) ease-in-out var(--d, 0s) infinite;
+    }
+    @keyframes ffRise {
+      0% { transform: translate3d(0, 0, 0) scale(.7); opacity: 0; }
+      14% { opacity: var(--o, .8); }
+      55% { opacity: var(--o2, .4); }
+      100% { transform: translate3d(var(--dx, 30px), -96vh, 0) scale(1.15); opacity: 0; }
+    }
     @media (prefers-reduced-motion: reduce) {
       .cosmos, .cosmos::before, .cosmos::after, .cosmos .stars-b,
-      .cosmos .stardust .sd-travel, .cosmos .stardust .sd-dot { animation: none; }
+      .cosmos .stardust .sd-travel, .cosmos .stardust .sd-dot, .fireflies, .fireflies i { animation: none; }
     }
 
     /* ---------- Hero（特斯拉式全屏大画幅，透明叠在星空上） ---------- */
@@ -182,14 +198,14 @@
       line-height: 1.1; letter-spacing: -.025em; font-weight: 700;
       max-width: 1100px;
     }
-    .hero-rule { width: 64px; height: 4px; border-radius: 2px; background: var(--red); margin: 32px auto 0; }
+    .hero-rule { width: 64px; height: 4px; border-radius: 2px; background: var(--fire); margin: 32px auto 0; box-shadow: 0 0 18px rgba(245, 179, 85, .55); }
     .hero-sub { margin-top: 22px; font-size: clamp(15px, 1.3vw, 17.5px); color: var(--ink-2); max-width: 600px; }
     .hero-now {
       margin-top: 28px; display: inline-flex; align-items: center; gap: 9px;
       font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--ink-3);
     }
-    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(232, 33, 39, .4); animation: live-pulse 2.6s ease-in-out infinite; }
-    @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(232, 33, 39, .4); opacity: 1; } 50% { box-shadow: 0 0 0 6px rgba(232, 33, 39, 0); opacity: .65; } }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fire); box-shadow: 0 0 0 0 rgba(245, 179, 85, .45); animation: live-pulse 2.6s ease-in-out infinite; }
+    @keyframes live-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(245, 179, 85, .45); opacity: 1; } 50% { box-shadow: 0 0 0 6px rgba(245, 179, 85, 0); opacity: .65; } }
     @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; opacity: 1; } }
     .hero-ctas { display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
     .btn {
@@ -198,13 +214,13 @@
       padding: 13px 26px; border-radius: 5px; font-weight: 700; font-size: 15px;
       transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
     }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 8px 24px rgba(106, 92, 255, .3); }
+    .btn-primary { background: var(--accent); color: #13101a; box-shadow: 0 8px 24px rgba(245, 179, 85, .32); }
     .btn-primary::before {
       content: ""; position: absolute; top: 0; left: -70%; width: 45%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255, 255, 255, .35), transparent);
+      background: linear-gradient(105deg, transparent, rgba(255, 255, 255, .4), transparent);
       transform: skewX(-18deg); transition: left .55s ease;
     }
-    .btn-primary:hover { background: var(--accent-bright); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(106, 92, 255, .5); }
+    .btn-primary:hover { background: var(--accent-bright); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245, 179, 85, .5); }
     .btn-primary:hover::before { left: 130%; }
     .btn-ghost { border: 1px solid rgba(255, 255, 255, .35); background: transparent; color: var(--ink); }
     .btn-ghost:hover { border-color: var(--ink); transform: translateY(-2px); background: rgba(255, 255, 255, .05); }
@@ -237,7 +253,7 @@
       background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
       overflow: hidden; transition: border-color .22s ease, transform .22s ease, box-shadow .22s ease;
     }
-    .feature-card:hover { border-color: var(--accent-line); box-shadow: 0 24px 50px rgba(106, 92, 255, .18), 0 18px 40px rgba(0, 0, 0, .45); }
+    .feature-card:hover { border-color: var(--accent-line); box-shadow: 0 24px 50px rgba(245, 179, 85, .16), 0 18px 40px rgba(0, 0, 0, .45); }
     html.js .feature-card.is-visible:hover { transform: translateY(-4px); }
     @media (hover: none) { html.js .feature-card.is-visible:hover { transform: none; } }
     .feature-info { padding: 38px 36px 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
@@ -249,7 +265,7 @@
     .feature-cta:hover span:last-child { transform: translateX(5px); }
     .feature-visual {
       position: relative;
-      background: linear-gradient(155deg, #6a5cff 0%, #4a3fd0 52%, #2e2586 100%);
+      background: linear-gradient(155deg, #f5b355 0%, #d9912f 52%, #7a4a12 100%);
       border-left: 1px solid rgba(255, 255, 255, .14);
       display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; padding: 36px;
     }
@@ -301,7 +317,7 @@
     .prow-desc { grid-column: 2; grid-row: 2; color: var(--ink-3); font-size: 12.5px; }
 
     /* ---------- 实验室（About） ---------- */
-    #lab { background: linear-gradient(180deg, rgba(106, 92, 255, .1), rgba(106, 92, 255, .04) 62%, transparent); }
+    #lab { background: linear-gradient(180deg, rgba(245, 179, 85, .1), rgba(245, 179, 85, .04) 62%, transparent); }
     .about-big { font-family: var(--serif); font-size: clamp(1.9rem, 3.6vw, 3rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.3; max-width: 24em; }
     .about-body { margin-top: 16px; color: var(--ink-2); font-size: 16px; max-width: 640px; }
     .about-tags { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; list-style: none; }
@@ -392,7 +408,7 @@
     <div class="container header-inner">
       <a class="wordmark" href="/" aria-label="RCJ Lab">
         <span class="mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" width="18" height="18"><rect width="64" height="64" rx="14" fill="#6a5cff"/><text x="32" y="45" text-anchor="middle" font-family="system-ui" font-size="34" font-weight="800" fill="#fff">R</text></svg>
+          <svg viewBox="0 0 64 64" width="18" height="18"><rect width="64" height="64" rx="14" fill="#f5b355"/><text x="32" y="45" text-anchor="middle" font-family="system-ui" font-size="34" font-weight="800" fill="#13101a">R</text></svg>
         </span>
         <span class="wm">
           <span class="wm-name">RCJ Lab</span>
@@ -407,11 +423,13 @@
     </div>
   </header>
 
-  <!-- 全站固定深空背景：流动雾 + 密星 + 紫光带 + 随机相位冷光星点（透明叠在内容之下） -->
+  <!-- 全站固定深空背景：流动雾 + 密星 + 暖光带 + 随机相位星点（透明叠在内容之下） -->
   <div class="cosmos" aria-hidden="true">
     <div class="stars-b"></div>
     <div class="stardust" id="stardust"></div>
   </div>
+  <!-- 萤火虫暖黄光点层（缓缓上浮，firefly 氛围） -->
+  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
 
   <main>
     <!-- ============== Hero ============== -->
@@ -459,13 +477,13 @@
 
         <!-- 次级精选：Exam / Voice / Shop / Blog -->
         <div class="feature-secondary">
-          <a class="mini-card reveal" style="--mc:#6a5cff" href="https://exam.955827.xyz" target="_blank" rel="noopener">
+          <a class="mini-card reveal" style="--mc:#f5b355" href="https://exam.955827.xyz" target="_blank" rel="noopener">
             <p class="feature-tag">02 / Learning</p>
             <h3 class="mini-name">Exam Hub</h3>
             <p class="mini-desc" data-i18n="ehDesc">备考资料、题目练习、知识卡片与面试表达训练。</p>
             <span class="feature-cta"><span data-i18n="ehCta">开始使用</span></span>
           </a>
-          <a class="mini-card reveal" style="--mc:#f59e0b" href="https://voice.955827.xyz" target="_blank" rel="noopener">
+          <a class="mini-card reveal" style="--mc:#ffd78a" href="https://voice.955827.xyz" target="_blank" rel="noopener">
             <p class="feature-tag">03 / Voice</p>
             <h3 class="mini-name">Voice</h3>
             <p class="mini-desc" data-i18n="voDesc">华语女声清唱试听与声音定制：试听 + 歌词 + 下单。</p>
@@ -489,68 +507,68 @@
 
         <div class="project-cols reveal">
           <!-- 学习与求职 -->
-          <div class="pcol" style="--pc:#6a5cff">
+          <div class="pcol" style="--pc:#f5b355">
             <h3 class="pcol-title" data-i18n="groupLearn">学习与求职</h3>
             <ul class="prow-list">
               <li><a class="prow" href="https://exam.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#1e88e5" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Exam Hub</span>
                 <span class="prow-desc" data-i18n="pExam">题库 · 知识卡 · 面试 · 教程</span>
               </a></li>
               <li><a class="prow" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#14b8a6" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">FaceTalk</span>
                 <span class="prow-desc" data-i18n="pFace">60 秒试音 · 双向互选 · 阅后即焚</span>
               </a></li>
               <li><a class="prow" href="https://card.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#8b5cf6" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">voicecard</span>
                 <span class="prow-desc" data-i18n="pCard">录一段语音，生成链接，贴进简历</span>
               </a></li>
             </ul>
           </div>
           <!-- 内容与生活 -->
-          <div class="pcol" style="--pc:#f59e0b">
+          <div class="pcol" style="--pc:#f7c566">
             <h3 class="pcol-title" data-i18n="groupLife">内容与生活</h3>
             <ul class="prow-list">
               <li><a class="prow" href="https://blog.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#f97316" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Blog</span>
                 <span class="prow-desc" data-i18n="pBlog">随笔 · 开发笔记 · 作品橱窗</span>
               </a></li>
               <li><a class="prow" href="https://speak.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#6366f1" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Speak</span>
                 <span class="prow-desc" data-i18n="pSpeak">SoloSpeak · LetOut 讲话系列</span>
               </a></li>
               <li><a class="prow" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#b87333" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Dinner for You</span>
                 <span class="prow-desc" data-i18n="pDinner">邀请码点餐 · 录歌 · 双向邮件</span>
               </a></li>
             </ul>
           </div>
           <!-- 服务与变现 -->
-          <div class="pcol" style="--pc:#ef4444">
+          <div class="pcol" style="--pc:#e8513c">
             <h3 class="pcol-title" data-i18n="groupServe">服务与变现</h3>
             <ul class="prow-list">
               <li><a class="prow" href="https://voice.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#d946ef" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Voice</span>
                 <span class="prow-desc" data-i18n="pVoice">华语女声 · 清唱试听 · 声音定制</span>
               </a></li>
               <li><a class="prow" href="https://shop.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#ef4444" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Shop</span>
                 <span class="prow-desc" data-i18n="pShop">定制题库 · 代建站服务</span>
               </a></li>
               <li><a class="prow" href="https://support.955827.xyz" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#10b981" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Support</span>
                 <span class="prow-desc" data-i18n="pSupport">聊天 widget · Telegram 通道</span>
               </a></li>
               <li><a class="prow" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener">
-                <span class="dot" style="--c:#f6821f" aria-hidden="true"></span>
+                <span class="dot" style="--c:#f5b355" aria-hidden="true"></span>
                 <span class="prow-name">Stack</span>
                 <span class="prow-desc" data-i18n="pStack">零月费 SaaS 套件 · MIT 开源</span>
               </a></li>
@@ -616,9 +634,9 @@
       if (!box) return;
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       var PALETTE = [
-        { c: '#eef2ff', glow: 'rgba(238,242,255,.85)', soft: 'rgba(190,205,255,.35)' },
-        { c: '#bfe0ff', glow: 'rgba(150,200,255,.8)', soft: 'rgba(120,170,255,.3)' },
-        { c: '#dcd6ff', glow: 'rgba(196,180,255,.8)', soft: 'rgba(160,140,255,.3)' }
+        { c: '#fff3dd', glow: 'rgba(255,230,190,.85)', soft: 'rgba(245,200,130,.35)' },
+        { c: '#ffdfa8', glow: 'rgba(250,205,130,.8)', soft: 'rgba(240,180,90,.3)' },
+        { c: '#f7c566', glow: 'rgba(245,179,85,.8)', soft: 'rgba(230,160,70,.3)' }
       ];
       var w = window.innerWidth;
       var desktop = w >= 640;
@@ -649,6 +667,27 @@
         dot.style.setProperty('--bdelay', bdelay + 's');
         travel.appendChild(dot);
         frag.appendChild(travel);
+      }
+      box.appendChild(frag);
+    })();
+
+    /* 萤火虫暖黄光点：缓缓上浮 + 左右漂移（firefly 氛围）；reduced-motion 不生成 */
+    (function buildFireflies() {
+      var box = document.getElementById('fireflies');
+      if (!box) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var frag = document.createDocumentFragment();
+      var N = window.innerWidth < 640 ? 12 : 20;
+      for (var i = 0; i < N; i++) {
+        var s = document.createElement('i');
+        var size = (2.5 + Math.random() * 4).toFixed(1);
+        s.style.cssText = 'left:' + (Math.random() * 100).toFixed(1) + '%;bottom:-12px;width:' + size + 'px;height:' + size + 'px;' +
+          '--t:' + (9 + Math.random() * 10).toFixed(1) + 's;' +
+          '--d:' + (Math.random() * 7).toFixed(1) + 's;' +
+          '--dx:' + (Math.random() * 140 - 70).toFixed(0) + 'px;' +
+          '--o:' + (0.5 + Math.random() * 0.5).toFixed(2) + ';' +
+          '--o2:' + (0.2 + Math.random() * 0.3).toFixed(2) + ';';
+        frag.appendChild(s);
       }
       box.appendChild(frag);
     })();

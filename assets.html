@@ -3,11 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#0b0d16" />
   <title>RCJ 资产库 · Asset Hub</title>
   <meta name="description" content="RCJ Lab 资产总目录 —— 记录创造，沉淀能力，让每一次探索成为下一次复用的基础。核心引擎 / 互动资产 / 媒体资产 / AI 工作流 / 设计资产 / 产品映射 / 能力地图。" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231e88e5'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='system-ui' font-size='28' font-weight='800' fill='white'%3ER%3C/text%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="/assets/hub.v2.css?v=20260813b" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5b355'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='system-ui' font-size='28' font-weight='800' fill='%2313101a'%3ER%3C/text%3E%3C/svg%3E" />
+  <style>
+    /* ===== firefly 暗色设计系统（内置，替代线上 hub.v2.css） ===== */
+    :root {
+      --ink:#f4f1ea; --ink-2:#c2bdb2; --ink-3:#8f8a7e; --ink-4:#6e6a60;
+      --line:rgba(255,255,255,.1); --line-2:rgba(255,255,255,.07);
+      --bg:#0b0d16; --surface:#131627; --bg-soft:rgba(255,255,255,.04);
+      --accent:#f5b355; --accent-weak:rgba(245,179,85,.14);
+      --signal:#f5a524; --signal-weak:rgba(245,179,85,.14);
+      --radius:16px; --radius-sm:10px; --max:1080px;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+      color:var(--ink); background:var(--bg); line-height:1.6; -webkit-font-smoothing:antialiased;
+    }
+    a { color:inherit; text-decoration:none; }
+    ul { list-style:none; }
+    .container { max-width:var(--max); margin:0 auto; padding:0 24px; }
+    .site-header { padding:18px 0; position:sticky; top:0; z-index:50; background:rgba(11,13,22,.82); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border-bottom:1px solid var(--line-2); }
+    .nav { display:flex; align-items:center; justify-content:space-between; }
+    .wordmark { display:inline-flex; align-items:center; gap:10px; font-weight:700; }
+    .mark { display:inline-grid; place-items:center; width:32px; height:32px; border-radius:9px; background:var(--accent); color:#13101a; font-size:14px; font-weight:800; letter-spacing:-.5px; }
+    .wm-text { font-size:15px; letter-spacing:.1px; color:var(--ink); }
+    .nav-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
+    .nav-link { display:inline-flex; align-items:center; gap:5px; padding:8px 16px; border:1px solid var(--line); border-radius:999px; font-size:14px; font-weight:600; color:var(--ink); transition:border-color .2s ease, background .2s ease, color .2s ease; }
+    .nav-link:hover, .nav-link:focus { border-color:var(--ink-4); background:var(--bg-soft); color:var(--accent); }
+    @media (max-width:480px) { .nav-link { padding:7px 13px; font-size:13px; } }
+    /* 萤火虫暖黄光点（firefly 氛围） */
+    .fireflies { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+    .fireflies i { position:absolute; bottom:-12px; border-radius:50%; background:radial-gradient(circle,rgba(255,238,196,.98) 0%,rgba(247,212,138,.5) 42%,rgba(247,212,138,0) 74%); opacity:0; will-change:transform,opacity; animation:ffRise var(--t,11s) ease-in-out var(--d,0s) infinite; }
+    @keyframes ffRise { 0%{transform:translate3d(0,0,0) scale(.7);opacity:0;} 14%{opacity:var(--o,.8);} 55%{opacity:var(--o2,.4);} 100%{transform:translate3d(var(--dx,30px),-96vh,0) scale(1.15);opacity:0;} }
+    main.container, .site-header { position:relative; z-index:1; }
+    @media (prefers-reduced-motion:reduce) { * { animation:none !important; scroll-behavior:auto; } }
+  </style>
   <style>
     .asset-hero { padding: 72px 0 36px; }
     .asset-hero h1 { font-size: clamp(28px, 5vw, 46px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 14px; }
@@ -31,14 +65,14 @@
     .layer-repo a { color: var(--accent); }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-    .card { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease; display: flex; flex-direction: column; gap: 8px; }
-    .card:hover { box-shadow: 0 16px 36px rgba(15,23,42,.12); border-color: var(--ink-4); transform: translateY(-2px); }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease; display: flex; flex-direction: column; gap: 8px; }
+    .card:hover { box-shadow: 0 16px 36px rgba(0,0,0,.5); border-color: var(--ink-4); transform: translateY(-2px); }
     .card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .card-name { font-size: 15.5px; font-weight: 700; color: var(--ink); }
     .pill { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
-    .pill.done { background: #e7f6ee; color: #15803d; }
-    .pill.planned { background: var(--signal-weak); color: #b45309; }
-    .pill.wip { background: #e8f1fc; color: var(--accent); }
+    .pill.done { background: rgba(74,222,128,.14); color: #6ee7a0; }
+    .pill.planned { background: var(--signal-weak); color: #fbbf24; }
+    .pill.wip { background: rgba(245,179,85,.14); color: var(--accent); }
     .card-desc { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
     .card-meta { font-size: 12px; color: var(--ink-4); line-height: 1.55; margin-top: auto; }
     .card-meta b { color: var(--ink-3); font-weight: 600; }
@@ -48,8 +82,8 @@
 
     /* ===== 核心引擎面板 ===== */
     .engines { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 6px; }
-    .engine { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 18px; position: relative; overflow: hidden; }
-    .engine::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #7c3aed); }
+    .engine { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 18px; position: relative; overflow: hidden; }
+    .engine::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-deep, #d9912f)); }
     .engine-ico { font-size: 26px; }
     .engine-name { font-size: 18px; font-weight: 800; color: var(--ink); margin: 8px 0 2px; }
     .engine-tag { font-size: 13px; color: var(--ink-3); margin-bottom: 12px; }
@@ -60,8 +94,8 @@
 
     /* ===== 产品映射图 ===== */
     .pmap { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 26px 16px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); }
-    .pm-node { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 18px; font-weight: 700; color: var(--ink); font-size: 15px; box-shadow: 0 4px 14px rgba(15,23,42,.05); }
-    .pm-root { background: var(--accent); color: #fff; border-color: transparent; }
+    .pm-node { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 18px; font-weight: 700; color: var(--ink); font-size: 15px; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+    .pm-root { background: var(--accent); color: #13101a; border-color: transparent; }
     .pm-mid { font-size: 16px; }
     .pm-row, .pm-row2 { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
     .pm-arrow { color: var(--ink-4); font-size: 18px; line-height: 1; }
@@ -69,7 +103,7 @@
 
     /* ===== 能力地图 ===== */
     .caps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-    .cap { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 16px; }
+    .cap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 16px; }
     .cap-ico { font-size: 22px; }
     .cap-name { font-size: 16px; font-weight: 800; color: var(--ink); margin: 8px 0 10px; }
     .cap ul { margin: 0; padding-left: 18px; }
@@ -86,6 +120,7 @@
   </style>
 </head>
 <body class="hub">
+  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
   <header class="site-header">
     <div class="container nav">
       <a class="wordmark" href="/">
@@ -344,6 +379,23 @@
         <div class="cap-projects"><div class="lab">代表项目</div>${projects}</div>`;
       capWrap.appendChild(el);
     });
+
+    // 萤火虫暖黄光点
+    (function(){
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var box = document.getElementById('fireflies'); if (!box) return;
+      var frag = document.createDocumentFragment();
+      var N = window.innerWidth < 640 ? 12 : 20;
+      for (var i = 0; i < N; i++) {
+        var s = document.createElement('i');
+        var size = (2.5 + Math.random() * 4).toFixed(1);
+        s.style.cssText = 'left:' + (Math.random() * 100).toFixed(1) + '%;bottom:-12px;width:' + size + 'px;height:' + size + 'px;' +
+          '--t:' + (9 + Math.random() * 10).toFixed(1) + 's;--d:' + (Math.random() * 7).toFixed(1) + 's;' +
+          '--dx:' + (Math.random() * 140 - 70).toFixed(0) + 'px;--o:' + (0.5 + Math.random() * 0.5).toFixed(2) + ';--o2:' + (0.2 + Math.random() * 0.3).toFixed(2) + ';';
+        frag.appendChild(s);
+      }
+      box.appendChild(frag);
+    })();
   </script>
 </body>
 </html>
