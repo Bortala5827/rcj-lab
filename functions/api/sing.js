@@ -119,7 +119,10 @@ export async function onRequest({ request, env }) {
       materials TEXT DEFAULT '[]', audio_key TEXT DEFAULT '', status TEXT DEFAULT 'pending',
       created INTEGER NOT NULL, decided_at INTEGER DEFAULT 0, ip TEXT DEFAULT ''
     )`);
-    if (r && r.error) return json({ ok: false, error: '建表失败' }, 500);
+    if (r && r.error) {
+      console.error('[sing] D1 建表失败', r.error);
+      return json({ ok: false, error: '建表失败：' + r.error }, 500);
+    }
     // 幂等补列：notify_err（通知失败原因，便于后台排查）
     {
       const pr = await d1(env, 'SELECT notify_err FROM sing_requests LIMIT 0');
@@ -140,7 +143,10 @@ export async function onRequest({ request, env }) {
     }
 
     const ins = await d1(env, `INSERT INTO sing_requests (id, email, tier, materials, audio_key, status, created, ip) VALUES ('${id}','${email.replace(/'/g, "''")}','${tier}','${JSON.stringify(materials).replace(/'/g, "''")}','${audioKey}','pending',${now},'${ip}')`);
-    if (ins && ins.error) return json({ ok: false, error: '存储失败' }, 500);
+    if (ins && ins.error) {
+      console.error('[sing] D1 写入失败', ins.error);
+      return json({ ok: false, error: '存储失败：' + ins.error }, 500);
+    }
 
     // 0元购报名 → 记 orders 表 + 通知站长（提醒我）
     try {
