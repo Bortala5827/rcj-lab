@@ -2,9 +2,7 @@
 // GET    /api/notes           -> 全部便签（按时间倒序，公开读）
 // POST   /api/notes           -> 新增 {text}（需登录，自动记时间）
 // DELETE /api/notes?id=xx     -> 删除（需登录）
-// 存储：复用 rcj-analytics-d1 的 notes 表（纯文字，惰性建表）
-
-const DB = 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828'; // rcj-analytics-d1
+// 存储：复用 rcj-analytics-d1 的 notes 表（纯文字，惰性建表，走原生绑定 env.DB）
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -40,14 +38,8 @@ async function verifyAuth(request, env) {
 }
 
 async function d1(env, sql, params = []) {
-  const r = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/d1/database/${DB}/query`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sql, params }),
-  });
-  const j = await r.json();
-  if (!j.success) throw new Error(j.errors?.[0]?.message || 'D1 查询失败');
-  return j.result[0].results;
+  const r = await env.DB.prepare(sql).bind(...params).all();
+  return r.results;
 }
 
 async function ensureTable(env) {

@@ -5,7 +5,6 @@
 // 失败静默，不影响主流程。匿名：只存项目/渠道/状态/耗时，不存用户内容、不存 IP。
 
 const PROJECTS = ['fj-sz', 'learn', 'shop', 'api', 'solospeak', 'facetalk', 'other'];
-const ANALYTICS_DB = 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828'; // rcj-analytics-d1
 
 function cors() {
   return {
@@ -36,11 +35,6 @@ export async function onRequestPost({ request, env }) {
   const latencyMs = Number(body.latency_ms) || 0;
   const tokens = Number(body.tokens) || 0;
 
-  if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID) {
-    return new Response(JSON.stringify({ ok: false, error: 'server misconfig' }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...cors() } });
-  }
-
   const now = new Date();
   const day = now.toISOString().slice(0, 10);
   const createdAt = now.toISOString();
@@ -48,8 +42,8 @@ export async function onRequestPost({ request, env }) {
   const esc = (s) => String(s).replace(/'/g, "''");
 
   try {
-    // 幂等建表 + 索引（表已存在时为 no-op）
-    const ddl = `CREATE TABLE IF NOT EXISTS ai_calls (
+    // 幂等建表 + 索引（表已存在时为 no-op；绑定 prepare 单语句，分 3 次执行）
+    await env.DB.prepare(`CREATE TABLE IF NOT EXISTS ai_calls (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         project TEXT NOT NULL,
         scene TEXT,
@@ -59,32 +53,14 @@ export async function onRequestPost({ request, env }) {
         tokens INTEGER DEFAULT 0,
         day TEXT NOT NULL,
         created_at TEXT NOT NULL
-      );
-      CREATE INDEX IF NOT EXISTS idx_ai_calls_day ON ai_calls(day);
-      CREATE INDEX IF NOT EXISTS idx_ai_calls_project ON ai_calls(project);`;
-
-    await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/d1/database/${ANALYTICS_DB}/query`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql: ddl }),
-      }
-    );
+      )`).run();
+    await env.DB.prepare('CREATE INDEX IF NOT EXISTS idx_ai_calls_day ON ai_calls(day)').run();
+    await env.DB.prepare('CREATE INDEX IF NOT EXISTS idx_ai_calls_project ON ai_calls(project)').run();
 
     const insertSql = `INSERT INTO ai_calls(project, scene, provider, status, latency_ms, tokens, day, created_at)
       VALUES('${esc(safeProject)}', '${esc(scene)}', '${esc(provider)}', '${status}', ${latencyMs}, ${tokens}, '${day}', '${createdAt}')`;
 
-    const r = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/d1/database/${ANALYTICS_DB}/query`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql: insertSql }),
-      }
-    );
-    const j = await r.json();
-    if (!j.success) throw new Error(j.errors?.[0]?.message || 'db error');
+    await env.DB.prepare(insertSql).run();
 
     return new Response(JSON.stringify({ ok: true }),
       { status: 200, headers: { 'Content-Type': 'application/json', ...cors() } });

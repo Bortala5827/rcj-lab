@@ -1,13 +1,14 @@
 // rcj-lab · 统一后台数据聚合
 // GET /api/admin/data  (需登录：签名 cookie 或 ?password=)
-// 服务端用 CF_API_TOKEN + CF_ACCOUNT_ID 读取各 D1 库，聚合后返回 JSON。
-// token 仅存于服务端 env，绝不下发浏览器。
+// 服务端用 D1 原生绑定（env.DB / env.FACETALK_DB）读取各库，聚合后返回 JSON。
+// 绑定由 Pages 平台托管凭证，无需 API Token。
 //
 // v3: 加 60s 内存缓存(避免每次 15 并发 D1 查询) + 合并 SQL(15→10) + 整体超时
+// v4: 2026-10-21 REST+token → 原生 D1 绑定（DBS 值改为绑定名）
 
 const DBS = {
-  facetalk: 'f93a89d7-ef5f-49c5-863d-5f1611e1a7f4',  // mianshi-dazi-d1 (FaceTalk)
-  analytics: 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828',  // rcj-analytics-d1 (统一浏览统计)
+  facetalk: 'FACETALK_DB',  // mianshi-dazi-d1 (FaceTalk)
+  analytics: 'DB',          // rcj-analytics-d1 (统一浏览统计)
 };
 
 // ── 服务端内存缓存（60s TTL，单 Worker 隔离足够用）──
@@ -55,25 +56,16 @@ async function verifyAuth(request, env) {
 }
 
 async function d1(env, dbId, sql, ms = 6000) {
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), ms);
-  try {
-    const r = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/d1/database/${dbId}/query`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sql }),
-      signal: ac.signal,
-    });
-    const j = await r.json();
-    if (!j.success) throw new Error(j.errors?.[0]?.message || 'D1 查询失败');
-    return j.result[0].results;
-  } finally { clearTimeout(timer); }
+  const binding = env[dbId];
+  if (!binding) throw new Error('D1 绑定缺失: ' + dbId);
+  const r = await binding.prepare(sql).all();
+  return r.results;
 }
 
 export async function onRequestGet({ request, env }) {
   if (!(await verifyAuth(request, env))) return json({ error: '未登录' }, 401);
-  if (!env.CF_API_TOKEN || !env.CF_ACCOUNT_ID) {
-    return json({ error: 'CF_API_TOKEN / CF_ACCOUNT_ID 未配置。请在 rcj-lab Pages → Settings → Functions → Environment variables 添加这两个变量。' }, 500);
+  if (!env.DB || !env.FACETALK_DB) {
+    return json({ error: 'D1 绑定缺失（DB / FACETALK_DB）。请在 rcj-lab Pages → Settings → Bindings 添加 D1 绑定。' }, 500);
   }
 
   // ── 缓存命中直接返回（?nocache=1 强制绕过，用于操作后即时刷新）──

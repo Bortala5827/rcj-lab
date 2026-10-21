@@ -4,7 +4,7 @@
 //   GET  /api/admin/wall?del=<id>       删除单条
 //   GET  /api/admin/wall?delIp=<ip>     删除该 IP 的全部留言
 //   POST /api/admin/wall  body: {del:<id>} | {delIp:<ip>}
-const FACETALK_DB = 'f93a89d7-a3d1-4f4c-9f5a-3b8e9c7d2a1f'; // mianshi-dazi-d1
+const FACETALK_DB = 'FACETALK_DB'; // mianshi-dazi-d1 原生绑定（2026-10-21 修复：原硬编码 UUID 为占位假值，改用绑定）
 
 // HMAC-SHA256 → base64（与 login.js / health.js / data.js 保持一致；
 // 历史曾用 hex 验签，导致 login 写 base64 cookie 后这两个接口 401，已统一为 base64）
@@ -44,14 +44,11 @@ function adminOk(request, env) {
 }
 
 function d1(env, dbId, sql) {
-  const acct = env.CF_ACCOUNT_ID, tok = env.CF_API_TOKEN;
-  if (!acct || !tok) return Promise.resolve({ error: 'NO_CRED' });
-  const url = `https://api.cloudflare.com/v4/accounts/${acct}/d1/database/${dbId}/query`;
-  return fetch(url, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${tok}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sql })
-  }).then(r => r.json()).then(j => j.success ? (j.result || []) : { error: (j.errors && j.errors[0] && j.errors[0].message) || 'D1_FAIL' });
+  const binding = env[dbId];
+  if (!binding) return Promise.resolve({ error: 'D1 绑定缺失' });
+  return binding.prepare(sql).run()
+    .then(r => ({ meta: r.meta }))
+    .catch(e => ({ error: e.message }));
 }
 
 function json(o, status) {
@@ -94,7 +91,7 @@ export async function onRequest(context) {
     }
     const res = await d1(env, FACETALK_DB, sql);
     if (res && res.error) return bad('删除失败：' + res.error, 500);
-    const changes = (res && res[0] && res[0].meta && res[0].meta.changes) || 0;
+    const changes = (res && res.meta && res.meta.changes) || 0;
     return json({ ok: true, deleted: changes, target: label });
   } catch (e) {
     return bad('删除异常：' + e.message, 500);

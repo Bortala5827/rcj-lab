@@ -1,11 +1,7 @@
 // rcj-lab · 一次性迁移：把辅警库历史 visit_counts 并入统一库（site='aux'）
 // GET /api/admin/migrate  (需后台登录)
 // 幂等：INSERT OR REPLACE，重复执行安全。仅管理员可触发。
-
-const DBS = {
-  // aux: 'ab639fbe-39b7-4ea8-bd67-18cdaa133599',  // aux-police-exam-d1 —— 已于 2026-08-17 并入 exam 后删除，本迁移脚本随之作废
-  analytics: 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828',  // rcj-analytics-d1
-};
+// 注：aux-police-exam-d1 已于 2026-08-17 并入 exam 后删除，本迁移已作废，不再执行任何 D1 查询。
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -38,22 +34,6 @@ async function verifyAuth(request, env) {
   }
   return false; // 移除 ?password= URL 明文参数
 }
-async function d1(env, dbId, sql, ms = 8000) {
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), ms);
-  try {
-    const r = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/d1/database/${dbId}/query`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sql }),
-      signal: ac.signal,
-    });
-    const j = await r.json();
-    if (!j.success) throw new Error(j.errors?.[0]?.message || 'D1 查询失败');
-    return j.result[0].results;
-  } finally { clearTimeout(timer); }
-}
-
 export async function onRequestGet({ request, env }) {
   if (!(await verifyAuth(request, env))) return json({ error: '未登录' }, 401);
   // aux-police-exam-d1 已于 2026-08-17 并入 exam 后删除，无历史数据可迁；

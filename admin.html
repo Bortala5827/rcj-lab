@@ -1174,6 +1174,14 @@ function fmtTime(ts){ if(!ts)return '—'; const s=String(ts); let d; if(s.inclu
     if(urlParams.get('conversation')) window._pendingConvId = urlParams.get('conversation');
     document.getElementById('genSmall').textContent = '';
   }
+  // 深链：?page=sing（Sing to Me 审核语音）/ ?page=orders（订单提醒）——通知邮件/TG 直达用
+  const deepPage = urlParams.get('page');
+  if(deepPage === 'sing' || deepPage === 'orders'){
+    currentPage = deepPage;
+    document.querySelectorAll('.sb-item').forEach(x => x.classList.toggle('active', x.dataset.page === deepPage));
+    document.getElementById('pageTitle').textContent = deepPage === 'sing' ? 'Sing to Me · 审核语音' : '订单提醒';
+    document.getElementById('genSmall').textContent = '';
+  }
   const r=await apiGet('/data');
   if(r.ok && r.data && r.data.ok){
     DATA=r.data;

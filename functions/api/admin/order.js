@@ -1,10 +1,10 @@
-// 订单管理端点（orders 表，存在 rcj-analytics-d1）
+// 订单管理端点（orders 表，存在 rcj-analytics-d1，走原生绑定 env.DB）
 // 鉴权：后台登录 cookie（rcj_admin，HMAC-SHA256）或明文 ADMIN_KEY 任一通过
 // 用法：
 //   POST /api/admin/order  body: { id:<订单id>, action:'collect' }  把定金订单标记为「余款已收」(status→paid, balance→0)
 //   POST /api/admin/order  body: { id:<订单id>, action:'setStatus', status:'paid'|'deposit'|'pending' }
 //   POST /api/admin/order  body: { id:<订单id>, action:'delete' }  删除订单（不可逆）
-const ANALYTICS_DB = 'b3198ef2-6e7c-424e-8a0f-a7b21afc1828'; // rcj-analytics-d1
+const ANALYTICS_DB = 'DB'; // rcj-analytics-d1 原生绑定
 
 function hmac(key, msg) {
   const enc = new TextEncoder();
@@ -39,13 +39,11 @@ function adminOk(request, env) {
   return !!envKey && String(key).trim() === envKey;
 }
 function d1(env, dbId, sql) {
-  const acct = env.CF_ACCOUNT_ID, tok = env.CF_API_TOKEN;
-  if (!acct || !tok) return Promise.resolve({ error: 'NO_CRED' });
-  return fetch(`https://api.cloudflare.com/v4/accounts/${acct}/d1/database/${dbId}/query`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sql })
-  }).then(r => r.json()).then(j => j.success ? (j.result || []) : { error: (j.errors && j.errors[0] && j.errors[0].message) || 'D1_FAIL' });
+  const binding = env[dbId];
+  if (!binding) return Promise.resolve({ error: 'D1 绑定缺失' });
+  return binding.prepare(sql).run()
+    .then(r => ({ meta: r.meta }))
+    .catch(e => ({ error: e.message }));
 }
 function json(o, status) { return new Response(JSON.stringify(o), { status: status || 200, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } }); }
 function bad(msg, status) { return json({ ok: false, error: msg }, status || 400); }
@@ -69,7 +67,7 @@ export async function onRequest(context) {
       // 定金 → 余款已收：状态置 paid，余款清零（金额仍按定金记，前端汇总时 paid 用全款计算）
       const res = await d1(env, ANALYTICS_DB, `UPDATE orders SET status='paid', balance=0 WHERE id='${esc(id)}'`);
       if (res && res.error) return bad('更新失败：' + res.error, 500);
-      const changes = (res && res[0] && res[0].meta && res[0].meta.changes) || 0;
+      const changes = (res && res.meta && res.meta.changes) || 0;
       return json({ ok: true, changes, id });
     }
     if (action === 'setStatus') {
@@ -77,14 +75,14 @@ export async function onRequest(context) {
       if (!['paid', 'deposit', 'pending'].includes(status)) return bad('非法状态');
       const res = await d1(env, ANALYTICS_DB, `UPDATE orders SET status='${esc(status)}' WHERE id='${esc(id)}'`);
       if (res && res.error) return bad('更新失败：' + res.error, 500);
-      const changes = (res && res[0] && res[0].meta && res[0].meta.changes) || 0;
+      const changes = (res && res.meta && res.meta.changes) || 0;
       return json({ ok: true, changes, id, status });
     }
     if (action === 'delete') {
       // 删除订单（测试数据清理/误单撤销，不可逆）
       const res = await d1(env, ANALYTICS_DB, `DELETE FROM orders WHERE id='${esc(id)}'`);
       if (res && res.error) return bad('删除失败：' + res.error, 500);
-      const changes = (res && res[0] && res[0].meta && res[0].meta.changes) || 0;
+      const changes = (res && res.meta && res.meta.changes) || 0;
       return json({ ok: true, changes, id });
     }
     return bad('未知 action');

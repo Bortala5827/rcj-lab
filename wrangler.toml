@@ -1,6 +1,7 @@
-﻿# rcj-lab · Cloudflare Pages + D1 绑定配置（参考）
-# 本机无 Cloudflare 凭证，无法 wrangler 部署；此文件供你在本地或 CI 使用。
-# 更简单的方式：直接在 CF 后台 Pages 项目 → Settings → Functions → D1 bindings 里加绑定（见交付说明）。
+# rcj-lab · Cloudflare Pages + D1 绑定配置
+# 2026-10-21：D1 由「REST API + CF_API_TOKEN/CF_ACCOUNT_ID 直查」迁移为原生绑定
+# （见 functions/api/admin/data.js 的 DBS 对象，值改为绑定名；track/stats/sing 等用 env.DB）。
+# 绑定必须在后台同步配置：Pages → rcj-lab → Settings → Bindings → D1（Git 集成部署以后台为准）。
 
 name = "rcj-lab"
 pages_build_output_dir = "."
@@ -11,9 +12,14 @@ compatibility_date = "2024-09-23"
 binding = "SING_R2"
 bucket_name = "rcj-sing"
 
-# 注意：rcj-lab 的 Functions 不通过 env.DB 绑定访问 D1，
-# 而是用硬编码的 D1 UUID + CF_API_TOKEN/CF_ACCOUNT_ID 经 CF API 直查
-# （见 functions/api/admin/data.js 的 DBS 对象、functions/api/track.js 的 ANALYTICS_DB）。
-# 故此处不再声明任何 D1 binding；曾声明的 DB→rcj-lab-d1(b18ad841) 因该库已删
-# 会导致 Pages 部署失败（"D1 binding 'DB' references database ... not found"），
-# 已于 2026-08-17 移除。如需新增绑定，请改用真实存在的库 UUID。
+# D1：统一浏览统计 / 订单 / Sing to Me / 手记（track/stats/notes/sing/order 等）
+[[d1_databases]]
+binding = "DB"
+database_name = "rcj-analytics-d1"
+database_id = "b3198ef2-6e7c-424e-8a0f-a7b21afc1828"
+
+# D1：FaceTalk 互动数据（mianshi-dazi-d1，后台聚合与留言管理用）
+[[d1_databases]]
+binding = "FACETALK_DB"
+database_name = "mianshi-dazi-d1"
+database_id = "f93a89d7-ef5f-49c5-863d-5f1611e1a7f4"
