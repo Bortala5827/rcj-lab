@@ -43,9 +43,8 @@ export async function verifyAuth(request, env) {
     if (Date.now() - Number(ts) > DAY) return false; // 1 天过期（与 login.js Max-Age 对齐）
     if ((await hmac(ts, env.ADMIN_PASSWORD)) === sig) return true;
   }
-  // 2) 一次性 ADMIN_KEY 深链（与主后台 admin/* 保持一致，避免深链进后台时 sing 列表/音频 401）
-  const url = new URL(request.url);
-  const key = url.searchParams.get('admin') || '';
+  // 2) 明文 ADMIN_KEY 旁路（S-05：改走请求头 x-admin-key，不再接受 URL query，避免密钥进日志/历史/Referrer）
+  const key = request.headers.get('x-admin-key') || '';
   const envKey = String(env.ADMIN_KEY || '').trim();
   if (envKey && String(key).trim() === envKey) return true;
   return false;

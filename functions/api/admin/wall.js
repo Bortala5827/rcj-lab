@@ -36,8 +36,8 @@ async function verifyCookie(request, env) {
 }
 
 function adminOk(request, env) {
-  const url = new URL(request.url);
-  const key = url.searchParams.get('admin') || '';
+  // S-05：明文 ADMIN_KEY 改走请求头 x-admin-key，不再接受 URL query（避免密钥进日志/历史/Referrer）
+  const key = request.headers.get('x-admin-key') || '';
   const envKey = String(env.ADMIN_KEY || '').trim();
   const byKey = !!envKey && String(key).trim() === envKey;
   return byKey; // cookie 校验异步，外部 await verifyCookie 合并
