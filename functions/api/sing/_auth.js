@@ -35,12 +35,12 @@ export function getCookie(req, name) {
 }
 
 export async function verifyAuth(request, env) {
-  // 1) HMAC cookie（登录后由 login.js 下发，7 天有效）
+  // 1) HMAC cookie（登录后由 login.js 下发，与 Max-Age 对齐：1 天有效）
   const cookie = getCookie(request, 'rcj_admin');
   if (cookie && env.ADMIN_PASSWORD) {
     const [ts, sig] = cookie.split('.');
     if (!ts || !sig) return false;
-    if (Date.now() - Number(ts) > 7 * DAY) return false; // 7 天过期
+    if (Date.now() - Number(ts) > DAY) return false; // 1 天过期（与 login.js Max-Age 对齐）
     if ((await hmac(ts, env.ADMIN_PASSWORD)) === sig) return true;
   }
   // 2) 一次性 ADMIN_KEY 深链（与主后台 admin/* 保持一致，避免深链进后台时 sing 列表/音频 401）

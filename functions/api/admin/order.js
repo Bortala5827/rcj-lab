@@ -29,7 +29,7 @@ async function verifyCookie(request, env) {
   if (!cookie) return false;
   const [ts, sig] = cookie.split('.');
   if (!ts || !sig) return false;
-  if (Date.now() - Number(ts) > 7 * 24 * 60 * 60 * 1000) return false;
+  if (Date.now() - Number(ts) > 24 * 60 * 60 * 1000) return false; // 1 天，与 login.js Max-Age 对齐
   return (await hmac(ts, pw)) === sig;
 }
 function adminOk(request, env) {

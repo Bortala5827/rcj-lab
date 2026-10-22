@@ -276,6 +276,50 @@ function findChannel(channels, id) {
   return channels.find((c) => c.id === id);
 }
 
+// ── per-IP 限流（D1 计数器；任何异常都放行，绝不阻断 AI 主服务）──
+// 默认 20 次/分钟/IP、300 次/天/IP；可用环境变量覆盖：
+//   AI_RATE_PER_MIN（每分钟上限，<=0 关闭分钟窗）、AI_RATE_PER_DAY（每天上限，<=0 关闭天窗）
+function getClientIp(request) {
+  return (
+    request.headers.get("cf-connecting-ip") ||
+    (request.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
+    "unknown"
+  );
+}
+
+async function aiRateLimit(env, ip) {
+  const db = env.DB;
+  if (!db || typeof db.prepare !== "function") return { ok: true }; // 无 D1 绑定：放行
+  const perMin = Number(env.AI_RATE_PER_MIN ?? 20);
+  const perDay = Number(env.AI_RATE_PER_DAY ?? 300);
+  const now = Math.floor(Date.now() / 1000);
+  try {
+    await db.prepare(
+      `CREATE TABLE IF NOT EXISTS ai_rate_limits (
+        key TEXT PRIMARY KEY, count INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL
+      )`
+    ).run();
+    const windows = [];
+    if (perMin > 0) windows.push({ key: `ai:m:${ip}`, max: perMin, window: 60 });
+    if (perDay > 0) windows.push({ key: `ai:d:${ip}`, max: perDay, window: 86400 });
+    for (const w of windows) {
+      const row = await db.prepare("SELECT count, reset_at FROM ai_rate_limits WHERE key=?").bind(w.key).first();
+      if (!row || row.reset_at < now) {
+        await db.prepare("INSERT OR REPLACE INTO ai_rate_limits (key, count, reset_at) VALUES (?, 1, ?)")
+          .bind(w.key, now + w.window).run();
+      } else {
+        if (row.count >= w.max) {
+          return { ok: false, retryAfter: Math.max(1, row.reset_at - now) };
+        }
+        await db.prepare("UPDATE ai_rate_limits SET count = count + 1 WHERE key=?").bind(w.key).run();
+      }
+    }
+    return { ok: true };
+  } catch (e) {
+    return { ok: true }; // 限流表/D1 异常：放行
+  }
+}
+
 // 渠道可用：status 非 disabled 且 key 已配
 function isUsable(ch) {
   return !!ch && ch.status !== "disabled" && !!ch.apiKey;
@@ -358,6 +402,21 @@ function sceneToProject(scene) {
 }
 
 export async function onRequestPost({ request, env, context }) {
+  // per-IP 限流先于一切处理；超限 429，D1/表异常时放行（见 aiRateLimit）
+  const ip = getClientIp(request);
+  const rl = await aiRateLimit(env, ip);
+  if (!rl.ok) {
+    return new Response(JSON.stringify({ error: "请求过于频繁，请稍后再试（每分钟/每天有调用上限）" }), {
+      status: 429,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Access-Control-Allow-Origin": "*",
+        "Retry-After": String(rl.retryAfter || 60),
+      },
+    });
+  }
+
   const startedAt = Date.now();
   const trackUrl = new URL(request.url).origin + "/api/ai-track";
   const track = { project: "other", scene: "", provider: "", status: "fail", latency: 0, tokens: 0 };

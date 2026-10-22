@@ -30,8 +30,8 @@ async function verifyAuth(request, env) {
   if (cookie && env.ADMIN_PASSWORD) {
     const [ts, sig] = cookie.split('.');
     if (!ts || !sig) return false;
-    // 毫秒时间戳（login.js Date.now()），7 天有效
-    if (Date.now() - Number(ts) > 7 * 24 * 60 * 60 * 1000) return false;
+    // 毫秒时间戳（login.js Date.now()），与 login.js Max-Age 对齐：1 天有效
+    if (Date.now() - Number(ts) > 24 * 60 * 60 * 1000) return false;
     if ((await hmac(ts, env.ADMIN_PASSWORD)) === sig) return true;
   }
   return false; // 移除 ?password= URL 明文参数

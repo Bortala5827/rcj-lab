@@ -36,7 +36,7 @@ async function verifyAuth(request, env) {
   if (cookie && env.ADMIN_PASSWORD) {
     const [ts, sig] = cookie.split('.');
     if (!ts || !sig) return false;
-    if (Date.now() - Number(ts) > 7 * 24 * 60 * 60 * 1000) return false;
+    if (Date.now() - Number(ts) > 24 * 60 * 60 * 1000) return false; // 1 天，与 login.js Max-Age 对齐
     if ((await hmac(ts, env.ADMIN_PASSWORD)) === sig) return true;
   }
   return false;
