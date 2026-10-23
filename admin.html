@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>RCJ Admin · 统一后台</title>
+  <title>RCJ Admin</title>
   <style>
     /* ── 移动端客服面板底部安全区适配 ── */
     @media (max-width: 768px) {
@@ -14,7 +14,7 @@
     }
     /* 高亮滚动到目标会话 */
     tr.conv-active-row td { background: rgba(245,179,85,.12) !important; border-left: 3px solid #f5b355; }
-    /* 访问分析重点板块 */
+    /* Traffic重点板块 */
     .traffic-focus { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-bottom:16px; }
     .focus-card { background:linear-gradient(135deg,#141828,#10131f); border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:16px 18px; position:relative; overflow:hidden; }
     .focus-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--fc,#f5b355); }
@@ -100,7 +100,7 @@
     .lg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sb-text)}
     .lg-dot{width:10px;height:10px;border-radius:50%}
 
-    /* 条形（城市） */
+    /* entries形（城市） */
     .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px;font-size:13px}
     .bar-label{flex:0 0 86px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .bar-track{flex:1;background:rgba(255,255,255,.08);border-radius:999px;height:15px;overflow:hidden}
@@ -145,7 +145,7 @@
     .loading{padding:60px;text-align:center;color:var(--muted)}
     .err-box{background:rgba(248,113,113,.12);color:#fca5a5;padding:14px 18px;border-radius:11px;font-size:14px;margin-bottom:18px}
 
-    /* 站点状态 */
+    /* Site Status */
     .hc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
     .hc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:13px}
     .hc-dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto}
@@ -161,7 +161,7 @@
     .hc-sum b{font-variant-numeric:tabular-nums}
     .hc-sum .okn{color:#4ade80} .hc-sum .badn{color:#f87171}
 
-    /* 业务概览卡（站点状态页） */
+    /* Business overview卡（Site Status页） */
     .biz-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
     .biz-hd{font-weight:700;font-size:15px;margin-bottom:10px;color:var(--text)}
     .biz-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px dashed var(--line)}
@@ -206,11 +206,11 @@
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <div class="lc-logo">RCJ</div>
-    <h2>统一后台</h2>
-    <p>管理 RCJ 全站数据 · 一次登录</p>
+    <h2>Admin Console</h2>
+    <p>Manage all RCJ site data · one sign-in</p>
     <div class="err" id="loginErr" style="display:none"></div>
-    <input type="password" id="pwInput" placeholder="管理员密码" autofocus />
-    <button onclick="doLogin()">登录</button>
+    <input type="password" id="pwInput" placeholder="Admin password" autofocus />
+    <button onclick="doLogin()">Sign in</button>
   </div>
 </div>
 
@@ -219,20 +219,20 @@
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
       <div class="sb-logo">RCJ</div>
-      <div><b>RCJ Admin</b><small>统一数据后台</small></div>
+      <div><b>RCJ Admin</b><small>Unified Admin</small></div>
     </div>
     <nav class="sb-nav" id="nav">
-      <div class="sb-item active" data-page="health"><span class="ico">🩺</span>站点状态</div>
-      <div class="sb-item" data-page="traffic"><span class="ico">📊</span>访问分析</div>
-      <div class="sb-item" data-page="support"><span class="ico">💬</span>客服系统</div>
-      <div class="sb-item" data-page="blog"><span class="ico">📝</span>博客管理</div>
-      <div class="sb-item" data-page="aux"><span class="ico">🛡️</span>辅警题库</div>
+      <div class="sb-item active" data-page="health"><span class="ico">🩺</span>Site Status</div>
+      <div class="sb-item" data-page="traffic"><span class="ico">📊</span>Traffic</div>
+      <div class="sb-item" data-page="support"><span class="ico">💬</span>Support</div>
+      <div class="sb-item" data-page="blog"><span class="ico">📝</span>Blog Admin</div>
+      <div class="sb-item" data-page="aux"><span class="ico">🛡️</span>Auxiliary Police</div>
       <div class="sb-item" data-page="facetalk"><span class="ico">💬</span>FaceTalk</div>
-      <div class="sb-item" data-page="orders"><span class="ico">💰</span>订单提醒</div>
+      <div class="sb-item" data-page="orders"><span class="ico">💰</span>Orders</div>
     </nav>
     <div class="sb-foot">
       <div id="genTime">—</div>
-      <button onclick="doLogout()">退出登录</button>
+      <button onclick="doLogout()">Sign out</button>
     </div>
   </aside>
 
@@ -242,14 +242,14 @@
       <span class="mb-menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</span>
     </div>
     <div class="topbar">
-      <h1 id="pageTitle">站点状态</h1>
+      <h1 id="pageTitle">Site Status</h1>
       <div class="acts">
         <span class="gen" id="genSmall"></span>
-        <button class="btn" onclick="loadData()">↻ 刷新</button>
+        <button class="btn" onclick="loadData()">↻ Refresh</button>
       </div>
     </div>
     <div class="content" id="content">
-      <div class="loading">读取中…</div>
+      <div class="loading">Loading…</div>
     </div>
   </div>
 </div>
@@ -257,9 +257,9 @@
 <script>
 const API = '/api/admin';
 const SITE_COLORS = { aux:'#60a5fa', xf:'#fb923c', facetalk:'#c084fc', hub:'#4ade80', solospeak:'#2dd4bf', letout:'#d6a68a', training:'#facc15', exam:'#f472b6', shop:'#fbbf24', voice:'#f5b355' };
-const SITE_LABELS = { aux:'辅警刷题站', xf:'消防刷题站', facetalk:'FaceTalk', hub:'RCJ Lab', solospeak:'SoloSpeak', letout:'LetOut', training:'RCJ Training', exam:'Exam Hub', shop:'Shop 商店', voice:'Voice 声音站' };
+const SITE_LABELS = { aux:'Auxiliary Police Bank', xf:'Fire Service Bank', facetalk:'FaceTalk', hub:'RCJ Lab', solospeak:'SoloSpeak', letout:'LetOut', training:'RCJ Training', exam:'Exam Hub', shop:'Shop', voice:'Voice' };
 let DATA = null;
-// 登录态由 HttpOnly cookie（rcj_admin）接管，1 天过期；不存任何密码于 localStorage
+// 登录态由 HttpOnly cookie（rcj_admin）接管，1 days过期；不存任何密码于 localStorage
 
 // ---------- 统一请求封装（含 8s 超时 + 错误归一）----------
 async function apiReq(path, opts = {}) {
@@ -271,7 +271,7 @@ async function apiReq(path, opts = {}) {
     try { data = await res.json(); } catch (_) {}
     return { ok: res.ok, status: res.status, data };
   } catch (e) {
-    return { ok: false, status: 0, data: null, error: (e && e.name === 'AbortError') ? '请求超时' : (e && e.message) || '网络错误' };
+    return { ok: false, status: 0, data: null, error: (e && e.name === 'AbortError') ? 'Request timeout' : (e && e.message) || 'Network error' };
   } finally { clearTimeout(timer); }
 }
 const apiGet = (p, o) => apiReq(p, o);
@@ -289,7 +289,7 @@ async function doLogin(){
   const e = document.getElementById('loginErr'); e.style.display = 'none';
   const r = await apiPost('/login', { password: v });
   if(r.ok && r.data && r.data.ok){ enterApp(); loadData(); }
-  else { e.style.display = 'block'; e.textContent = (r.data && r.data.error) || r.error || '登录失败'; }
+  else { e.style.display = 'block'; e.textContent = (r.data && r.data.error) || r.error || 'Sign-in failed'; }
 }
 function doLogout(){
   fetch(API+'/logout',{method:'POST'}).finally(()=>location.reload());
@@ -303,16 +303,16 @@ document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='En
 // ---------- 数据加载 ----------
 async function loadData(force){
   const c=document.getElementById('content');
-  c.innerHTML='<div class="loading">读取中…</div>';
+  c.innerHTML='<div class="loading">Loading…</div>';
   const r=await apiGet('/data'+(force?'?nocache=1':''));
   if(r.status===401){ showLogin(); return; }
   if(!r.ok || !r.data || !r.data.ok){
-    const msg=(r.data && r.data.error) || r.error || ('HTTP ' + r.status) || '加载失败';
-    c.innerHTML='<div class="err-box">'+esc(msg)+'<div style="margin-top:12px"><button class="btn" onclick="loadData()">↻ 重试</button></div></div>';
+    const msg=(r.data && r.data.error) || r.error || ('HTTP ' + r.status) || 'Load failed';
+    c.innerHTML='<div class="err-box">'+esc(msg)+'<div style="margin-top:12px"><button class="btn" onclick="loadData()">↻ Retry</button></div></div>';
     return;
   }
   DATA=r.data;
-  document.getElementById('genTime').textContent='更新于 '+fmtTime(DATA.generatedAt);
+  document.getElementById('genTime').textContent='Updated '+fmtTime(DATA.generatedAt);
   document.getElementById('genSmall').textContent=fmtTime(DATA.generatedAt);
   renderPage(currentPage);
 }
@@ -328,7 +328,7 @@ document.getElementById('nav').addEventListener('click',e=>{
   renderPage(currentPage);
 });
 
-// 程序化切换页面（供卡片内按钮跳转用，如留言墙「查看全部」、Sing to Me 审核）
+// 程序化切换页面（供卡片内按钮跳转用，如Wall「查看全部」、Sing to Me Review）
 window.switchPage = function(p){
   currentPage=p;
   document.querySelectorAll('.sb-item').forEach(x=>x.classList.toggle('active', x.dataset.page===p));
@@ -336,7 +336,7 @@ window.switchPage = function(p){
 };
 
 function renderPage(p){
-  if(!DATA){ document.getElementById('content').innerHTML='<div class="loading">读取中…</div>'; return; }  if(p==='overview') renderOverview();
+  if(!DATA){ document.getElementById('content').innerHTML='<div class="loading">Loading…</div>'; return; }  if(p==='overview') renderOverview();
   else if(p==='health') renderHealth();
   else if(p==='blog') renderBlog();
   else if(p==='facetalk') renderFaceTalk();
@@ -350,23 +350,23 @@ function renderPage(p){
   else if(p==='orders') renderOrders();
 }
 
-// ---------- 博客管理（iframe 嵌入 blog.955827.xyz/admin）----------
+// ---------- Blog Admin（iframe 嵌入 blog.955827.xyz/admin）----------
 function renderBlog(){
   const c=document.getElementById('content');
   c.innerHTML=
     '<div class="panel" style="padding:0;overflow:hidden">'+
       '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)">'+
-        '<div><h3 style="margin:0">📝 博客管理 <span class="tag">blog.955827.xyz/admin</span></h3></div>'+
+        '<div><h3 style="margin:0">📝 Blog Admin <span class="tag">blog.955827.xyz/admin</span></h3></div>'+
         '<div style="display:flex;gap:8px">'+
-          '<button class="btn" onclick="document.getElementById(\'blogFrame\').contentWindow.location.reload()">↻ 刷新</button>'+
-          '<button class="btn" onclick="window.open(\'https://blog.955827.xyz/admin\',\'_blank\')" target="_blank">↗ 新窗口</button>'+
+          '<button class="btn" onclick="document.getElementById(\'blogFrame\').contentWindow.location.reload()">↻ Refresh</button>'+
+          '<button class="btn" onclick="window.open(\'https://blog.955827.xyz/admin\',\'_blank\')" target="_blank">↗ New window</button>'+
         '</div>'+
       '</div>'+
       '<iframe id="blogFrame" src="https://blog.955827.xyz/admin" style="width:100%;height:calc(100vh - 200px);border:none;background:#0b0d16"></iframe>'+
     '</div>';
 }
 
-// 邮件/直达链接：站外跳转进客服管理并定位到具体会话
+// 邮件/直达链接：站外跳转进Support Console并定位到具体会话
 // ?conversation=xxx 或 ?page=support&conversation=xxx
 function handleDeepLink(){
   const url = new URL(location.href);
@@ -375,7 +375,7 @@ function handleDeepLink(){
   if (wantSupport) {
     currentPage = 'support';
     document.querySelectorAll('.sb-item').forEach(x => x.classList.toggle('active', x.dataset.page === 'support'));
-    document.getElementById('pageTitle').textContent = '客服管理';
+    document.getElementById('pageTitle').textContent = 'Support Console';
     renderSupport();
     if (conv) {
       window._pendingConvId = conv;
@@ -383,25 +383,25 @@ function handleDeepLink(){
   }
 }
 
-// ---------- AI 监控 ----------
+// ---------- AI Monitor ----------
 function renderAI(){
   const d = DATA.ai || { total:0, ok:0, fail:0, successRate:0, byProject:{}, byProvider:{}, byDay:{} };
   const content = document.getElementById('content');
-  document.getElementById('pageTitle').textContent = 'AI 监控';
+  document.getElementById('pageTitle').textContent = 'AI Monitor';
   let html = '';
   html += '<div class="stats">';
-  html += '<div class="stat"><div class="stat-num">'+d.total+'</div><div class="stat-label">总调用量</div></div>';
-  html += '<div class="stat"><div class="stat-num" style="color:var(--ok)">'+d.ok+'</div><div class="stat-label">成功</div></div>';
-  html += '<div class="stat"><div class="stat-num" style="color:var(--danger)">'+d.fail+'</div><div class="stat-label">失败</div></div>';
-  html += '<div class="stat"><div class="stat-num">'+d.successRate+'%</div><div class="stat-label">成功率</div></div>';
+  html += '<div class="stat"><div class="stat-num">'+d.total+'</div><div class="stat-label">Total calls</div></div>';
+  html += '<div class="stat"><div class="stat-num" style="color:var(--ok)">'+d.ok+'</div><div class="stat-label">OK</div></div>';
+  html += '<div class="stat"><div class="stat-num" style="color:var(--danger)">'+d.fail+'</div><div class="stat-label">Fail</div></div>';
+  html += '<div class="stat"><div class="stat-num">'+d.successRate+'%</div><div class="stat-label">Success rate</div></div>';
   html += '</div>';
   function renderTable(title, tag, data){
     let h = '<div class="panel"><h3>'+title+' <span class="tag">'+tag+'</span></h3>';
     const keys = Object.keys(data || {});
-    if(!keys.length){ h += '<p class="small muted">暂无数据（部署后首次 AI 调用会自动建表并开始记录）</p>'; }
+    if(!keys.length){ h += '<p class="small muted">No data yet (the table is created on the first AI call after deploy)</p>'; }
     else {
       h += '<table style="width:100%;border-collapse:collapse;font-size:13px">';
-      h += '<tr style="text-align:left;border-bottom:1px solid var(--line)"><th style="padding:8px">名称</th><th style="padding:8px">总量</th><th style="padding:8px">成功</th><th style="padding:8px">失败</th><th style="padding:8px">成功率</th></tr>';
+      h += '<tr style="text-align:left;border-bottom:1px solid var(--line)"><th style="padding:8px">Name</th><th style="padding:8px">Total</th><th style="padding:8px">OK</th><th style="padding:8px">Fail</th><th style="padding:8px">Success rate</th></tr>';
       keys.sort(function(a,b){return (data[b].total||0)-(data[a].total||0);}).forEach(function(k){
         var s = data[k]; var rate = s.total ? Math.round(s.ok/s.total*100) : 0;
         h += '<tr style="border-bottom:1px solid var(--line)"><td style="padding:8px;font-weight:600">'+esc(k||'unknown')+'</td><td style="padding:8px">'+s.total+'</td><td style="padding:8px;color:var(--ok)">'+s.ok+'</td><td style="padding:8px;color:var(--danger)">'+s.fail+'</td><td style="padding:8px">'+rate+'%</td></tr>';
@@ -411,19 +411,19 @@ function renderAI(){
     h += '</div>';
     return h;
   }
-  html += renderTable('各项目调用', '按 project 聚合', d.byProject);
-  html += renderTable('各渠道调用', '按 provider 聚合', d.byProvider);
-  // 最近 14 天趋势
-  html += '<div class="panel"><h3>最近 14 天趋势 <span class="tag">按日聚合</span></h3>';
+  html += renderTable('Calls by project', 'by project', d.byProject);
+  html += renderTable('Calls by channel', 'by provider', d.byProvider);
+  // Last-14-day trend
+  html += '<div class="panel"><h3>Last-14-day trend <span class="tag">daily</span></h3>';
   var days = Object.keys(d.byDay || {}).sort();
-  if(!days.length){ html += '<p class="small muted">暂无数据</p>'; }
+  if(!days.length){ html += '<p class="small muted">No data</p>'; }
   else {
     var max = 1; days.forEach(function(day){ if((d.byDay[day].total||0)>max) max=d.byDay[day].total; });
     html += '<div style="display:flex;align-items:flex-end;gap:4px;height:120px;margin-top:10px">';
     days.forEach(function(day){
       var s = d.byDay[day]; var h = Math.round((s.total||0)/max*100);
       var rate = s.total ? Math.round(s.ok/s.total*100) : 0;
-      html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px" title="'+day+': '+s.total+'次 '+rate+'%">';
+      html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px" title="'+day+': '+s.total+' calls '+rate+'%">';
       html += '<div style="width:100%;background:var(--accent);border-radius:3px 3px 0 0;height:'+h+'%;min-height:'+(s.total?2:0)+'px"></div>';
       html += '<span style="font-size:9px;color:var(--muted);transform:rotate(-45deg);white-space:nowrap">'+day.slice(5)+'</span>';
       html += '</div>';
@@ -446,22 +446,22 @@ function renderOverview(){
   const fullSeries=ALL_SITES.map(s=>seriesMap[s]);
   const allVisits=fullSeries.reduce((a,s)=>a+s.total,0);
   const cards=[
-    {cls:'ft',num:F.pairsTotal,label:'FaceTalk 匹配',sub:F.intents+' 意图 / '+F.applications+' 申请'},
-    {cls:'aux',num:allVisits,label:'全站浏览量',sub:fullSeries.filter(s=>s.total>0).length+' 个站点有数据 · 辅警 '+A.visits.s},
+    {cls:'ft',num:F.pairsTotal,label:'FaceTalk matches',sub:F.intents+' intents / '+F.applications+' Applications'},
+    {cls:'aux',num:allVisits,label:'All-site visits',sub:fullSeries.filter(s=>s.total>0).length+' sites with data · Aux '+A.visits.s},
   ];
   let html='<div class="stats">';
   cards.forEach(c=>html+='<div class="stat '+c.cls+'"><div class="stat-num">'+c.num+'</div><div class="stat-label">'+c.label+'</div><div class="stat-sub">'+c.sub+'</div></div>');
   html+='</div>';
 
-  // 全站多站点趋势图（7/14/30 天切换）
-  html+='<div class="panel"><div class="panel-hd"><h3>全站浏览趋势 <span class="tag">rcj-analytics-d1</span></h3>'
+  // 全站多站点趋势图（7/14/30 days切换）
+  html+='<div class="panel"><div class="panel-hd"><h3>All-site traffic trend <span class="tag">rcj-analytics-d1</span></h3>'
     +'<span class="range-tabs">'
-    +'<button onclick="setTrendDays(7)" class="'+(trendDays===7?'active':'')+'">7天</button>'
-    +'<button onclick="setTrendDays(14)" class="'+(trendDays===14?'active':'')+'">14天</button>'
-    +'<button onclick="setTrendDays(30)" class="'+(trendDays===30?'active':'')+'">30天</button>'
+    +'<button onclick="setTrendDays(7)" class="'+(trendDays===7?'active':'')+'">7d</button>'
+    +'<button onclick="setTrendDays(14)" class="'+(trendDays===14?'active':'')+'">14d</button>'
+    +'<button onclick="setTrendDays(30)" class="'+(trendDays===30?'active':'')+'">30d</button>'
     +'</span></div>'+multiLineChart(fullSeries, trendDays)+'</div>';
 
-  // 今日 TOP + 最近访问明细
+  // 今日 TOP + Recent visits
   const top=calcTodayTop(seriesMap);
   let topHtml='';
   if(top.length){
@@ -472,32 +472,32 @@ function renderOverview(){
     });
   }
   html+='<div class="grid-2">';
-  html+='<div class="panel"><h3>最新数据日 TOP 站点 <span class="tag">'+esc(top.length&&top[0].day||'—')+'</span></h3><div class="site-stats">'+topHtml+'</div></div>';
+  html+='<div class="panel"><h3>Top sites (latest day) <span class="tag">'+esc(top.length&&top[0].day||'—')+'</span></h3><div class="site-stats">'+topHtml+'</div></div>';
   const rv=d.recentVisits||[];
   let rvHtml='';
-  if(!rv.length) rvHtml='<div class="empty">近 7 日暂无访问记录</div>';
+  if(!rv.length) rvHtml='<div class="empty">No visits in the last 7 days</div>';
   else{
-    rvHtml='<table><thead><tr><th>站点</th><th>日期</th><th>IP</th><th>次数</th></tr></thead><tbody>';
+    rvHtml='<table><thead><tr><th>Site</th><th>Date</th><th>IP</th><th>Count</th></tr></thead><tbody>';
     rv.forEach(v=>{
       rvHtml+='<tr><td><span class="ss-dot" style="display:inline-block;vertical-align:middle;margin-right:6px;background:'+(SITE_COLORS[v.site]||'#64748b')+'"></span>'+SITE_LABELS[v.site]+'</td><td class="mono small">'+esc(v.day)+'</td><td class="mono small">'+esc(v.ip)+'</td><td class="mono">'+v.n+'</td></tr>';
     });
     rvHtml+='</tbody></table>';
   }
-  html+='<div class="panel"><h3>最近访问明细 <span class="tag">近 7 日</span></h3>'+rvHtml+'</div>';
+  html+='<div class="panel"><h3>Recent visits <span class="tag">last 7 days</span></h3>'+rvHtml+'</div>';
   html+='</div>';
 
-  // 各站点累计流量
-  html+='<div class="panel"><h3>各站点流量（累计）</h3><div class="site-stats">';
+  // All-time traffic by site
+  html+='<div class="panel"><h3>Traffic by site (all-time)</h3><div class="site-stats">';
   let any=false;
   ALL_SITES.forEach(site=>{
     const s=fullSeries.find(x=>x.site===site); if(!s)return; any=true;
-    html+='<div class="ss-item"><span class="ss-dot" style="background:'+SITE_COLORS[site]+'"></span><span class="ss-name">'+SITE_LABELS[site]+'</span><span class="ss-num">'+s.total+'</span><span class="ss-sub">'+s.u+' 访客 / '+s.d+' 天</span></div>';
+    html+='<div class="ss-item"><span class="ss-dot" style="background:'+SITE_COLORS[site]+'"></span><span class="ss-name">'+SITE_LABELS[site]+'</span><span class="ss-num">'+s.total+'</span><span class="ss-sub">'+s.u+' visitors / '+s.d+' days</span></div>';
   });
-  if(!any) html+='<div class="empty">暂无浏览数据（埋点已部署，访问各站点后开始累计）</div>';
+  if(!any) html+='<div class="empty">No data yet (tracking is live — visit the sites to start accumulating)</div>';
   html+='</div></div>';
 
-  html+='<div class="panel"><h3>数据源说明</h3><p class="small muted">'+esc(d.note)+'</p>';
-  html+='<p class="small muted" style="margin-top:8px">所有站点浏览量通过统一埋点 <code>/api/track?site=xxx</code> 汇入同一张表，一处聚合、跨站对比，不再分散。</p></div>';
+  html+='<div class="panel"><h3>Data source</h3><p class="small muted">'+esc(d.note)+'</p>';
+  html+='<p class="small muted" style="margin-top:8px">All-site visits flow through the shared tracker <code>/api/track?site=xxx</code> into one table — aggregated in one place, comparable across sites.</p></div>';
 
   document.getElementById('content').innerHTML=html;
 }
@@ -520,8 +520,8 @@ function calcTodayTop(seriesMap){
 function miniModuleList(){
   const d=DATA, F=d.facetalk, A=d.aux;
   const rows=[
-    ['💬 FaceTalk','匹配 '+F.pairsTotal+' · 留言墙 '+F.wall+' · 举报 '+F.reports+' · 评分 '+F.ratings],
-    ['🛡️ 辅警题库','浏览 '+A.visits.s+' · 独立访客 '+A.visits.u],
+    ['💬 FaceTalk','Matches '+F.pairsTotal+' · Wall '+F.wall+' · Reports '+F.reports+' · Ratings '+F.ratings],
+    ['🛡️ Auxiliary Police','Visits '+A.visits.s+' · Unique visitors '+A.visits.u],
   ];
   let h='<div style="display:flex;flex-direction:column;gap:12px">';
   rows.forEach(r=>h+='<div style="display:flex;gap:10px;font-size:13px"><span>'+r[0]+'</span><span class="muted">'+r[1]+'</span></div>');
@@ -532,29 +532,29 @@ function miniModuleList(){
 function renderFaceTalk(){
   const F=DATA.facetalk, bs=F.pairsByStatus||{};
   let html='<div class="stats">';
-  [['ft',F.pairsTotal,'匹配对总数','closed '+ (bs.closed||0)],
-   ['ft',F.intents,'公开意图',''],
-   ['ft',F.applications,'申请',''],
-   ['ft',F.wall,'留言墙',''],
-   ['ft',F.reports,'举报',''],
-   ['ft',F.ratings,'评分','']].forEach(c=>html+='<div class="stat '+c[0]+'"><div class="stat-num">'+c[1]+'</div><div class="stat-label">'+c[2]+'</div>'+(c[3]?'<div class="stat-sub">'+c[3]+'</div>':'')+'</div>');
+  [['ft',F.pairsTotal,'Total matches','closed '+ (bs.closed||0)],
+   ['ft',F.intents,'Public intents',''],
+   ['ft',F.applications,'Applications',''],
+   ['ft',F.wall,'Wall',''],
+   ['ft',F.reports,'Reports',''],
+   ['ft',F.ratings,'Ratings','']].forEach(c=>html+='<div class="stat '+c[0]+'"><div class="stat-num">'+c[1]+'</div><div class="stat-label">'+c[2]+'</div>'+(c[3]?'<div class="stat-sub">'+c[3]+'</div>':'')+'</div>');
   html+='</div>';
 
   html+='<div class="grid-2">';
   // 最近匹配
-  html+='<div class="panel"><h3>最近匹配对 <span class="tag">mianshi-dazi-d1</span></h3>';
-  if(!F.recentPairs.length) html+='<div class="empty">暂无匹配记录</div>';
+  html+='<div class="panel"><h3>Recent matches <span class="tag">mianshi-dazi-d1</span></h3>';
+  if(!F.recentPairs.length) html+='<div class="empty">No matches yet</div>';
   else{
-    html+='<table><thead><tr><th>模式</th><th>状态</th><th>创建时间</th></tr></thead><tbody>';
+    html+='<table><thead><tr><th>Mode</th><th>Status</th><th>Created</th></tr></thead><tbody>';
     F.recentPairs.forEach(p=>{
       html+='<tr><td>'+(p.mode||'-')+'</td><td><span class="pill '+(p.status==='closed'?'ok':'blue')+'">'+esc(p.status)+'</span></td><td class="mono small">'+fmtTime(p.created)+'</td></tr>';
     });
     html+='</tbody></table>';
   }
   html+='</div>';
-  // 最近留言墙
-  html+='<div class="panel"><h3>最近留言墙</h3>';
-  if(!F.recentWall.length) html+='<div class="empty">暂无留言</div>';
+  // Recent wall
+  html+='<div class="panel"><h3>Recent wall</h3>';
+  if(!F.recentWall.length) html+='<div class="empty">No messages</div>';
   else{
     html+='<div style="display:flex;flex-direction:column;gap:10px">';
     F.recentWall.forEach(w=>{
@@ -567,12 +567,12 @@ function renderFaceTalk(){
   html+='</div>';
 
   if(F.highlights && F.highlights.length){
-    html+='<div class="panel"><h3>✨ 产品亮点 <span class="tag">得意之作</span></h3><div style="display:flex;flex-direction:column;gap:10px">';
+    html+='<div class="panel"><h3>✨ Highlights <span class="tag">proud pieces</span></h3><div style="display:flex;flex-direction:column;gap:10px">';
     F.highlights.forEach(function(h){ html+='<div class="biz-ms ms-info"><b>'+esc(h.label)+'</b> · '+esc(h.desc)+'</div>'; });
     html+='</div></div>';
   }
 
-  html+='<div class="panel"><h3>原生后台（深度操作）</h3><a class="site-card" href="https://facetalk.955827.xyz/admin" target="_blank" rel="noopener"><div class="sc-ico">💬</div><div class="sc-name">FaceTalk 管理后台</div><div class="sc-url">facetalk.955827.xyz/admin</div><div class="sc-desc">匹配详情、信誉、留言墙审核等深度操作（独立密码）。</div></a></div>';
+  html+='<div class="panel"><h3>Native admin (deep operations)</h3><a class="site-card" href="https://facetalk.955827.xyz/admin" target="_blank" rel="noopener"><div class="sc-ico">💬</div><div class="sc-name">FaceTalk admin</div><div class="sc-url">facetalk.955827.xyz/admin</div><div class="sc-desc">Match details, reputation, wall review and more (separate password).</div></a></div>';
 
   document.getElementById('content').innerHTML=html;
 }
@@ -581,32 +581,32 @@ function renderFaceTalk(){
 function renderAux(){
   const A=DATA.aux;
   let html='<div class="stats">';
-  [['aux',A.visits.s,'浏览量','近 '+A.visits.d+' 天'],
-   ['aux',A.visits.u,'独立访客','']].forEach(c=>html+='<div class="stat '+c[0]+'"><div class="stat-num">'+c[1]+'</div><div class="stat-label">'+c[2]+'</div>'+(c[3]?'<div class="stat-sub">'+c[3]+'</div>':'')+'</div>');
+  [['aux',A.visits.s,'Visits','last '+A.visits.d+' days'],
+   ['aux',A.visits.u,'Unique visitors','']].forEach(c=>html+='<div class="stat '+c[0]+'"><div class="stat-num">'+c[1]+'</div><div class="stat-label">'+c[2]+'</div>'+(c[3]?'<div class="stat-sub">'+c[3]+'</div>':'')+'</div>');
   html+='</div>';
 
   html+='<div class="panel"><p class="small muted">'+esc(A.note||'')+'</p></div>';
 
   if(A.milestones && A.milestones.length){
-    html+='<div class="panel"><h3>🏆 业务里程碑 <span class="tag">运营数据</span></h3><div style="display:flex;flex-direction:column;gap:10px">';
+    html+='<div class="panel"><h3>🏆 Milestones <span class="tag">ops data</span></h3><div style="display:flex;flex-direction:column;gap:10px">';
     A.milestones.forEach(function(m){
       html+='<div class="biz-ms ms-'+m.tone+'"><b>'+esc(m.label)+'</b> · '+esc(m.desc)+' <span class="biz-tag">'+esc(m.tag)+'</span></div>';
     });
-    html+='</div><p class="small muted" style="margin-top:10px">注：里程碑为线下运营数据（非系统自动统计），由运营维护。</p></div>';
+    html+='</div><p class="small muted" style="margin-top:10px">Note: milestones are offline ops data (not auto-tracked), maintained by hand.</p></div>';
   }
 
-  html+='<div class="panel"><h3>近 14 日浏览趋势 <span class="tag">rcj-analytics-d1</span></h3><div class="chart-wrap">'+lineChart(A.visitTrend)+'</div></div>';
+  html+='<div class="panel"><h3>Last-14-day trend <span class="tag">rcj-analytics-d1</span></h3><div class="chart-wrap">'+lineChart(A.visitTrend)+'</div></div>';
 
   document.getElementById('content').innerHTML=html;
 }
 
 // runMigrate 已废弃：aux-police-exam-d1 已删除，迁移脚本在后端直接返回「无需迁移」（见 functions/api/admin/migrate.js）。
 
-// ---------- 通知通道自检（真实发送，逐通道报成败）----------
+// ---------- Notification channels self-test（真实发送，逐通道报成败）----------
 window.runNotifyTest = async function(){
   var btn=document.getElementById('ntBtn'), msg=document.getElementById('ntMsg'), box=document.getElementById('ntResult');
   if(!btn||!box) return;
-  btn.disabled=true; if(msg) msg.textContent='发送中，约 3 秒后出结果…'; box.innerHTML='';
+  btn.disabled=true; if(msg) msg.textContent='Sending… results in ~3s'; box.innerHTML='';
   try{
     var r=await fetch('/api/admin/notify-test',{method:'POST',cache:'no-store'});
     if(r.status===401){ showLogin(); return; }
@@ -615,18 +615,18 @@ window.runNotifyTest = async function(){
       box.innerHTML='<div class="err-box">'+esc((d&&d.error)||('HTTP '+r.status))+'</div>';
       if(msg) msg.textContent=''; return;
     }
-    var LABEL={shop:'shop 订单提醒', supportly:'客服提醒（supportly）'};
+    var LABEL={shop:'Shop order alerts', supportly:'Support alerts (supportly)'};
     var html='';
     (d.targets||[]).forEach(function(t){
       var name=t.target||'?';
       html+='<div style="border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:10px">'
         +'<div class="small" style="font-weight:700;margin-bottom:6px">'+esc(LABEL[name]||name)+'</div>';
       if(t.ok===false||t.error){
-        html+='<div class="small" style="color:var(--danger)">× '+esc(t.error||'调用失败')+'</div>';
+        html+='<div class="small" style="color:var(--danger)">× '+esc(t.error||'Call failed')+'</div>';
       } else {
         (t.channels||[]).forEach(function(c){
           var tone=c.status==='ok'?'var(--ok)':(c.status==='fail'?'var(--danger)':'var(--muted)');
-          var mark=c.status==='ok'?'正常':(c.status==='fail'?'失败':'未配置');
+          var mark=c.status==='ok'?'Up':(c.status==='fail'?'Down':'Not configured');
           html+='<div class="small" style="display:flex;gap:10px;align-items:baseline;padding:2px 0">'
             +'<span style="color:'+tone+';font-weight:700;min-width:48px">'+mark+'</span>'
             +'<span style="min-width:112px">'+esc(c.label||c.id)+'</span>'
@@ -635,118 +635,118 @@ window.runNotifyTest = async function(){
       }
       html+='</div>';
     });
-    box.innerHTML=html||'<div class="empty">无结果</div>';
-    if(msg) msg.textContent=d.failed?('有 '+d.failed+' 个通道失败'):(d.unreachable?('有 '+d.unreachable+' 个站点未响应'):'全部通道正常');
+    box.innerHTML=html||'<div class="empty">No result</div>';
+    if(msg) msg.textContent=d.failed?(' '+d.failed+' channels failed'):(d.unreachable?(' '+d.unreachable+' sites unreachable'):'All channels OK');
   }catch(e){
-    box.innerHTML='<div class="err-box">'+esc(e&&e.message?e.message:'网络错误')+'</div>';
+    box.innerHTML='<div class="err-box">'+esc(e&&e.message?e.message:'Network error')+'</div>';
     if(msg) msg.textContent='';
   }finally{ btn.disabled=false; }
 };
 
-// ---------- 站点状态 ----------
+// ---------- Site Status ----------
 async function renderHealth(){
   const c=document.getElementById('content');
-  c.innerHTML='<div class="loading">正在探测各站点…</div>';
+  c.innerHTML='<div class="loading">Probing sites…</div>';
   const r=await apiGet('/health');
   if(r.status===401){ showLogin(); return; }
   if(!r.ok || !r.data || !r.data.ok){
     const msg=(r.data && r.data.error) || r.error || ('HTTP '+r.status);
-    c.innerHTML='<div class="err-box">'+esc(msg)+'<div style="margin-top:12px"><button class="btn" onclick="renderHealth()">↻ 重试</button></div></div>';
+    c.innerHTML='<div class="err-box">'+esc(msg)+'<div style="margin-top:12px"><button class="btn" onclick="renderHealth()">↻ Retry</button></div></div>';
     return;
   }
   const h=r.data, sites=h.sites||[];
   const upN=h.summary&&h.summary.up!==undefined?h.summary.up:sites.filter(s=>s.ok).length;
   const total=sites.length;
-  let html='<div class="panel"><h3>🩺 站点在线状态</h3>'
-    +'<div class="hc-sum">'+upN+' / '+total+' 个站点正常'
-    +(h.cached?' <span class="small muted">（缓存 '+h.checkedAt.slice(11,16)+'）</span>':'')
-    +' <span class="small muted">探测于 '+h.checkedAt.slice(0,16).replace('T',' ')+'</span></div>'
+  let html='<div class="panel"><h3>🩺 Site status</h3>'
+    +'<div class="hc-sum">'+upN+' / '+total+' sites up'
+    +(h.cached?' <span class="small muted">(cached '+h.checkedAt.slice(11,16)+'）</span>':'')
+    +' <span class="small muted">probed at '+h.checkedAt.slice(0,16).replace('T',' ')+'</span></div>'
     +'<div class="hc-grid">';
   sites.forEach(s=>{
     const up=!!s.ok;
     html+='<div class="hc-card"><span class="hc-dot '+(up?'up':'down')+'"></span><div class="hc-body">'
       +'<div class="hc-name">'+esc(s.name)+'</div>'
       +'<div class="hc-url">'+esc(s.url.replace(/^https?:\/\//,''))+'</div>'
-      +'<div class="hc-status '+(up?'up':'down')+'">'+(up?('正常 · HTTP '+s.status):(s.status===0?('异常 · '+(s.error||'不可达')):('HTTP '+s.status)))+'</div>'
+      +'<div class="hc-status '+(up?'up':'down')+'">'+(up?('Up · HTTP '+s.status):(s.status===0?('Down · '+(s.error||'unreachable')):('HTTP '+s.status)))+'</div>'
       +'</div></div>';
   });
   html+='</div>';
 
-  // ===== 业务概览（各站点核心指标，与在线状态并列）=====
+  // ===== Business overview（各站点核心指标，与在线状态并列）=====
   const F=DATA.facetalk||{}, A=DATA.aux||{};
-  html+='<div class="panel" style="margin-top:16px"><h3>📌 业务概览 <span class="tag">核心站点</span></h3><div class="grid-2">';
-  // 辅警题库
-  html+='<div class="biz-card"><div class="biz-hd">🛡️ 辅警题库</div>'
-    +'<div class="biz-row"><span>浏览量</span><b>'+A.visits.s+'</b></div>'
-    +'<div class="biz-row"><span>独立访客</span><b>'+A.visits.u+'</b></div>'
+  html+='<div class="panel" style="margin-top:16px"><h3>📌 Business overview <span class="tag">core sites</span></h3><div class="grid-2">';
+  // Auxiliary Police
+  html+='<div class="biz-card"><div class="biz-hd">🛡️ Auxiliary Police</div>'
+    +'<div class="biz-row"><span>Visits</span><b>'+A.visits.s+'</b></div>'
+    +'<div class="biz-row"><span>Unique visitors</span><b>'+A.visits.u+'</b></div>'
     +(A.milestones||[]).map(function(m){ return '<div class="biz-ms ms-'+m.tone+'"><b>'+esc(m.label)+'</b> · '+esc(m.desc)+' <span class="biz-tag">'+esc(m.tag)+'</span></div>'; }).join('')
     +'</div>';
   // FaceTalk
   html+='<div class="biz-card"><div class="biz-hd">💬 FaceTalk</div>'
-    +'<div class="biz-row"><span>匹配对</span><b>'+F.pairsTotal+'</b></div>'
-    +'<div class="biz-row"><span>留言墙</span><b>'+F.wall+'</b></div>'
-    +'<div class="biz-row"><span>评分</span><b>'+F.ratings+'</b></div>'
+    +'<div class="biz-row"><span>Matches</span><b>'+F.pairsTotal+'</b></div>'
+    +'<div class="biz-row"><span>Wall</span><b>'+F.wall+'</b></div>'
+    +'<div class="biz-row"><span>Ratings</span><b>'+F.ratings+'</b></div>'
     +(F.highlights||[]).map(function(h){ return '<div class="biz-ms ms-info"><b>'+esc(h.label)+'</b> · '+esc(h.desc)+'</div>'; }).join('')
     +'</div>';
   html+='</div></div>';
 
-  // ===== 留言墙聚合（融为一体：主后台统一管 FaceTalk 留言墙）=====
+  // ===== Wall聚合（融为一体：主后台统一管 FaceTalk Wall）=====
   const wall=(F.recentWall||[]).slice(0,5);
-  html+='<div class="panel" style="margin-top:16px"><h3>🗒️ 留言墙 <span class="tag">来自 FaceTalk · 已融入主后台</span></h3>';
-  if(!wall.length) html+='<div class="empty">暂无留言</div>';
+  html+='<div class="panel" style="margin-top:16px"><h3>🗒️ Wall <span class="tag">from FaceTalk · merged into the main admin</span></h3>';
+  if(!wall.length) html+='<div class="empty">No messages</div>';
   else{
     html+='<div style="display:flex;flex-direction:column;gap:8px">';
-    wall.forEach(function(w){ html+='<div style="border-bottom:1px dashed var(--line);padding-bottom:8px"><div class="small"><b>'+esc(w.name||'匿名')+'</b> <span class="muted">'+fmtTime(w.created_at)+'</span></div><div class="small">'+esc(w.text||'')+'</div></div>'; });
-    html+='</div><div style="margin-top:10px"><button class="btn" onclick="switchPage(\'wall\')">查看全部 / 管理 →</button></div>';
+    wall.forEach(function(w){ html+='<div style="border-bottom:1px dashed var(--line);padding-bottom:8px"><div class="small"><b>'+esc(w.name||'Anonymous')+'</b> <span class="muted">'+fmtTime(w.created_at)+'</span></div><div class="small">'+esc(w.text||'')+'</div></div>'; });
+    html+='</div><div style="margin-top:10px"><button class="btn" onclick="switchPage(\'wall\')">View all / manage →</button></div>';
   }
   html+='</div>';
 
-  // ===== Sing to Me 审核入口（0元购：用户为我唱歌，我送资料）=====
-  html+='<div class="panel" style="margin-top:16px"><h3>🎤 Sing to Me <span class="tag">0元购 · 用户为我唱歌</span></h3>'
-    +'<p class="small muted">用户在 shop 为我唱一首歌，我送她资料。点此审核录音、标记通过 / 已发。</p>'
-    +'<div style="margin-top:10px"><button class="btn" onclick="switchPage(\'sing\')">去审核 →</button></div></div>';
+  // ===== Sing to Me Review入口（Sing-to-get：用户为我唱歌，我送资料）=====
+  html+='<div class="panel" style="margin-top:16px"><h3>🎤 Sing to Me <span class="tag">sing-to-get · users sing for me</span></h3>'
+    +'<p class="small muted">A user sings a song for me on Shop and I send materials back. Review recordings, mark approved / sent.</p>'
+    +'<div style="margin-top:10px"><button class="btn" onclick="switchPage(\'sing\')">Review →</button></div></div>';
 
-  // ===== 通知通道自检（一键验证提醒是否真的在发）=====
-  html+='<div class="panel" style="margin-top:16px"><h3>通知通道自检</h3>'
-    +'<p class="small muted">真实发一条测试提醒到 shop 订单与客服（supportly）的每个通道：Telegram / 邮件 / 飞书。<br>改完 secret 后点一下就知道有没有生效，不必等真实订单来验证。</p>'
-    +'<div style="margin-top:10px"><button class="btn" id="ntBtn" onclick="runNotifyTest()">发送测试通知</button> <span class="small muted" id="ntMsg"></span></div>'
+  // ===== Notification channels self-test（一键验证提醒是否真的在发）=====
+  html+='<div class="panel" style="margin-top:16px"><h3>Notification channels self-test</h3>'
+    +'<p class="small muted">Send one real test alert to every channel of Shop orders and Support (supportly): Telegram / email / Feishu.<br>After changing a secret, click once to verify — no need to wait for a real order.</p>'
+    +'<div style="margin-top:10px"><button class="btn" id="ntBtn" onclick="runNotifyTest()">Send test alert</button> <span class="small muted" id="ntMsg"></span></div>'
     +'<div id="ntResult" style="margin-top:12px"></div></div>';
 
-  html+='<div style="margin-top:14px"><button class="btn" onclick="renderHealth()">↻ 重新探测</button></div></div>';
+  html+='<div style="margin-top:14px"><button class="btn" onclick="renderHealth()">↻ Re-probe</button></div></div>';
   c.innerHTML=html;
 }
 
-// ---------- Sing to Me 审核 ----------
-// 录音加载失败时给出可见提示，避免"点了没反应/闪退"无从判断
+// ---------- Sing to Me Review ----------
+// 录音Load failed时给出可见提示，避免"点了没反应/闪退"无从判断
 window.__singAudioErr=function(el){
   el.style.display='none';
   var d=document.createElement('div');
   d.className='small';
   d.style.color='var(--danger)';
-  d.textContent='录音加载失败：可能已被清除，或登录已过期（请重新登录后再试）';
+  d.textContent='Failed to load recording: it may have been cleared, or your session expired (sign in again)';
   if(el.parentNode) el.parentNode.insertBefore(d, el.nextSibling);
 };
 async function renderSingRequests(){
   const c=document.getElementById('content');
-  document.getElementById('pageTitle').textContent='Sing to Me 审核';
-  c.innerHTML='<div class="loading">加载 Sing to Me 请求…</div>';
+  document.getElementById('pageTitle').textContent='Sing to Me Review';
+  c.innerHTML='<div class="loading">Loading Sing to Me requests…</div>';
   let data;
   try{
     const r=await fetch('/api/sing?list=1',{cache:'no-store'});
     data=await r.json();
-  }catch(e){ c.innerHTML='<div class="err-box">加载失败：'+e.message+'</div>'; return; }
-  if(!data.ok){ if(data.error==='未登录'){ showLogin(); return; } c.innerHTML='<div class="err-box">'+(data.error||'加载失败')+'</div>'; return; }
+  }catch(e){ c.innerHTML='<div class="err-box">Load failed：'+e.message+'</div>'; return; }
+  if(!data.ok){ if(data.error==='Not signed in'){ showLogin(); return; } c.innerHTML='<div class="err-box">'+(data.error||'Load failed')+'</div>'; return; }
   const list=data.list||[];
-  const matLabel={anki:'Anki卡组',app:'开源App',offline:'离线题库',ndd:'你懂的',jgh:'结构化',fj:'辅警题库',xf:'消防题库'};
-  const tierLabel={0:'0元 · 唱送资料',9.9:'9.9元',39:'39元',69:'69元'};
-  const stMap={pending:['待审核','var(--warn)'],approved:['已通过','var(--ok)'],rejected:['已拒绝','var(--danger)'],sent:['已发送','var(--accent)']};
+  const matLabel={anki:'Anki deck',app:'Open-source app',offline:'Offline bank',ndd:'You-know-what',jgh:'Structured',fj:'Auxiliary Police',xf:'Fire Service'};
+  const tierLabel={0:'Free · sing for materials',9.9:'¥9.9',39:'¥39',69:'¥69'};
+  const stMap={pending:['Pending review','var(--warn)'],approved:['Approved','var(--ok)'],rejected:['Rejected','var(--danger)'],sent:['Sent','var(--accent)']};
   let html='<div class="stats">'
-    +'<div class="stat"><div class="stat-num">'+list.length+'</div><div class="stat-label">总请求</div></div>'
-    +'<div class="stat"><div class="stat-num" style="color:var(--ok)">'+list.filter(x=>x.status==='pending').length+'</div><div class="stat-label">待审核</div></div>'
-    +'<div class="stat"><div class="stat-num">'+list.filter(x=>x.status==='sent').length+'</div><div class="stat-label">已发送</div></div>'
+    +'<div class="stat"><div class="stat-num">'+list.length+'</div><div class="stat-label">Total requests</div></div>'
+    +'<div class="stat"><div class="stat-num" style="color:var(--ok)">'+list.filter(x=>x.status==='pending').length+'</div><div class="stat-label">Pending review</div></div>'
+    +'<div class="stat"><div class="stat-num">'+list.filter(x=>x.status==='sent').length+'</div><div class="stat-label">Sent</div></div>'
     +'</div>';
-  html+='<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3>请求列表</h3><div><button class="btn" onclick="renderSingRequests()">↻ 刷新</button> <button class="btn" onclick="singClean()">清除30天前</button></div></div>';
-  if(!list.length){ html+='<div class="empty">暂无请求</div></div>'; c.innerHTML=html; return; }
+  html+='<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3>Requests</h3><div><button class="btn" onclick="renderSingRequests()">↻ Refresh</button> <button class="btn" onclick="singClean()">Clean 30d+</button></div></div>';
+  if(!list.length){ html+='<div class="empty">No requests</div></div>'; c.innerHTML=html; return; }
   html+='<div style="display:flex;flex-direction:column;gap:14px;margin-top:12px">';
   list.forEach(function(x){
     let mats=[]; try{ mats=JSON.parse(x.materials||'[]'); }catch(e){}
@@ -756,16 +756,16 @@ async function renderSingRequests(){
     html+='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">';
     html+='<div><b>'+esc(x.email)+'</b> <span class="tag">'+esc(tierLabel[x.tier]||x.tier)+'</span> <span style="color:'+sm[1]+'">'+sm[0]+'</span></div>';
     html+='<span class="small muted">'+fmtTime(x.created)+'</span></div>';
-    html+= x.notifyErr ? '<div class="small" style="margin-top:6px;color:#fbbf24">通知未达：'+esc(x.notifyErr)+'</div>' : '<div class="small" style="margin-top:6px;color:#4ade80">通知已送达</div>';
-    html+='<div class="small" style="margin:6px 0">想要：'+esc(mats)+'</div>';
+    html+= x.notifyErr ? '<div class="small" style="margin-top:6px;color:#fbbf24">Alert failed: '+esc(x.notifyErr)+'</div>' : '<div class="small" style="margin-top:6px;color:#4ade80">Alert delivered</div>';
+    html+='<div class="small" style="margin:6px 0">Wants: '+esc(mats)+'</div>';
     if(x.audioKey) html+='<audio controls preload="none" src="/api/sing/audio/'+encodeURIComponent(x.id)+'" style="width:100%;margin:6px 0" onerror="__singAudioErr(this)"></audio>';
-    else html+='<div class="small muted">（无录音 · 已清除）</div>';
+    else html+='<div class="small muted">(no recording · cleared)</div>';
     html+='<div style="display:flex;gap:8px;margin-top:6px">';
     if(x.status==='pending'){
-      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'approve\')">通过</button>';
-      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'reject\')">不满意 · 拒绝并清除录音</button>';
+      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'approve\')">Approve</button>';
+      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'reject\')">Reject & clear recording</button>';
     } else {
-      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'sent\')">标记已发</button>';
+      html+='<button class="btn" onclick="singAct(\''+x.id+'\',\'sent\')">Mark sent</button>';
     }
     html+='</div></div>';
   });
@@ -776,32 +776,32 @@ async function singAct(id,action){
   try{
     const r=await fetch('/api/sing?id='+encodeURIComponent(id)+'&action='+action,{method:'POST',cache:'no-store'});
     const d=await r.json();
-    if(!d.ok) alert('操作失败：'+(d.error||''));
-  }catch(e){ alert('操作失败：'+e.message); }
+    if(!d.ok) alert('Action failed: '+(d.error||''));
+  }catch(e){ alert('Action failed: '+e.message); }
   renderSingRequests();
 }
 async function singClean(){
-  if(!confirm('清除 30 天前已处理的请求及其语音？')) return;
+  if(!confirm('Clean processed requests and their voice files from 30+ days ago?')) return;
   try{
     const r=await fetch('/api/sing?clean=1',{cache:'no-store'});
     const d=await r.json();
-    alert(d.ok?('已清除 '+d.cleaned+' 条，删 R2 语音 '+d.r2Deleted+' 个'):('失败：'+(d.error||'')));
-  }catch(e){ alert('失败：'+e.message); }
+    alert(d.ok?('Cleared '+d.cleaned+' entries, deleted R2 voice '+d.r2Deleted+' files'):('Failed: '+(d.error||'')));
+  }catch(e){ alert('Failed: '+e.message); }
   renderSingRequests();
 }
 
-// ---------- 站点导航 ----------
+// ---------- Site map ----------
 function renderSites(){
   const sites=[
-    {ico:'💬',name:'FaceTalk',url:'facetalk.955827.xyz/admin',desc:'面试搭子 · 匹配/留言/信誉'},
-    {ico:'🛡️',name:'辅警刷题站',url:'exam.955827.xyz/fj',desc:'笔试·面试·体测题库'},
-    {ico:'🔥',name:'消防刷题站',url:'exam.955827.xyz/xf',desc:'消防员结构化面试'},
-    {ico:'📚',name:'RCJ Exam Hub',url:'exam.955827.xyz',desc:'题库与内容中枢'},
-    {ico:'🎯',name:'RCJ Training',url:'exam.955827.xyz/train',desc:'职业能力训练系统'},
-    {ico:'🎤',name:'SoloSpeak',url:'speak.955827.xyz/solospeak',desc:'开口系列 · 独声练习'},
-    {ico:'🌿',name:'LetOut',url:'speak.955827.xyz/letout',desc:'开口系列 · 大声说'},
+    {ico:'💬',name:'FaceTalk',url:'facetalk.955827.xyz/admin',desc:'Interview partner · matching/wall/reputation'},
+    {ico:'🛡️',name:'Auxiliary Police Bank',url:'exam.955827.xyz/fj',desc:'Written · interview · fitness banks'},
+    {ico:'🔥',name:'Fire Service Bank',url:'exam.955827.xyz/xf',desc:'Firefighter structured interview'},
+    {ico:'📚',name:'RCJ Exam Hub',url:'exam.955827.xyz',desc:'Banks & content hub'},
+    {ico:'🎯',name:'RCJ Training',url:'exam.955827.xyz/train',desc:'Career ability training system'},
+    {ico:'🎤',name:'SoloSpeak',url:'speak.955827.xyz/solospeak',desc:'Speaking series · solo practice'},
+    {ico:'🌿',name:'LetOut',url:'speak.955827.xyz/letout',desc:'Speaking series · speak out'},
   ];
-  let html='<div class="panel"><h3>🌐 站点导航</h3><div class="site-grid">';
+  let html='<div class="panel"><h3>🌐 Site map</h3><div class="site-grid">';
   sites.forEach(s=>{
     const full=s.url.startsWith('http')?s.url:('https://'+s.url);
     html+='<a class="site-card" href="'+full+'" target="_blank" rel="noopener"><div class="sc-ico">'+s.ico+'</div><div class="sc-name">'+s.name+'</div><div class="sc-url">'+s.url+'</div><div class="sc-desc">'+s.desc+'</div></a>';
@@ -810,20 +810,20 @@ function renderSites(){
   document.getElementById('content').innerHTML=html;
 }
 
-// ---------- 留言管理（FaceTalk wall 表） ----------
+// ---------- Wall management（FaceTalk wall 表） ----------
 function renderWallMgmt(){
   const c=document.getElementById('content');
   const F=DATA.facetalk||{};
-  const list=(F.recentWall||[]).slice(); // 已由 data.js 返回最近 200 条，含 id/ip/name/text/created_at
-  let html='<div class="panel"><h3>💬 留言管理</h3>'
-    +'<p class="small muted">数据来自 FaceTalk 独立库（mianshi-dazi-d1 · wall 表），共 '+list.length+' 条（最近 200）。每条带来源 IP，便于区分谁发的。</p>'
+  const list=(F.recentWall||[]).slice(); // 已由 data.js 返回最近 200 entries，含 id/ip/name/text/created_at
+  let html='<div class="panel"><h3>💬 Wall management</h3>'
+    +'<p class="small muted">Data comes from FaceTalk\'s separate DB (mianshi-dazi-d1 · wall), '+list.length+' entries (latest 200). Each shows its source IP.</p>'
     +'<div style="margin:14px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
-    +'<input id="wallIpInput" placeholder="输入 IP 批量删（如 1.2.3.4）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)"/>'
-    +'<button class="btn" onclick="delWallIp()">🗑 按 IP 删除</button>'
+    +'<input id="wallIpInput" placeholder="Enter IP to bulk delete (e.g. 1.2.3.4)" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)"/>'
+    +'<button class="btn" onclick="delWallIp()">🗑 Delete by IP</button>'
     +'<span class="small muted" id="wallMsg"></span>'
     +'</div>';
   if(!list.length){
-    html+='<div class="empty">暂无留言</div></div>';
+    html+='<div class="empty">No messages</div></div>';
     c.innerHTML=html; return;
   }
   html+='<div style="border:1px solid var(--line);border-radius:10px;overflow:hidden">';
@@ -831,64 +831,64 @@ function renderWallMgmt(){
   list.forEach(w=>{
     const ip=(w.ip||'').trim();
     html+='<div style="padding:12px 14px;border-bottom:1px solid var(--line)">'
-      +'<div class="small"><b>'+esc(w.name||'匿名')+'</b>'
-      +'<span class="muted" style="margin-left:8px;font-family:ui-monospace,monospace">🌐 '+(ip||'未知IP')+'</span>'
+      +'<div class="small"><b>'+esc(w.name||'Anonymous')+'</b>'
+      +'<span class="muted" style="margin-left:8px;font-family:ui-monospace,monospace">🌐 '+(ip||'Unknown IP')+'</span>'
       +'<span class="muted" style="margin-left:8px">'+fmtTime(w.created_at)+'</span></div>'
       +'<div class="small" style="margin-top:4px;white-space:pre-wrap">'+esc(w.text||'')+'</div></div>';
     html+='<div style="padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center">'
-      +'<button class="btn small" onclick="delWall(\''+esc(w.id)+'\')">删除</button></div>';
+      +'<button class="btn small" onclick="delWall(\''+esc(w.id)+'\')">Delete</button></div>';
   });
   html+='</div></div></div>';
   c.innerHTML=html;
 }
 async function delWall(id){
   if(!id) return;
-  if(!confirm('确认删除这条留言？不可恢复。')) return;
+  if(!confirm('Delete this message? Not recoverable.')) return;
   const msg=document.getElementById('wallMsg');
-  if(msg){ msg.textContent='处理中…'; msg.style.color='var(--muted)'; }
+  if(msg){ msg.textContent='Working…'; msg.style.color='var(--muted)'; }
   try{
     const r=await fetch('/api/admin/wall?del='+encodeURIComponent(id),{method:'GET',credentials:'same-origin'});
     const j=await r.json().catch(()=>({}));
     if(r.ok && j.ok){
-      if(msg){ msg.textContent='✓ 已删除 '+j.deleted+' 条'; msg.style.color='var(--ok)'; }
+      if(msg){ msg.textContent='✓ Deleted '+j.deleted+' entries'; msg.style.color='var(--ok)'; }
       loadData(); // 重新拉数据刷新列表
     } else if(r.status===401){
-      if(msg){ msg.textContent='✗ 未登录'; msg.style.color='var(--danger)'; }
+      if(msg){ msg.textContent='✗ Not signed in'; msg.style.color='var(--danger)'; }
       showLogin();
     } else {
       if(msg){ msg.textContent='✗ '+(j.error||('HTTP '+r.status)); msg.style.color='var(--danger)'; }
     }
   }catch(e){
-    if(msg){ msg.textContent='✗ 网络错误'; msg.style.color='var(--danger)'; }
+    if(msg){ msg.textContent='✗ Network error'; msg.style.color='var(--danger)'; }
   }
 }
 
 async function delWallIp(){
   const ip=document.getElementById('wallIpInput').value.trim();
   if(!ip) return;
-  if(!confirm('确认删除 IP '+ip+' 的全部留言？不可恢复。')) return;
+  if(!confirm('Delete all messages from IP '+ip+'? Not recoverable.')) return;
   const msg=document.getElementById('wallMsg');
-  if(msg){ msg.textContent='处理中…'; msg.style.color='var(--muted)'; }
+  if(msg){ msg.textContent='Working…'; msg.style.color='var(--muted)'; }
   try{
     const r=await fetch('/api/admin/wall?delIp='+encodeURIComponent(ip),{method:'GET',credentials:'same-origin'});
     const j=await r.json().catch(()=>({}));
     if(r.ok && j.ok){
-      if(msg){ msg.textContent='✓ 已删除 '+j.deleted+' 条'; msg.style.color='var(--ok)'; }
+      if(msg){ msg.textContent='✓ Deleted '+j.deleted+' entries'; msg.style.color='var(--ok)'; }
       loadData();
     } else if(r.status===401){
-      if(msg){ msg.textContent='✗ 未登录'; msg.style.color='var(--danger)'; }
+      if(msg){ msg.textContent='✗ Not signed in'; msg.style.color='var(--danger)'; }
       showLogin();
     } else {
       if(msg){ msg.textContent='✗ '+(j.error||('HTTP '+r.status)); msg.style.color='var(--danger)'; }
     }
   }catch(e){
-    if(msg){ msg.textContent='✗ 网络错误'; msg.style.color='var(--danger)'; }
+    if(msg){ msg.textContent='✗ Network error'; msg.style.color='var(--danger)'; }
   }
 }
 
 // ---------- SVG 折线图 ----------
 function lineChart(data){
-  if(!data||!data.length) return '<div class="empty">暂无浏览数据</div>';
+  if(!data||!data.length) return '<div class="empty">No visit data</div>';
   const W=680,H=220,pad=34;
   const max=Math.max(...data.map(d=>d.s),1);
   const n=data.length;
@@ -914,13 +914,13 @@ function lineChart(data){
 
 // 多站点折线图（每条线一个 site，days 控制显示最近 N 个有数据日）
 function multiLineChart(series, days = 14){
-  if(!series||!series.length) return '<div class="empty">暂无浏览数据</div>';
+  if(!series||!series.length) return '<div class="empty">No visit data</div>';
   const W=680,H=240,pad=36;
   const daySet=new Set();
   series.forEach(s=>(s.points||[]).forEach(p=>daySet.add(p.day)));
   const allDays=Array.from(daySet).sort();
   const daysArr=allDays.slice(-days);
-  const n=daysArr.length; if(!n) return '<div class="empty">暂无浏览数据</div>';
+  const n=daysArr.length; if(!n) return '<div class="empty">No visit data</div>';
   const max=Math.max(1,...series.flatMap(s=>(s.points||[]).map(p=>p.s)));
   const X=i=>pad+i*((W-pad*2)/(n-1));
   const Y=v=>H-pad-(v/max)*(H-pad*2);
@@ -938,18 +938,18 @@ function multiLineChart(series, days = 14){
   return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img">'+grid+polylines+labels+'</svg><div class="legend">'+legend+'</div>';
 }
 
-// ---------- 客服管理 ----------
+// ---------- Support Console ----------
 async function renderSupport(){
   const c = document.getElementById('content');
-  document.getElementById('pageTitle').textContent = '客服管理';
+  document.getElementById('pageTitle').textContent = 'Support Console';
   c.innerHTML = `
-    <div class="panel"><h3>RCJ 在线客服</h3>
-      <p class="small muted">人工客服统一在 RCJ Supportly 处理（仅 shop 渠道使用）。</p>
-      <a class="btn" href="https://support.955827.xyz/admin" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px">打开客服后台 →</a>
+    <div class="panel"><h3>RCJ Online Support</h3>
+      <p class="small muted">Human support runs on RCJ Supportly (Shop channel only).</p>
+      <a class="btn" href="https://support.955827.xyz/admin" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px">Open support admin →</a>
     </div>`;
 }
 
-// ---------- 订单提醒（PayPal 收款 + 0元购报名）----------
+// ---------- Orders（PayPal 收款 + Sing-to-get signups）----------
 let orderKeyword = '';
 let orderStatusFilter = 'all';
 const RCJ_RATE = 7.2; // 与 shop / _lib.js 一致
@@ -958,12 +958,12 @@ function renderOrders(){
   const esc2 = function(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); };
   const fmt = function(ts){ if(!ts) return '—'; const d=new Date(Number(ts)); const p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); };
   const statColor = { paid:'#2dd4bf', enrolled:'#60a5fa', pending:'#fbbf24', deposit:'#fbbf24' };
-  const statText = { paid:'已收款', enrolled:'已报名', pending:'待支付', deposit:'定金已付' };
+  const statText = { paid:'Paid', enrolled:'Enrolled', pending:'Pending', deposit:'Deposit paid' };
   const sCur = function(c){ return (c==='CNY') ? '¥' : '$'; };
   const cnyOf = function(o){ return (o.cny_amount != null) ? Number(o.cny_amount) : (Number(o.amount)||0); };
   const fullCny = function(o){ return (o.currency==='CNY') ? (Number(o.full_price)||0) : (Number(o.full_price)||0)*RCJ_RATE; };
 
-  // 汇总：已收款按全款计，定金按已收定金计
+  // 汇总：Paid按全款计，定金按已收定金计
   const sum = all.reduce(function(a,o){ return a + (o.status==='paid' ? fullCny(o) : cnyOf(o)); }, 0);
   const paidN = all.filter(o=>o.status==='paid').length;
   const depN = all.filter(o=>o.status==='deposit').length;
@@ -982,38 +982,38 @@ function renderOrders(){
   });
 
   let html = '';
-  html += '<div class="panel"><h3>收款概览</h3><div style="display:flex;gap:16px;flex-wrap:wrap">'
-    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">已收款(笔)</div><div class="fc-num" style="font-size:22px;color:#2dd4bf">'+(paidN+depN)+'</div></div>'
-    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">已收款(金额)</div><div class="fc-num" style="font-size:22px;color:#2dd4bf">¥'+sum.toFixed(2)+'</div></div>'
-    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">待支付</div><div class="fc-num" style="font-size:22px;color:#fbbf24">'+pendingCount+'</div></div>'
-    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">0元购报名</div><div class="fc-num" style="font-size:22px;color:#60a5fa">'+singN+'</div></div>'
+  html += '<div class="panel"><h3>Revenue overview</h3><div style="display:flex;gap:16px;flex-wrap:wrap">'
+    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">Paid (orders)</div><div class="fc-num" style="font-size:22px;color:#2dd4bf">'+(paidN+depN)+'</div></div>'
+    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">Paid (amount)</div><div class="fc-num" style="font-size:22px;color:#2dd4bf">¥'+sum.toFixed(2)+'</div></div>'
+    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">Pending</div><div class="fc-num" style="font-size:22px;color:#fbbf24">'+pendingCount+'</div></div>'
+    + '<div class="stat-card" style="flex:1;min-width:120px;padding:12px 16px;background:var(--bg);border:1px solid var(--line);border-radius:10px"><div class="fc-name">Sing-to-get signups</div><div class="fc-num" style="font-size:22px;color:#60a5fa">'+singN+'</div></div>'
     + '</div></div>';
 
   // 工具条：搜索 + 状态筛选 + 导出
   html += '<div class="panel"><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">'
-    + '<input id="orderSearch" placeholder="搜索 邮箱 / 订单号 / 项目" value="'+esc2(orderKeyword)+'" oninput="orderKeyword=this.value;renderOrders()" style="flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'
+    + '<input id="orderSearch" placeholder="Search email / order / item" value="'+esc2(orderKeyword)+'" oninput="orderKeyword=this.value;renderOrders()" style="flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'
     + '<select id="orderStatus" onchange="orderStatusFilter=this.value;renderOrders()" style="padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)">'
-    + '<option value="all">全部状态</option>'
-    + '<option value="deposit"'+((orderStatusFilter==='deposit')?' selected':'')+'>定金已付</option>'
-    + '<option value="paid"'+((orderStatusFilter==='paid')?' selected':'')+'>已收款</option>'
-    + '<option value="pending"'+((orderStatusFilter==='pending')?' selected':'')+'>待支付</option>'
+    + '<option value="all">All statuses</option>'
+    + '<option value="deposit"'+((orderStatusFilter==='deposit')?' selected':'')+'>Deposit paid</option>'
+    + '<option value="paid"'+((orderStatusFilter==='paid')?' selected':'')+'>Paid</option>'
+    + '<option value="pending"'+((orderStatusFilter==='pending')?' selected':'')+'>Pending</option>'
     + '</select>'
-    + '<button class="btn" onclick="exportOrdersCSV()">⬇ 导出 CSV</button>'
-    + '<span class="small muted">共 '+list.length+' 条</span>'
+    + '<button class="btn" onclick="exportOrdersCSV()">⬇ Export CSV</button>'
+    + '<span class="small muted">Total '+list.length+' entries</span>'
     + '</div>';
 
-  if(!list.length){ html += '<p class="small muted">暂无匹配订单或报名记录。</p>'; }
+  if(!list.length){ html += '<p class="small muted">No matching orders or signups.</p>'; }
   else {
-    html += '<div style="overflow-x:auto"><table class="dt"><thead><tr><th>时间</th><th>来源</th><th>项目</th><th>金额(定金)</th><th>全款</th><th>余款</th><th>付款邮箱</th><th>联系邮箱</th><th>状态</th><th>操作</th></tr></thead><tbody>';
+    html += '<div style="overflow-x:auto"><table class="dt"><thead><tr><th>Time</th><th>Source</th><th>Item</th><th>Amount (deposit)</th><th>Full</th><th>Balance</th><th>Pay email</th><th>Contact email</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
     list.forEach(function(o){
       const c = statColor[o.status]||'#64748b';
       const isDeposit = (o.status==='deposit');
       const actHtml = (isDeposit
-        ? '<button class="btn small" onclick="orderAct(\''+esc2(o.id)+'\',\'collect\')">收余款</button> '
+        ? '<button class="btn small" onclick="orderAct(\''+esc2(o.id)+'\',\'collect\')">Collect balance</button> '
         : '')
-        + '<button class="btn small" style="color:var(--danger)" onclick="if(confirm(\'确认删除该订单？不可恢复\')) orderAct(\''+esc2(o.id)+'\',\'delete\')">删除</button>';
+        + '<button class="btn small" style="color:var(--danger)" onclick="if(confirm(\'Delete this order? Not recoverable\')) orderAct(\''+esc2(o.id)+'\',\'delete\')">Delete</button>';
       html += '<tr><td>'+fmt(o.created)+'</td>'
-        + '<td>'+esc2(o.source==='sing'?'0元购':'PayPal')+'</td>'
+        + '<td>'+esc2(o.source==='sing'?'Sing-to-get':'PayPal')+'</td>'
         + '<td>'+esc2(o.item)+'</td>'
         + '<td>'+(o.source==='sing'?'0':sCur(o.currency)+(Number(o.amount)||0).toFixed(2))+'</td>'
         + '<td>'+(o.full_price?((sCur(o.currency))+(Number(o.full_price)||0).toFixed(2)):'—')+'</td>'
@@ -1027,26 +1027,26 @@ function renderOrders(){
   }
   html += '</div>';
   document.getElementById('content').innerHTML = html;
-  document.getElementById('pageTitle').textContent = '订单提醒';
+  document.getElementById('pageTitle').textContent = 'Orders';
 }
 
 async function orderAct(id, action){
-  if(action==='collect' && !confirm('确认标记该订单「余款已收」？状态将变为「已收款」，余款清零。')) return;
+  if(action==='collect' && !confirm('Mark this order balance as collected? Status becomes Paid and balance clears.')) return;
   try{
     const r = await fetch('/api/admin/order', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id, action }) });
     const d = await r.json().catch(()=>({}));
-    if(!r.ok || !d.ok){ alert('操作失败：'+(d.error||('HTTP '+r.status))); }
-  }catch(e){ alert('操作失败：'+e.message); }
+    if(!r.ok || !d.ok){ alert('Action failed: '+(d.error||('HTTP '+r.status))); }
+  }catch(e){ alert('Action failed: '+e.message); }
   loadData(true); // 强制绕过缓存刷新
 }
 
 function exportOrdersCSV(){
   const all = (DATA.orders || []);
-  const head = ['时间','来源','项目','定金','全款','余款','币种','付款邮箱','联系邮箱','状态','PayPal单号'];
+  const head = ['Time','Source','Item','Deposit','Full','Balance','Currency','Pay email','Contact email','Status','PayPal ID'];
   const rows = all.map(function(o){
     const d = new Date(Number(o.created)); const p=n=>String(n).padStart(2,'0');
     const t = d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
-    return [t, o.source==='sing'?'0元购':'PayPal', o.item||'', o.amount||'', o.full_price||'', o.balance||'', o.currency||'', o.payer_email||'', o.contact_email||'', o.status||'', o.paypal_order_id||''];
+    return [t, o.source==='sing'?'Sing-to-get':'PayPal', o.item||'', o.amount||'', o.full_price||'', o.balance||'', o.currency||'', o.payer_email||'', o.contact_email||'', o.status||'', o.paypal_order_id||''];
   });
   const csv = [head].concat(rows).map(function(r){ return r.map(function(c){ c=String(c==null?'':c); return /[",\n]/.test(c)?('"'+c.replace(/"/g,'""')+'"'):c; }).join(','); }).join('\n');
   const blob = new Blob(['﻿'+csv], { type:'text/csv;charset=utf-8' });
@@ -1054,7 +1054,7 @@ function exportOrdersCSV(){
   setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
 }
 
-// ---------- 访问分析 ----------
+// ---------- Traffic ----------
 function renderTraffic(){
   const d = DATA, AN = d.analytics || {series:[],allVisits:0};
   const seriesMap = {};
@@ -1067,27 +1067,27 @@ function renderTraffic(){
   // 重点板块：exam 系列、shop 商店、api 页、facetalk
   var html = '';
   html += '<div class="traffic-focus">';
-  // exam 系列（你懂的 / 辅警）
-  html += '<div class="focus-card" style="--fc:#f472b6"><div class="fc-name">📚 Exam 系列（你懂的/辅警）</div>'
+  // exam 系列（You-know-what / 辅警）
+  html += '<div class="focus-card" style="--fc:#f472b6"><div class="fc-name">📚 Exam series (you-know / aux)</div>'
     + '<div class="fc-num">' + getS('exam') + '</div>'
-    + '<div class="fc-sub">' + getU('exam') + ' 访客 · ' + getD('exam') + ' 天 · 占全站 ' + (AN.allVisits ? Math.round(getS('exam')/AN.allVisits*100) : 0) + '%</div></div>';
-  // Shop 商店（独立 site，含浏览 + 订单）
+    + '<div class="fc-sub">' + getU('exam') + ' visitors · ' + getD('exam') + ' days · of all-site ' + (AN.allVisits ? Math.round(getS('exam')/AN.allVisits*100) : 0) + '%</div></div>';
+  // Shop（独立 site，含Visits + 订单）
   var shopOrders = (d.orders||[]).filter(function(o){ return o.source==='paypal'; }).length;
-  html += '<div class="focus-card" style="--fc:#fbbf24"><div class="fc-name">🛒 Shop 商店</div>'
+  html += '<div class="focus-card" style="--fc:#fbbf24"><div class="fc-name">🛒 Shop</div>'
     + '<div class="fc-num">' + getS('shop') + '</div>'
-    + '<div class="fc-sub">' + getU('shop') + ' 访客 · ' + getD('shop') + ' 天 · 订单 ' + shopOrders + ' 笔</div></div>';
+    + '<div class="fc-sub">' + getU('shop') + ' visitors · ' + getD('shop') + ' days · orders ' + shopOrders + ' orders</div></div>';
   // 辅警（aux）
-  html += '<div class="focus-card" style="--fc:#60a5fa"><div class="fc-name">🛡️ 辅警题库</div>'
+  html += '<div class="focus-card" style="--fc:#60a5fa"><div class="fc-name">🛡️ Auxiliary Police</div>'
     + '<div class="fc-num">' + getS('aux') + '</div>'
-    + '<div class="fc-sub">' + getU('aux') + ' 访客 · ' + getD('aux') + ' 天</div></div>';
+    + '<div class="fc-sub">' + getU('aux') + ' visitors · ' + getD('aux') + ' days</div></div>';
   // API 页（无独立 site，从 hub 总流量中估算暂无独立统计）
-  html += '<div class="focus-card" style="--fc:#4ade80"><div class="fc-name">🌐 RCJ Lab（含 API 页）</div>'
+  html += '<div class="focus-card" style="--fc:#4ade80"><div class="fc-name">🌐 RCJ Lab (incl. API pages)</div>'
     + '<div class="fc-num">' + getS('hub') + '</div>'
-    + '<div class="fc-sub">' + getU('hub') + ' 访客 · ' + getD('hub') + ' 天</div></div>';
+    + '<div class="fc-sub">' + getU('hub') + ' visitors · ' + getD('hub') + ' days</div></div>';
   // FaceTalk
-  html += '<div class="focus-card" style="--fc:#c084fc"><div class="fc-name">💬 FaceTalk 面试搭子</div>'
+  html += '<div class="focus-card" style="--fc:#c084fc"><div class="fc-name">💬 FaceTalk interview partner</div>'
     + '<div class="fc-num">' + getS('facetalk') + '</div>'
-    + '<div class="fc-sub">' + getU('facetalk') + ' 访客 · ' + getD('facetalk') + ' 天</div></div>';
+    + '<div class="fc-sub">' + getU('facetalk') + ' visitors · ' + getD('facetalk') + ' days</div></div>';
   html += '</div>';
 
   // 全站趋势图（复用原 overview 的 multiLineChart）
@@ -1097,42 +1097,42 @@ function renderTraffic(){
     if(seriesMap[site]) fullSeries.push(seriesMap[site]);
     else fullSeries.push({site:site,points:[],total:0,u:0,d:0});
   });
-  html += '<div class="panel"><div class="panel-hd"><h3>全站浏览趋势 <span class="tag">rcj-analytics-d1</span></h3>'
+  html += '<div class="panel"><div class="panel-hd"><h3>All-site traffic trend <span class="tag">rcj-analytics-d1</span></h3>'
     + '<span class="range-tabs">'
-    + '<button onclick="setTrendDays(7)" class="'+(trendDays===7?'active':'')+'">7天</button>'
-    + '<button onclick="setTrendDays(14)" class="'+(trendDays===14?'active':'')+'">14天</button>'
-    + '<button onclick="setTrendDays(30)" class="'+(trendDays===30?'active':'')+'">30天</button>'
+    + '<button onclick="setTrendDays(7)" class="'+(trendDays===7?'active':'')+'">7d</button>'
+    + '<button onclick="setTrendDays(14)" class="'+(trendDays===14?'active':'')+'">14d</button>'
+    + '<button onclick="setTrendDays(30)" class="'+(trendDays===30?'active':'')+'">30d</button>'
     + '</span></div>' + multiLineChart(fullSeries, trendDays) + '</div>';
 
-  // 各站点累计流量排序
+  // All-time traffic by site排序
   var sorted = ALL_SITES.slice().sort(function(a,b){ return getS(b) - getS(a); });
-  html += '<div class="panel"><h3>各站点累计流量</h3><div class="site-stats">';
+  html += '<div class="panel"><h3>All-time traffic by site</h3><div class="site-stats">';
   var any = false;
   sorted.forEach(function(site){
     var s = seriesMap[site]; if(!s || !s.total) return;
     any = true;
     var col = {'aux':'#60a5fa','xf':'#fb923c','facetalk':'#c084fc','hub':'#4ade80','solospeak':'#2dd4bf','letout':'#d6a68a','training':'#facc15','exam':'#f472b6','shop':'#fbbf24'}[site]||'#64748b';
-    var label = {'aux':'辅警题库','xf':'消防题库','facetalk':'FaceTalk','hub':'RCJ Lab','solospeak':'SoloSpeak','letout':'LetOut','training':'RCJ Training','exam':'Exam Hub','shop':'Shop 商店'}[site]||site;
-    html += '<div class="ss-item"><span class="ss-dot" style="background:'+col+'"></span><span class="ss-name">'+label+'</span><span class="ss-num">'+s.total+'</span><span class="ss-sub">'+s.u+' 访客 / '+s.d+' 天</span></div>';
+    var label = {'aux':'Auxiliary Police','xf':'Fire Service','facetalk':'FaceTalk','hub':'RCJ Lab','solospeak':'SoloSpeak','letout':'LetOut','training':'RCJ Training','exam':'Exam Hub','shop':'Shop'}[site]||site;
+    html += '<div class="ss-item"><span class="ss-dot" style="background:'+col+'"></span><span class="ss-name">'+label+'</span><span class="ss-num">'+s.total+'</span><span class="ss-sub">'+s.u+' visitors / '+s.d+' days</span></div>';
   });
-  if(!any) html += '<div class="empty">暂无浏览数据（埋点已部署，访问各站点后开始累计）</div>';
+  if(!any) html += '<div class="empty">No data yet (tracking is live — visit the sites to start accumulating)</div>';
   html += '</div></div>';
 
-  // AI 调用数据（直接从 data.ai 取）
+  // AI call data（直接从 data.ai 取）
   var ai = d.ai || {total:0,ok:0,fail:0,successRate:0,byProject:{},byProvider:{}};
-  html += '<div class="panel"><h3>🤖 AI 调用数据</h3><div class="stats">'
-    + '<div class="stat ft"><div class="stat-num">' + ai.total + '</div><div class="stat-label">总调用</div></div>'
-    + '<div class="stat ft"><div class="stat-num" style="color:var(--ok)">' + ai.ok + '</div><div class="stat-label">成功</div></div>'
-    + '<div class="stat ft"><div class="stat-num" style="color:var(--danger)">' + ai.fail + '</div><div class="stat-label">失败</div></div>'
-    + '<div class="stat ft"><div class="stat-num">' + ai.successRate + '%</div><div class="stat-label">成功率</div></div>'
+  html += '<div class="panel"><h3>🤖 AI call data</h3><div class="stats">'
+    + '<div class="stat ft"><div class="stat-num">' + ai.total + '</div><div class="stat-label">Total calls</div></div>'
+    + '<div class="stat ft"><div class="stat-num" style="color:var(--ok)">' + ai.ok + '</div><div class="stat-label">OK</div></div>'
+    + '<div class="stat ft"><div class="stat-num" style="color:var(--danger)">' + ai.fail + '</div><div class="stat-label">Fail</div></div>'
+    + '<div class="stat ft"><div class="stat-num">' + ai.successRate + '%</div><div class="stat-label">Success rate</div></div>'
     + '</div>';
 
-  // 按项目/Provider 细分
+  // By project/Provider 细分
   function renderTable(title, data){
     var h = '';
     var keys = Object.keys(data || {});
-    if(!keys.length){ h += '<p class="small muted">暂无数据</p>'; return h; }
-    h += '<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;border-bottom:1px solid var(--line)"><th style="padding:8px">名称</th><th style="padding:8px">总量</th><th style="padding:8px">成功</th><th style="padding:8px">失败</th><th style="padding:8px">成功率</th></tr>';
+    if(!keys.length){ h += '<p class="small muted">No data</p>'; return h; }
+    h += '<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="text-align:left;border-bottom:1px solid var(--line)"><th style="padding:8px">Name</th><th style="padding:8px">Total</th><th style="padding:8px">OK</th><th style="padding:8px">Fail</th><th style="padding:8px">Success rate</th></tr>';
     keys.sort(function(a,b){return (data[b].total||0)-(data[a].total||0);}).forEach(function(k){
       var s = data[k]; var rate = s.total ? Math.round(s.ok/s.total*100) : 0;
       h += '<tr style="border-bottom:1px solid var(--line)"><td style="padding:8px;font-weight:600">' + esc2(k||'unknown') + '</td><td style="padding:8px">' + s.total + '</td><td style="padding:8px;color:var(--ok)">' + s.ok + '</td><td style="padding:8px;color:var(--danger)">' + s.fail + '</td><td style="padding:8px">' + rate + '%</td></tr>';
@@ -1141,12 +1141,12 @@ function renderTraffic(){
     return h;
   }
   html += '<div class="grid-2">';
-  html += '<div class="panel"><h4>按项目</h4><div class="panel-inset">' + renderTable('按项目', ai.byProject) + '</div></div>';
-  html += '<div class="panel"><h4>按 Provider</h4><div class="panel-inset">' + renderTable('按 Provider', ai.byProvider) + '</div></div>';
+  html += '<div class="panel"><h4>By project</h4><div class="panel-inset">' + renderTable('By project', ai.byProject) + '</div></div>';
+  html += '<div class="panel"><h4>By Provider</h4><div class="panel-inset">' + renderTable('By Provider', ai.byProvider) + '</div></div>';
   html += '</div></div>';
 
-  // 数据源说明
-  html += '<div class="panel"><h3>数据源</h3><p class="small muted">' + esc2(d.note) + '</p></div>';
+  // Data source
+  html += '<div class="panel"><h3>Data source</h3><p class="small muted">' + esc2(d.note) + '</p></div>';
 
   document.getElementById('content').innerHTML = html;
 }
@@ -1161,32 +1161,32 @@ function fmtDur(sec){
   return h+'h'+(m%60)+'′';
 }
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function fmtTime(ts){ if(!ts)return '—'; const s=String(ts); let d; if(s.includes('T')||s.includes('-')) d=new Date(s); else if(s.length>12) d=new Date(Number(s)); else d=new Date(Number(s)*1000); if(isNaN(d))return '—'; const bj=new Date(d.getTime()+(d.getTimezoneOffset()*60000)+8*3600000); const p=n=>n<10?'0'+n:''+n; return bj.getFullYear()+'-'+p(bj.getMonth()+1)+'-'+p(bj.getDate())+' '+p(bj.getHours())+':'+p(bj.getMinutes())+' 北京'; }
+function fmtTime(ts){ if(!ts)return '—'; const s=String(ts); let d; if(s.includes('T')||s.includes('-')) d=new Date(s); else if(s.length>12) d=new Date(Number(s)); else d=new Date(Number(s)*1000); if(isNaN(d))return '—'; const bj=new Date(d.getTime()+(d.getTimezoneOffset()*60000)+8*3600000); const p=n=>n<10?'0'+n:''+n; return bj.getFullYear()+'-'+p(bj.getMonth()+1)+'-'+p(bj.getDate())+' '+p(bj.getHours())+':'+p(bj.getMinutes())+' BJ'; }
 
 // ---------- 启动（只探测一次，成功直接渲染，不再重复拉取）----------
 (async function(){
-  // 深链优先：带 ?conversation= 或 ?page=support 时进客服管理并定位
+  // 深链优先：带 ?conversation= 或 ?page=support 时进Support Console并定位
   const urlParams = new URLSearchParams(location.search);
   if(urlParams.get('conversation') || urlParams.get('page') === 'support'){
     currentPage = 'support';
     document.querySelectorAll('.sb-item').forEach(x => x.classList.toggle('active', x.dataset.page === 'support'));
-    document.getElementById('pageTitle').textContent = '客服管理';
+    document.getElementById('pageTitle').textContent = 'Support Console';
     if(urlParams.get('conversation')) window._pendingConvId = urlParams.get('conversation');
     document.getElementById('genSmall').textContent = '';
   }
-  // 深链：?page=sing（Sing to Me 审核语音）/ ?page=orders（订单提醒）——通知邮件/TG 直达用
+  // 深链：?page=sing（Sing to Me Review语音）/ ?page=orders（Orders）——通知邮件/TG 直达用
   const deepPage = urlParams.get('page');
   if(deepPage === 'sing' || deepPage === 'orders'){
     currentPage = deepPage;
     document.querySelectorAll('.sb-item').forEach(x => x.classList.toggle('active', x.dataset.page === deepPage));
-    document.getElementById('pageTitle').textContent = deepPage === 'sing' ? 'Sing to Me · 审核语音' : '订单提醒';
+    document.getElementById('pageTitle').textContent = deepPage === 'sing' ? 'Sing to Me · Review' : 'Orders';
     document.getElementById('genSmall').textContent = '';
   }
   const r=await apiGet('/data');
   if(r.ok && r.data && r.data.ok){
     DATA=r.data;
     enterApp();
-    document.getElementById('genTime').textContent='更新于 '+fmtTime(DATA.generatedAt);
+    document.getElementById('genTime').textContent='Updated '+fmtTime(DATA.generatedAt);
     document.getElementById('genSmall').textContent=fmtTime(DATA.generatedAt);
     renderPage(currentPage);
   } else {

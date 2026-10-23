@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b0d16" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>手记 · RCJ Lab</title>
-  <meta name="description" content="私下手记，随手记下一些想法。" />
+  <title>Notes · RCJ Lab</title>
+  <meta name="description" content="Private notes — jotted down as they come." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5b355'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='system-ui' font-size='34' font-weight='800' fill='%2313101a'%3ER%3C/text%3E%3C/svg%3E" />
   <style>
     :root {
@@ -306,26 +306,26 @@
     <div class="note-wrap">
       <div class="note-hero">
         <p class="note-eyebrow">Private Notes</p>
-        <h1>手记</h1>
-        <p>随手记下一些想法，简短即可。便签墙会替你收好每一张。</p>
+        <h1>Notes</h1>
+        <p>Jot down whatever comes to mind — keep it short. The board will look after every note.</p>
       </div>
 
       <div class="composer">
-        <textarea id="input" placeholder="写点什么…（Ctrl+Enter 保存）"></textarea>
+        <textarea id="input" placeholder="Write something… (Ctrl+Enter to save)"></textarea>
         <div class="c-foot">
           <span class="c-hint" id="hint"></span>
-          <button class="btn" onclick="save()">保存</button>
+          <button class="btn" onclick="save()">Save</button>
         </div>
       </div>
 
       <div class="toolbar">
-        <input class="search" id="search" type="search" placeholder="搜索手记内容…" oninput="onSearch(this.value)" />
-        <button class="btn-ghost" onclick="exportNotes('json')">导出 JSON</button>
-        <button class="btn-ghost" onclick="exportNotes('md')">导出 MD</button>
+        <input class="search" id="search" type="search" placeholder="Search notes…" oninput="onSearch(this.value)" />
+        <button class="btn-ghost" onclick="exportNotes('json')">Export JSON</button>
+        <button class="btn-ghost" onclick="exportNotes('md')">Export MD</button>
       </div>
       <div class="chips" id="chips"></div>
 
-      <div class="board" id="list"><div class="note-loading">读取中…</div></div>
+      <div class="board" id="list"><div class="note-loading">Loading…</div></div>
     </div>
   </main>
 
@@ -433,15 +433,15 @@
         try { data = await res.json(); } catch (_) {}
         return { ok: res.ok, status: res.status, data };
       } catch (e) {
-        return { ok: false, status: 0, data: { error: '网络错误' } };
+        return { ok: false, status: 0, data: { error: 'Network error' } };
       }
     }
 
     async function requireLogin() {
-      const pw = prompt('请输入密码');
+      const pw = prompt('Enter password');
       if (pw == null) return false;
       const r = await api('POST', '/api/admin/login', { password: pw });
-      if (!r.ok || !r.data || !r.data.ok) { alert('密码错误'); return false; }
+      if (!r.ok || !r.data || !r.data.ok) { alert('Wrong password'); return false; }
       return true;
     }
 
@@ -472,10 +472,10 @@
     function buildChips() {
       const years = [...new Set(ALL_NOTES.map((n) => new Date(n.created_at).getFullYear()))].sort((a, b) => b - a);
       const wrap = document.getElementById('chips');
-      const items = ['全部', ...years];
+      const items = ['All', ...years];
       wrap.innerHTML = items.map((y) => {
-        const active = (y === '全部' && state.year == null) || y === state.year;
-        return '<span class="chip' + (active ? ' active' : '') + '" data-year="' + (y === '全部' ? '' : y) + '">' + y + '</span>';
+        const active = (y === 'All' && state.year == null) || y === state.year;
+        return '<span class="chip' + (active ? ' active' : '') + '" data-year="' + (y === 'All' ? '' : y) + '">' + y + '</span>';
       }).join('');
       wrap.querySelectorAll('.chip').forEach((c) => {
         c.addEventListener('click', () => {
@@ -494,8 +494,8 @@
       if (state.year != null) notes = notes.filter((n) => new Date(n.created_at).getFullYear() === state.year);
       if (q) notes = notes.filter((n) => (n.text || '').toLowerCase().includes(q));
 
-      if (!ALL_NOTES.length) { el.innerHTML = '<div class="note-empty">还没有手记，写第一条吧。</div>'; return; }
-      if (!notes.length) { el.innerHTML = '<div class="note-empty">没有匹配的手记。</div>'; return; }
+      if (!ALL_NOTES.length) { el.innerHTML = '<div class="note-empty">No notes yet — write the first one.</div>'; return; }
+      if (!notes.length) { el.innerHTML = '<div class="note-empty">No matching notes.</div>'; return; }
 
       // 新→旧排列，便签墙平铺
       const sorted = [...notes].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -513,7 +513,7 @@
       el.innerHTML = '<div class="note-loading">读取中…</div>';
       const r = await api('GET', '/api/notes');
       if (!r.ok || !r.data || !r.data.ok) {
-        el.innerHTML = '<div class="note-empty">加载失败：' + esc((r.data && r.data.error) || '未知错误') + '</div>';
+        el.innerHTML = '<div class="note-empty">Failed to load: ' + esc((r.data && r.data.error) || 'Unknown error') + '</div>';
         return;
       }
       ALL_NOTES = r.data.notes || [];
@@ -536,10 +536,10 @@
     }
 
     function exportNotes(fmt) {
-      if (!ALL_NOTES.length) { alert('还没有手记可导出'); return; }
+      if (!ALL_NOTES.length) { alert('Nothing to export yet'); return; }
       const stamp = new Date().toISOString().slice(0, 10);
       if (fmt === 'json') {
-        download('手记-' + stamp + '.json', JSON.stringify(ALL_NOTES, null, 2), 'application/json');
+        download('notes-' + stamp + '.json', JSON.stringify(ALL_NOTES, null, 2), 'application/json');
       } else {
         const md = ALL_NOTES.slice().reverse().map((n) => {
           const d = new Date(n.created_at);
@@ -547,7 +547,7 @@
           const ts = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
           return '## ' + ts + '\n\n' + n.text + '\n';
         }).join('\n---\n\n');
-        download('手记-' + stamp + '.md', '# 手记\n\n' + md, 'text/markdown');
+        download('notes-' + stamp + '.md', '# Notes\n\n' + md, 'text/markdown');
       }
     }
 
@@ -561,18 +561,18 @@
         r = await api('POST', '/api/notes', { text });
       }
       if (r.ok && r.data && r.data.ok) { ta.value = ''; updateHint(''); load(); }
-      else { updateHint((r.data && r.data.error) || '保存失败'); }
+      else { updateHint((r.data && r.data.error) || 'Save failed'); }
     }
 
     async function del(id) {
-      if (!confirm('删除这条手记？')) return;
+      if (!confirm('Delete this note?')) return;
       let r = await api('DELETE', '/api/notes?id=' + encodeURIComponent(id));
       if (r.status === 401) {
         if (!(await requireLogin())) return;
         r = await api('DELETE', '/api/notes?id=' + encodeURIComponent(id));
       }
       if (r.ok && r.data && r.data.ok) load();
-      else alert((r.data && r.data.error) || '删除失败');
+      else alert((r.data && r.data.error) || 'Delete failed');
     }
 
     function updateHint(text) {
@@ -587,8 +587,8 @@
     document.getElementById('input').addEventListener('input', (e) => {
       const len = e.target.value.trim().length;
       if (len === 0) updateHint('');
-      else if (len > 5000) updateHint('已达上限 5000 字');
-      else updateHint(len + ' 字');
+      else if (len > 5000) updateHint('Limit reached (5000 chars)');
+      else updateHint(len + ' chars');
     });
 
     load();
