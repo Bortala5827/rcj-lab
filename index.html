@@ -417,11 +417,6 @@
       display: flex; align-items: center; justify-content: center;
       padding: 40px 0;
     }
-    .act-tag {
-      position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
-      font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .26em;
-      color: var(--ink-3); text-transform: uppercase; white-space: nowrap;
-    }
     .act-num {
       position: absolute; top: 50%; left: 50%; z-index: 0;
       transform: translate(-50%, calc(-50% + var(--py, 0px)));
@@ -568,11 +563,11 @@
 
     <div class="container hero-inner">
       <div class="hero-copy">
-        <p class="hero-eyebrow" data-i18n="heroEyebrow">Independent Digital Studio</p>
+        <p class="hero-eyebrow" data-i18n="heroEyebrow">A one-person product bench</p>
         <h1 class="hero-title" data-i18n="heroTitle"><span class="line">Ideas, into</span><br><span class="line"><em>handy little</em></span><br><span class="line">tools.</span></h1>
         <div class="hero-foot">
           <div>
-            <p class="hero-sub" data-i18n="heroSub">Lightweight products built from real needs with code and AI. What you see here actually works — plus ideas still in exploration.</p>
+            <p class="hero-sub" data-i18n="heroSub">Lightweight tools built from real needs — everything here actually works.</p>
             <p class="hero-now"><span class="live-dot" aria-hidden="true"></span><span data-i18n="heroNow">NOW · Voice · FaceTalk · still building</span></p>
           </div>
           <div class="hero-ctas">
@@ -635,19 +630,18 @@
         <header class="sec-head reveal">
           <span class="sec-num" aria-hidden="true">01</span>
           <h2 class="sec-title" data-i18n="featTitle">Featured Work</h2>
-          <p class="sec-sub" data-i18n="featSub">Three picks from the bench — the rest are in the index below.</p>
+          <p class="sec-sub" data-i18n="featSub">Three picks from the bench.</p>
         </header>
 
         <div class="acts">
         <!-- 幕 1 · FaceTalk 主卡 -->
         <div class="act">
-          <span class="act-tag" aria-hidden="true">SCENE 01 / 02</span>
           <span class="act-num" aria-hidden="true">01</span>
           <a class="feature-card reveal" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
           <div class="feature-info">
             <p class="feature-tag" data-i18n="ftTag">01 / Matching Tool</p>
             <h3 class="feature-name">FaceTalk</h3>
-            <p class="feature-desc" data-i18n="ftDesc">Choosing a practice partner starts with a 60-second audition. Two-way auditions and mutual reviews help people find a partner to practice speaking with.</p>
+            <p class="feature-desc" data-i18n="ftDesc">A 60-second audition and two-way picks — find your speaking-practice partner.</p>
             <div class="feature-spec">
               <span>STACK — <b>D1 · PWA</b></span>
               <span>STATUS — <b>LIVE</b></span>
@@ -667,7 +661,6 @@
 
         <!-- 幕 2 · Exam + Voice 双卡 -->
         <div class="act">
-          <span class="act-tag" aria-hidden="true">SCENE 02 / 02</span>
           <span class="act-num" aria-hidden="true">02</span>
           <div class="feature-secondary">
           <a class="mini-card reveal" href="https://exam.955827.xyz" target="_blank" rel="noopener">
@@ -702,7 +695,7 @@
         <header class="sec-head reveal">
           <span class="sec-num" aria-hidden="true">02</span>
           <h2 class="sec-title" data-i18n="allTitle">All Projects</h2>
-          <p class="sec-sub" data-i18n="allSub">All ten projects, each linking straight to the real product.</p>
+          <p class="sec-sub" data-i18n="allSub">No wrapper landing pages — every row is the product.</p>
         </header>
 
         <div class="bom">
@@ -888,9 +881,9 @@
         ja: 'RCJ Lab 独立系デジタルスタジオ：アイデアを手になじむツールに。試験対策、スピーキング、ボイス、コンテンツ・生活——10 の本物のプロダクトを軽快に。'
       },
       heroEyebrow: {
-        zh: '独立数字产品工作室',
-        en: 'Independent Digital Studio',
-        ja: '独立系デジタルスタジオ'
+        zh: '一个人的产品工作台',
+        en: 'A one-person product bench',
+        ja: 'ひとりのプロダクト工房'
       },
       heroTitle: {
         zh: '<span class="line">把想法，</span><br><span class="line">做成<em>顺手</em>的</span><br><span class="line">小工具。</span>',
@@ -898,9 +891,9 @@
         ja: '<span class="line">アイデアを、</span><br><span class="line"><em>手になじむ</em></span><br><span class="line">ツールに。</span>'
       },
       heroSub: {
-        zh: '从真实需求出发，用代码与 AI 构建轻量产品。这里展示已经做出来的东西，也记录仍在探索的想法。',
-        en: 'Lightweight products built from real needs with code and AI. What you see here actually works — plus ideas still in exploration.',
-        ja: '実際のニーズから、コードと AI で軽量プロダクトを構築。ここにあるのは本当に動くものと、まだ探索中のアイデア。'
+        zh: '从真实需求出发，用代码与 AI 做出轻量的小工具——这里每一件都真的能用。',
+        en: 'Lightweight tools built from real needs — everything here actually works.',
+        ja: '実際のニーズから生まれた軽量ツール。ここにあるものは、どれも本当に動きます。'
       },
       heroNow: {
         zh: 'NOW · 声音定制 Voice · FaceTalk · 持续构建中',
@@ -911,15 +904,15 @@
       ctaLab: { zh: '了解 RCJ Lab', en: 'About RCJ Lab', ja: 'RCJ Lab について' },
       featTitle: { zh: '精选作品', en: 'Featured Work', ja: '注目作品' },
       featSub: {
-        zh: '工作台上挑出三件——其余都在下面的索引表里。',
-        en: 'Three picks from the bench — the rest are in the index below.',
-        ja: '作業台から 3 つ厳選——残りは下の索引表に。'
+        zh: '工作台上挑出三件，其余见索引表。',
+        en: 'Three picks from the bench.',
+        ja: '作業台から 3 つ厳選。'
       },
       ftTag: { zh: '01 / 匹配工具', en: '01 / Matching Tool', ja: '01 / マッチングツール' },
       ftDesc: {
-        zh: '让练习搭档的选择，从 60 秒试音开始。双向试音、互相评价，帮助需要练习表达的人找到合适的练习搭档。',
-        en: 'Choosing a practice partner starts with a 60-second audition. Two-way auditions and mutual reviews help people find a partner to practice speaking with.',
-        ja: '練習相手選びは 60 秒のオーディションから。双方向の試聴と相互評価で、話す練習の相手を見つける。'
+        zh: '60 秒试音、双向互选——帮你找到合适的开口练习搭子。',
+        en: 'A 60-second audition and two-way picks — find your speaking-practice partner.',
+        ja: '60 秒のオーディションと相互マッチングで、話す練習の相手を見つける。'
       },
       ftCta: { zh: '体验产品', en: 'Try the product', ja: '使ってみる' },
       ehTag: { zh: '02 / 学习', en: '02 / Learning', ja: '02 / 学習' },
@@ -938,9 +931,9 @@
       voCta: { zh: '试听声音', en: 'Listen', ja: '試聴する' },
       allTitle: { zh: '全部项目', en: 'All Projects', ja: '全プロダクト' },
       allSub: {
-        zh: '现有十个项目全部保留，每个都直达真实产品。',
-        en: 'All ten projects, each linking straight to the real product.',
-        ja: '10 プロダクトすべてを掲載、すべて実際のプロダクトに直接リンク。'
+        zh: '没有套壳落地页——每行就是产品本身。',
+        en: 'No wrapper landing pages — every row is the product.',
+        ja: '包装ページなし——各行がそのままプロダクト。'
       },
       pExam: { zh: '题库 · 知识卡 · 面试 · 教程', en: 'Bank · cards · interview · tutorials', ja: '問題集 · 知識カード · 面接 · チュートリアル' },
       pFace: { zh: '60 秒试音 · 双向互选 · 阅后即焚', en: '60s audition · mutual match · burn after reading', ja: '60秒オーディション · 相互マッチ · 既読後消去' },
