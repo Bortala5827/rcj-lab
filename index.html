@@ -201,19 +201,26 @@
       writing-mode: vertical-rl;
       font-family: var(--mono); font-size: 10px; letter-spacing: .3em; color: var(--ink-3); text-transform: uppercase;
     }
-    /* Hero 入场编排 */
-    .hero-eyebrow, .hero-title, .hero-foot, .hero-ctas, .stamp, .hero-meta {
+    /* Hero 入场编排：标题逐行升起（萤火虫式 stagger），其余元素依次浮现 */
+    .hero-eyebrow, .hero-foot, .hero-ctas, .stamp, .hero-meta {
       opacity: 0; animation: heroRise .9s cubic-bezier(.22, 1.2, .36, 1) both;
     }
     .hero-eyebrow { animation-delay: .05s; }
-    .hero-title { animation-delay: .16s; }
-    .hero-foot { animation-delay: .34s; }
-    .hero-ctas { animation-delay: .48s; }
-    .stamp { animation-delay: .62s; }
-    .hero-meta { animation-delay: .68s; }
+    .hero-foot { animation-delay: .38s; }
+    .hero-ctas { animation-delay: .52s; }
+    .stamp { animation-delay: .66s; }
+    .hero-meta { animation-delay: .72s; }
+    .hero-title .line {
+      display: inline-block; opacity: 0;
+      animation: lineRise .95s cubic-bezier(.19, 1.08, .28, 1) both;
+    }
+    .hero-title .line:first-of-type { animation-delay: .14s; }
+    .hero-title .line:last-of-type { animation-delay: .27s; }
     @keyframes heroRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes lineRise { from { opacity: 0; transform: translateY(46px) rotate(.5deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
     @media (prefers-reduced-motion: reduce) {
-      .hero-eyebrow, .hero-title, .hero-foot, .hero-ctas, .stamp, .hero-meta { animation: none; opacity: 1; }
+      .hero-eyebrow, .hero-foot, .hero-ctas, .stamp, .hero-meta { animation: none; opacity: 1; }
+      .hero-title .line { animation: none; opacity: 1; transform: none; }
     }
 
     /* ---------- 跑马灯（产品索引条，CSS 无限滚动） ---------- */
@@ -319,7 +326,8 @@
       position: relative;
     }
     .bom-row:hover { background: var(--accent-soft); padding-left: 14px; }
-    .bom-no { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent-deep); letter-spacing: .08em; }
+    .bom-no { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent-deep); letter-spacing: .08em; }
+    .bom-no i { width: 9px; height: 9px; border-radius: 2px; background: var(--c, var(--accent)); flex: none; }
     .bom-name { font-family: var(--serif); font-size: 1.7rem; letter-spacing: -.01em; line-height: 1.15; }
     .bom-desc { color: var(--ink-2); font-size: 13.5px; }
     .bom-status {
@@ -366,9 +374,17 @@
       border: 1px solid rgba(238, 242, 255, .55); border-radius: 999px; padding: 8px 18px;
     }
     .bp-note { margin-top: 40px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: rgba(238, 242, 255, .66); }
-    .bp-compass { position: absolute; right: 56px; top: 50%; transform: translateY(-50%); opacity: .5; pointer-events: none; }
-    .bp-compass .c1 { animation: spin 60s linear infinite; transform-origin: 50% 50%; }
-    @media (prefers-reduced-motion: reduce) { .bp-compass .c1 { animation: none; } }
+    .bp-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 56px; align-items: center; }
+    .bp-map-label { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: rgba(238, 242, 255, .62); text-transform: uppercase; margin-bottom: 16px; }
+    .bp-map svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .bp-links line { stroke: rgba(238, 242, 255, .3); stroke-width: 1; stroke-dasharray: 3 5; }
+    .bp-nodes a { cursor: pointer; }
+    .bp-nodes a rect { fill: rgba(238, 242, 255, .06); stroke: rgba(238, 242, 255, .6); stroke-width: 1; transition: fill .18s ease, stroke .18s ease; }
+    .bp-nodes a text { fill: rgba(238, 242, 255, .92); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
+    .bp-nodes a:hover rect, .bp-nodes a:focus-visible rect { fill: rgba(255, 215, 138, .16); stroke: #ffd78a; }
+    .bp-nodes a:hover text, .bp-nodes a:focus-visible text { fill: #ffd78a; }
+    .bp-core rect { fill: rgba(255, 215, 138, .13); stroke: #ffd78a; stroke-width: 1.5; }
+    .bp-core text { fill: #ffd78a; font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: .2em; }
 
     /* ---------- Blog ---------- */
     .blog-line { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 400; letter-spacing: -.01em; max-width: 24em; line-height: 1.2; }
@@ -380,13 +396,15 @@
     .footer-brand { font-weight: 700; color: var(--ink); }
     .footer-inner .sep { color: var(--accent); }
 
-    /* ---------- 滚动显现 ---------- */
-    html.js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s cubic-bezier(.22, 1.05, .36, 1), transform .6s cubic-bezier(.22, 1.05, .36, 1); }
+    /* ---------- 滚动显现（萤火虫式：位移更大、缓动带轻微回弹，同容器错峰） ---------- */
+    html.js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .75s cubic-bezier(.2, 1, .3, 1), transform .75s cubic-bezier(.2, 1, .3, 1); }
     html.js .reveal.is-visible { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       html.js .reveal { opacity: 1; transform: none; transition: none; }
       .feature-card:hover, .mini-card:hover, .btn:hover { transform: none; box-shadow: none; }
     }
+    /* 萤火光点画布：fixed 全屏，置于内容层之下（z-index 0），JS 生成 */
+    #fireflyCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
     /* ---------- 响应式 ---------- */
     @media (max-width: 980px) {
@@ -396,7 +414,7 @@
       .bom-status { display: none; }
       .stamp { width: 130px; height: 130px; right: 26px; bottom: 80px; }
       .blueprint { padding: 72px 40px 64px; }
-      .bp-compass { display: none; }
+      .bp-grid { grid-template-columns: 1fr; gap: 44px; }
     }
     @media (max-width: 900px) {
       .feature-card { grid-template-columns: 1fr; }
@@ -565,75 +583,75 @@
           <p class="sec-sub" data-i18n="allSub">All ten projects, each linking straight to the real product.</p>
         </header>
 
-        <div class="bom reveal">
-          <div class="bom-head" aria-hidden="true">
+        <div class="bom">
+          <div class="bom-head reveal" aria-hidden="true">
             <span>No.</span><span>Product</span><span class="h-desc">Description</span><span class="h-status">Status</span><span></span>
           </div>
-          <a class="bom-row" href="https://exam.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">01</span>
+          <a class="bom-row reveal" href="https://exam.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#c65414"><i aria-hidden="true"></i>01</span>
             <span class="bom-name">Exam Hub</span>
             <span class="bom-desc" data-i18n="pExam">Bank · cards · interview · tutorials</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">02</span>
+          <a class="bom-row reveal" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#1a3591"><i aria-hidden="true"></i>02</span>
             <span class="bom-name">FaceTalk</span>
             <span class="bom-desc" data-i18n="pFace">60s audition · mutual match · burn after reading</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://card.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">03</span>
+          <a class="bom-row reveal" href="https://card.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#7c5cbf"><i aria-hidden="true"></i>03</span>
             <span class="bom-name">voicecard</span>
             <span class="bom-desc" data-i18n="pCard">Record a voice clip → link → resume</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://blog.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">04</span>
+          <a class="bom-row reveal" href="https://blog.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#171208"><i aria-hidden="true"></i>04</span>
             <span class="bom-name">Blog</span>
             <span class="bom-desc" data-i18n="pBlog">Essays · dev notes · showcase</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://speak.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">05</span>
+          <a class="bom-row reveal" href="https://speak.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#0e7a5f"><i aria-hidden="true"></i>05</span>
             <span class="bom-name">Speak</span>
             <span class="bom-desc" data-i18n="pSpeak">SoloSpeak · LetOut speaking series</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">06</span>
+          <a class="bom-row reveal" href="https://dinner.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#d4456e"><i aria-hidden="true"></i>06</span>
             <span class="bom-name">Dinner for You</span>
             <span class="bom-desc" data-i18n="pDinner">Invite-code ordering · songs · email</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://voice.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">07</span>
+          <a class="bom-row reveal" href="https://voice.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#b98a1f"><i aria-hidden="true"></i>07</span>
             <span class="bom-name">Voice</span>
             <span class="bom-desc" data-i18n="pVoice">Chinese female voice · previews · custom</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://shop.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">08</span>
+          <a class="bom-row reveal" href="https://shop.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#4a6b2f"><i aria-hidden="true"></i>08</span>
             <span class="bom-name">Shop</span>
             <span class="bom-desc" data-i18n="pShop">Custom banks · done-for-you sites</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://support.955827.xyz" target="_blank" rel="noopener">
-            <span class="bom-no">09</span>
+          <a class="bom-row reveal" href="https://support.955827.xyz" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#3a7ca5"><i aria-hidden="true"></i>09</span>
             <span class="bom-name">Support</span>
             <span class="bom-desc" data-i18n="pSupport">Chat widget · Telegram</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
             <span class="bom-arr" aria-hidden="true">→</span>
           </a>
-          <a class="bom-row" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener">
-            <span class="bom-no">10</span>
+          <a class="bom-row reveal" href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener">
+            <span class="bom-no" style="--c:#8d8471"><i aria-hidden="true"></i>10</span>
             <span class="bom-name">RCJ Stack</span>
             <span class="bom-desc" data-i18n="pStack">Zero-fee SaaS kit · MIT</span>
             <span class="bom-status"><i aria-hidden="true"></i>LIVE</span>
@@ -652,25 +670,54 @@
           <span class="bp-meta bl" aria-hidden="true">SCALE 1:1</span>
           <span class="bp-meta br" aria-hidden="true">DRAWN BY RCJ · CHECKED BY RCJ</span>
 
-          <svg class="bp-compass" width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">
-            <g class="c1">
-              <circle cx="75" cy="75" r="58" fill="none" stroke="rgba(238,242,255,.5)" stroke-width="1" stroke-dasharray="3 6" />
-              <circle cx="75" cy="75" r="40" fill="none" stroke="rgba(238,242,255,.35)" stroke-width="1" />
-              <line x1="75" y1="5" x2="75" y2="145" stroke="rgba(238,242,255,.3)" stroke-width="1" />
-              <line x1="5" y1="75" x2="145" y2="75" stroke="rgba(238,242,255,.3)" stroke-width="1" />
-            </g>
-            <circle cx="75" cy="75" r="3" fill="#ffd78a" />
-          </svg>
+          <div class="bp-grid">
+            <div class="bp-copy">
+              <p class="bp-eyebrow" data-i18n="labEyebrow">Manifesto</p>
+              <p class="bp-big" data-i18n="aboutBig">Build small. <em>Validate continuously.</em></p>
+              <p class="bp-body" data-i18n="aboutBody">Not every idea needs to become a platform. Solve one concrete problem first, then decide the next step from real usage.</p>
+              <ul class="bp-tags">
+                <li data-i18n="aboutTag1">Independently built</li>
+                <li data-i18n="aboutTag2">Lightweight iteration</li>
+                <li data-i18n="aboutTag3">Real experience</li>
+              </ul>
+              <p class="bp-note" data-i18n="siteNote">This very site is one of the experiments.</p>
+            </div>
 
-          <p class="bp-eyebrow" data-i18n="labEyebrow">Manifesto</p>
-          <p class="bp-big" data-i18n="aboutBig">Build small. <em>Validate continuously.</em></p>
-          <p class="bp-body" data-i18n="aboutBody">Not every idea needs to become a platform. Solve one concrete problem first, then decide the next step from real usage.</p>
-          <ul class="bp-tags">
-            <li data-i18n="aboutTag1">Independently built</li>
-            <li data-i18n="aboutTag2">Lightweight iteration</li>
-            <li data-i18n="aboutTag3">Real experience</li>
-          </ul>
-          <p class="bp-note" data-i18n="siteNote">This very site is one of the experiments.</p>
+            <div class="bp-map">
+              <p class="bp-map-label">Fig. 03 — Ecosystem Map · 10 nodes, all live</p>
+              <!-- 产品生态蓝图：中枢节点 RCJ LAB + 10 个产品节点（可点击直达），中枢定位的图纸表达 -->
+              <svg viewBox="0 0 640 500" role="img" aria-label="RCJ product ecosystem map">
+                <g class="bp-links">
+                  <line x1="320" y1="250" x2="320"   y2="85"  />
+                  <line x1="320" y1="250" x2="452.3" y2="116.5"/>
+                  <line x1="320" y1="250" x2="534"   y2="199" />
+                  <line x1="320" y1="250" x2="534"   y2="301" />
+                  <line x1="320" y1="250" x2="452.3" y2="383.5"/>
+                  <line x1="320" y1="250" x2="320"   y2="415" />
+                  <line x1="320" y1="250" x2="187.7" y2="383.5"/>
+                  <line x1="320" y1="250" x2="106"   y2="301" />
+                  <line x1="320" y1="250" x2="106"   y2="199" />
+                  <line x1="320" y1="250" x2="187.7" y2="116.5"/>
+                </g>
+                <g class="bp-nodes">
+                  <a href="https://exam.955827.xyz" target="_blank" rel="noopener"><rect x="266" y="71" width="108" height="28" rx="2"/><text x="320" y="89" text-anchor="middle">EXAM HUB</text></a>
+                  <a href="https://facetalk.955827.xyz" target="_blank" rel="noopener"><rect x="398.3" y="102.5" width="108" height="28" rx="2"/><text x="452.3" y="120.5" text-anchor="middle">FACETALK</text></a>
+                  <a href="https://card.955827.xyz" target="_blank" rel="noopener"><rect x="480" y="185" width="108" height="28" rx="2"/><text x="534" y="203" text-anchor="middle">VOICECARD</text></a>
+                  <a href="https://blog.955827.xyz" target="_blank" rel="noopener"><rect x="480" y="287" width="108" height="28" rx="2"/><text x="534" y="305" text-anchor="middle">BLOG</text></a>
+                  <a href="https://speak.955827.xyz" target="_blank" rel="noopener"><rect x="398.3" y="369.5" width="108" height="28" rx="2"/><text x="452.3" y="387.5" text-anchor="middle">SPEAK</text></a>
+                  <a href="https://dinner.955827.xyz" target="_blank" rel="noopener"><rect x="266" y="401" width="108" height="28" rx="2"/><text x="320" y="419" text-anchor="middle">DINNER</text></a>
+                  <a href="https://voice.955827.xyz" target="_blank" rel="noopener"><rect x="133.7" y="369.5" width="108" height="28" rx="2"/><text x="187.7" y="387.5" text-anchor="middle">VOICE</text></a>
+                  <a href="https://shop.955827.xyz" target="_blank" rel="noopener"><rect x="52" y="287" width="108" height="28" rx="2"/><text x="106" y="305" text-anchor="middle">SHOP</text></a>
+                  <a href="https://support.955827.xyz" target="_blank" rel="noopener"><rect x="52" y="185" width="108" height="28" rx="2"/><text x="106" y="203" text-anchor="middle">SUPPORT</text></a>
+                  <a href="https://rcj-stack-9xe.pages.dev" target="_blank" rel="noopener"><rect x="133.7" y="102.5" width="108" height="28" rx="2"/><text x="187.7" y="120.5" text-anchor="middle">STACK</text></a>
+                </g>
+                <g class="bp-core">
+                  <rect x="262" y="232" width="116" height="36" rx="3"/>
+                  <text x="320" y="255" text-anchor="middle">RCJ LAB</text>
+                </g>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -722,9 +769,9 @@
         ja: '独立系デジタルスタジオ'
       },
       heroTitle: {
-        zh: '把想法，做成<br><em>顺手</em>的小工具。',
-        en: 'Ideas, into<br><em>handy little</em> tools.',
-        ja: 'アイデアを、<br><em>手になじむ</em>ツールに。'
+        zh: '<span class="line">把想法，做成</span><br><span class="line"><em>顺手</em>的小工具。</span>',
+        en: '<span class="line">Ideas, into</span><br><span class="line"><em>handy little</em> tools.</span>',
+        ja: '<span class="line">アイデアを、</span><br><span class="line"><em>手になじむ</em>ツールに。</span>'
       },
       heroSub: {
         zh: '从真实需求出发，用代码与 AI 构建轻量产品。这里展示已经做出来的东西，也记录仍在探索的想法。',
