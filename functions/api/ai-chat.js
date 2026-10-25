@@ -242,6 +242,13 @@ const DEFAULT_SCENE_PROMPT = `你是「通用大模型 API 导航站」的助手
 Key 拿到了？去「你懂的」像刷小红书一样刷有用的知识 → [你懂的·知识卡](https://exam.955827.xyz/learn/)
 每次只推一个，不硬广。`;
 
+// facetalk Late Talk：深夜话题生成器（只输出话题本身）
+SCENE_PROMPTS["talk"] = `你是话题生成器。无论用户输入什么，只输出一个适合两个陌生人深夜匿名语音聊天的话题：
+- 一句话问题，15-30字
+- 有思辨性或情绪共鸣，但不沉重
+- 不涉及政治、宗教、性、自残、算命占卜
+- 直接输出话题本身：不要解释、不要引号、不要编号、不要任何前后缀`;
+
 function getSystemPrompt(scene) {
   return SCENE_PROMPTS[scene] || DEFAULT_SCENE_PROMPT;
 }
@@ -256,6 +263,7 @@ const SCENE_ROUTING = {
   "api":   ["groq", "bai", "agnes", "dots", "sensenova"],    // 低需求：API 导航，速度优先
   "shop":  ["agnes", "groq", "dots"],                          // 定制顾问
   "blog":  ["agnes", "groq", "dots", "bai", "sensenova"],    // 博客猫娘「团子」：质量优先 + failover
+  "talk":  ["groq", "dots", "bai", "agnes", "sensenova"],    // facetalk 深夜话题：快 + 免费优先
 };
 
 // ── 工具函数 ────────────────────────────────────────────────
