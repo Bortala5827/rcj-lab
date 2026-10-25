@@ -214,8 +214,9 @@
       display: inline-block; opacity: 0;
       animation: lineRise .95s cubic-bezier(.19, 1.08, .28, 1) both;
     }
-    .hero-title .line:first-of-type { animation-delay: .14s; }
-    .hero-title .line:last-of-type { animation-delay: .27s; }
+    .hero-title .line:nth-of-type(1) { animation-delay: .14s; }
+    .hero-title .line:nth-of-type(2) { animation-delay: .26s; }
+    .hero-title .line:nth-of-type(3) { animation-delay: .38s; }
     @keyframes heroRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes lineRise { from { opacity: 0; transform: translateY(46px) rotate(.5deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
     @media (prefers-reduced-motion: reduce) {
@@ -377,7 +378,7 @@
     .bp-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 56px; align-items: center; }
     .bp-map-label { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: rgba(238, 242, 255, .62); text-transform: uppercase; margin-bottom: 16px; }
     .bp-map svg { width: 100%; height: auto; display: block; overflow: visible; }
-    .bp-links line { stroke: rgba(238, 242, 255, .3); stroke-width: 1; stroke-dasharray: 3 5; }
+    .bp-links line { stroke: rgba(238, 242, 255, .34); stroke-width: 1; }
     .bp-nodes a { cursor: pointer; }
     .bp-nodes a rect { fill: rgba(238, 242, 255, .06); stroke: rgba(238, 242, 255, .6); stroke-width: 1; transition: fill .18s ease, stroke .18s ease; }
     .bp-nodes a text { fill: rgba(238, 242, 255, .92); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
@@ -403,8 +404,95 @@
       html.js .reveal { opacity: 1; transform: none; transition: none; }
       .feature-card:hover, .mini-card:hover, .btn:hover { transform: none; box-shadow: none; }
     }
-    /* 萤火光点画布：fixed 全屏，置于内容层之下（z-index 0），JS 生成 */
-    #fireflyCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    /* ---------- 顶栏滚动进度线 ---------- */
+    .scroll-progress {
+      position: absolute; left: 0; bottom: -2px; height: 2px; width: 100%;
+      background: var(--accent); transform: scaleX(0); transform-origin: 0 50%;
+      z-index: 60; pointer-events: none;
+    }
+
+    /* ---------- 分幕滚动叙事（#work 特斯拉式） ---------- */
+    .act {
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px 0;
+    }
+    .act-tag {
+      position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+      font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .26em;
+      color: var(--ink-3); text-transform: uppercase; white-space: nowrap;
+    }
+    .act-num {
+      position: absolute; top: 50%; left: 50%; z-index: 0;
+      transform: translate(-50%, calc(-50% + var(--py, 0px)));
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(9rem, 34vw, 30rem); line-height: 1; letter-spacing: -.04em;
+      color: transparent; -webkit-text-stroke: 1.5px rgba(23, 18, 8, .13);
+      pointer-events: none; user-select: none;
+    }
+    .act > .feature-card, .act > .feature-secondary { position: relative; z-index: 1; }
+    .act .feature-secondary { width: 100%; max-width: 940px; }
+    @media (min-width: 901px) {
+      .act { min-height: 100vh; min-height: 100svh; padding: 56px 0; }
+    }
+
+    /* ---------- Hero 3D 舞台（桌面双栏：左文案右制图台） ---------- */
+    .hero-stage { display: none; }
+    html.js .hero-stage { opacity: 0; transition: opacity .9s ease .2s; }
+    html.js .hero-stage.on { opacity: 1; }
+    .stage-tick { position: absolute; width: 12px; height: 12px; border: 0 solid var(--line-strong); pointer-events: none; }
+    .stage-tick.a { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+    .stage-tick.b { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+    .stage-tick.c { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+    .stage-tick.d { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+    .stage-label {
+      position: absolute; left: 2px; bottom: -30px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+      color: var(--ink-3); text-transform: uppercase; white-space: nowrap;
+    }
+    .stage-label b { color: var(--accent-deep); font-weight: 700; }
+    .stage-fallback { display: none; position: absolute; inset: 6%; width: 88%; height: 88%; }
+    .hero-stage.no3d canvas, html:not(.js) .hero-stage canvas { display: none; }
+    .hero-stage.no3d .stage-fallback, html:not(.js) .stage-fallback { display: block; }
+    html:not(.js) .hero-stage { opacity: 1; }
+    @media (min-width: 1101px) {
+      .hero { align-items: stretch; }
+      .hero-inner {
+        display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 48px; align-items: end;
+      }
+      .hero-title { font-size: clamp(2.9rem, 7.4vw, 6.2rem); }
+      .hero-stage {
+        display: block; position: relative;
+        height: clamp(420px, 58vh, 620px); align-self: end;
+      }
+      .hero-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+      .stamp { z-index: 3; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html.js .hero-stage { transition: none; opacity: 1; }
+    }
+
+    /* ---------- 蓝图描线（JS 进入视口后逐条画出 + 节点点亮） ---------- */
+    html.js .bp-map svg.bp-armed .bp-links line {
+      stroke-dasharray: 1; stroke-dashoffset: 1;
+      transition: stroke-dashoffset .85s cubic-bezier(.4, 0, .2, 1);
+    }
+    html.js .bp-map svg.bp-drawn .bp-links line { stroke-dashoffset: 0; }
+    html.js .bp-map svg.bp-armed .bp-nodes a {
+      opacity: 0; transform: translateY(7px) scale(.93);
+      transform-box: fill-box; transform-origin: center;
+      transition: opacity .5s ease, transform .6s cubic-bezier(.2, 1, .3, 1);
+    }
+    html.js .bp-map svg.bp-drawn .bp-nodes a { opacity: 1; transform: none; }
+    html.js .bp-map svg.bp-drawn .bp-core rect { animation: corePulse 3s ease-in-out 1.2s infinite; }
+    @keyframes corePulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: .35; } }
+    @media (prefers-reduced-motion: reduce) {
+      html.js .bp-map svg .bp-links line, html.js .bp-map svg .bp-nodes a {
+        transition: none; opacity: 1; transform: none; stroke-dashoffset: 0; stroke-dasharray: none;
+      }
+      html.js .bp-map svg .bp-core rect { animation: none; }
+    }
 
     /* ---------- 响应式 ---------- */
     @media (max-width: 980px) {
@@ -467,6 +555,7 @@
       </a>
       <span class="header-reg" aria-hidden="true">FIG. 01 — <b>955827.XYZ</b></span>
     </div>
+    <span class="scroll-progress" id="scrollProgress" aria-hidden="true"></span>
   </header>
 
   <!-- ============== Hero：图纸桌 ============== -->
@@ -478,17 +567,40 @@
     <p class="hero-meta" aria-hidden="true">SHEET 01 / 05 · SCALE 1:1</p>
 
     <div class="container hero-inner">
-      <p class="hero-eyebrow" data-i18n="heroEyebrow">Independent Digital Studio</p>
-      <h1 class="hero-title" data-i18n="heroTitle">Ideas, into<br><em>handy little</em> tools.</h1>
-      <div class="hero-foot">
-        <div>
-          <p class="hero-sub" data-i18n="heroSub">Lightweight products built from real needs with code and AI. What you see here actually works — plus ideas still in exploration.</p>
-          <p class="hero-now"><span class="live-dot" aria-hidden="true"></span><span data-i18n="heroNow">NOW · Voice · FaceTalk · still building</span></p>
+      <div class="hero-copy">
+        <p class="hero-eyebrow" data-i18n="heroEyebrow">Independent Digital Studio</p>
+        <h1 class="hero-title" data-i18n="heroTitle"><span class="line">Ideas, into</span><br><span class="line"><em>handy little</em></span><br><span class="line">tools.</span></h1>
+        <div class="hero-foot">
+          <div>
+            <p class="hero-sub" data-i18n="heroSub">Lightweight products built from real needs with code and AI. What you see here actually works — plus ideas still in exploration.</p>
+            <p class="hero-now"><span class="live-dot" aria-hidden="true"></span><span data-i18n="heroNow">NOW · Voice · FaceTalk · still building</span></p>
+          </div>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#work"><span data-i18n="ctaWork">Explore featured work</span><span class="arr" aria-hidden="true">↓</span></a>
+            <a class="btn btn-ghost" href="#lab"><span data-i18n="ctaLab">About RCJ Lab</span></a>
+          </div>
         </div>
-        <div class="hero-ctas">
-          <a class="btn btn-primary" href="#work"><span data-i18n="ctaWork">Explore featured work</span><span class="arr" aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="#lab"><span data-i18n="ctaLab">About RCJ Lab</span></a>
-        </div>
+      </div>
+
+      <!-- 3D 线框制图台：自托管 three.js，墨线装配体缓慢自转 + 鼠标视差；失败时回退静态 SVG -->
+      <div class="hero-stage" id="heroStage" aria-hidden="true">
+        <canvas id="hero3d"></canvas>
+        <svg class="stage-fallback" viewBox="0 0 220 220">
+          <g fill="none" stroke="#171208" stroke-width="1" opacity=".92">
+            <polygon points="110,26 178,65 178,143 110,182 42,143 42,65" />
+            <polygon points="110,52 156,78 156,130 110,156 64,130 64,78" />
+            <line x1="110" y1="26" x2="110" y2="52" /><line x1="178" y1="65" x2="156" y2="78" />
+            <line x1="178" y1="143" x2="156" y2="130" /><line x1="110" y1="182" x2="110" y2="156" />
+            <line x1="42" y1="143" x2="64" y2="130" /><line x1="42" y1="65" x2="64" y2="78" />
+          </g>
+          <g fill="none" stroke="#c65414" stroke-width="1">
+            <ellipse cx="110" cy="110" rx="96" ry="34" transform="rotate(-18 110 110)" />
+            <ellipse cx="110" cy="110" rx="96" ry="34" transform="rotate(52 110 110)" opacity=".55" />
+          </g>
+        </svg>
+        <span class="stage-tick a"></span><span class="stage-tick b"></span>
+        <span class="stage-tick c"></span><span class="stage-tick d"></span>
+        <p class="stage-label">FIG. 00 — WIREFRAME ASSEMBLY · <b>REV C</b></p>
       </div>
     </div>
 
@@ -526,8 +638,12 @@
           <p class="sec-sub" data-i18n="featSub">Three picks from the bench — the rest are in the index below.</p>
         </header>
 
-        <!-- 头条主推：FaceTalk -->
-        <a class="feature-card reveal" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
+        <div class="acts">
+        <!-- 幕 1 · FaceTalk 主卡 -->
+        <div class="act">
+          <span class="act-tag" aria-hidden="true">SCENE 01 / 02</span>
+          <span class="act-num" aria-hidden="true">01</span>
+          <a class="feature-card reveal" href="https://facetalk.955827.xyz" target="_blank" rel="noopener">
           <div class="feature-info">
             <p class="feature-tag" data-i18n="ftTag">01 / Matching Tool</p>
             <h3 class="feature-name">FaceTalk</h3>
@@ -547,9 +663,13 @@
             </div>
           </div>
         </a>
+        </div><!-- /act 1 -->
 
-        <!-- 次级精选：Exam / Voice -->
-        <div class="feature-secondary">
+        <!-- 幕 2 · Exam + Voice 双卡 -->
+        <div class="act">
+          <span class="act-tag" aria-hidden="true">SCENE 02 / 02</span>
+          <span class="act-num" aria-hidden="true">02</span>
+          <div class="feature-secondary">
           <a class="mini-card reveal" href="https://exam.955827.xyz" target="_blank" rel="noopener">
             <p class="feature-tag" data-i18n="ehTag">02 / Learning</p>
             <h3 class="mini-name">Exam Hub</h3>
@@ -570,7 +690,9 @@
             </div>
             <span class="feature-cta"><span data-i18n="voCta">Listen</span><span aria-hidden="true">↗</span></span>
           </a>
-        </div>
+          </div><!-- /feature-secondary -->
+        </div><!-- /act 2 -->
+        </div><!-- /acts -->
       </div>
     </section>
 
@@ -688,16 +810,16 @@
               <!-- 产品生态蓝图：中枢节点 RCJ LAB + 10 个产品节点（可点击直达），中枢定位的图纸表达 -->
               <svg viewBox="0 0 640 500" role="img" aria-label="RCJ product ecosystem map">
                 <g class="bp-links">
-                  <line x1="320" y1="250" x2="320"   y2="85"  />
-                  <line x1="320" y1="250" x2="452.3" y2="116.5"/>
-                  <line x1="320" y1="250" x2="534"   y2="199" />
-                  <line x1="320" y1="250" x2="534"   y2="301" />
-                  <line x1="320" y1="250" x2="452.3" y2="383.5"/>
-                  <line x1="320" y1="250" x2="320"   y2="415" />
-                  <line x1="320" y1="250" x2="187.7" y2="383.5"/>
-                  <line x1="320" y1="250" x2="106"   y2="301" />
-                  <line x1="320" y1="250" x2="106"   y2="199" />
-                  <line x1="320" y1="250" x2="187.7" y2="116.5"/>
+                  <line pathLength="1" x1="320" y1="250" x2="320"   y2="85"  />
+                  <line pathLength="1" x1="320" y1="250" x2="452.3" y2="116.5"/>
+                  <line pathLength="1" x1="320" y1="250" x2="534"   y2="199" />
+                  <line pathLength="1" x1="320" y1="250" x2="534"   y2="301" />
+                  <line pathLength="1" x1="320" y1="250" x2="452.3" y2="383.5"/>
+                  <line pathLength="1" x1="320" y1="250" x2="320"   y2="415" />
+                  <line pathLength="1" x1="320" y1="250" x2="187.7" y2="383.5"/>
+                  <line pathLength="1" x1="320" y1="250" x2="106"   y2="301" />
+                  <line pathLength="1" x1="320" y1="250" x2="106"   y2="199" />
+                  <line pathLength="1" x1="320" y1="250" x2="187.7" y2="116.5"/>
                 </g>
                 <g class="bp-nodes">
                   <a href="https://exam.955827.xyz" target="_blank" rel="noopener"><rect x="266" y="71" width="108" height="28" rx="2"/><text x="320" y="89" text-anchor="middle">EXAM HUB</text></a>
@@ -746,11 +868,13 @@
     </div>
   </footer>
 
+  <script defer src="assets/vendor/three.min.js"></script>
   <script>
   /* ============ 三语切换（zh / en / ja，单文件字典）+ 轻量滚动显现 ============ */
   (function () {
     'use strict';
 
+    var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var LANGS = ['en', 'zh', 'ja'];
     var DICT = {
       pageTitle: {
@@ -769,9 +893,9 @@
         ja: '独立系デジタルスタジオ'
       },
       heroTitle: {
-        zh: '<span class="line">把想法，做成</span><br><span class="line"><em>顺手</em>的小工具。</span>',
-        en: '<span class="line">Ideas, into</span><br><span class="line"><em>handy little</em> tools.</span>',
-        ja: '<span class="line">アイデアを、</span><br><span class="line"><em>手になじむ</em>ツールに。</span>'
+        zh: '<span class="line">把想法，</span><br><span class="line">做成<em>顺手</em>的</span><br><span class="line">小工具。</span>',
+        en: '<span class="line">Ideas, into</span><br><span class="line"><em>handy little</em></span><br><span class="line">tools.</span>',
+        ja: '<span class="line">アイデアを、</span><br><span class="line"><em>手になじむ</em></span><br><span class="line">ツールに。</span>'
       },
       heroSub: {
         zh: '从真实需求出发，用代码与 AI 构建轻量产品。这里展示已经做出来的东西，也记录仍在探索的想法。',
@@ -902,6 +1026,179 @@
       for (var r = 0; r < reveals.length; r++) io.observe(reveals[r]);
     } else {
       showAll();
+    }
+
+    /* ---------- 顶栏进度线 + 分幕背景编号视差（单 rAF 滚动通道） ---------- */
+    var progBar = document.getElementById('scrollProgress');
+    var actNums = document.querySelectorAll('.act-num');
+    var scrollTicking = false;
+    function onScrollFX() {
+      scrollTicking = false;
+      var doc = document.documentElement;
+      if (progBar) {
+        var max = doc.scrollHeight - doc.clientHeight;
+        var top = window.pageYOffset || doc.scrollTop || 0;
+        progBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, top / max) : 0) + ')';
+      }
+      if (!REDUCED && actNums.length) {
+        var vh = window.innerHeight || 1;
+        for (var i = 0; i < actNums.length; i++) {
+          var box = actNums[i].getBoundingClientRect();
+          var off = box.top + box.height / 2 - vh / 2;
+          actNums[i].style.setProperty('--py', (-off * 0.12).toFixed(1) + 'px');
+        }
+      }
+    }
+    window.addEventListener('scroll', function () {
+      if (!scrollTicking) { scrollTicking = true; window.requestAnimationFrame(onScrollFX); }
+    }, { passive: true });
+    onScrollFX();
+
+    /* ---------- 蓝图描线：进入视口后逐条画出 + 节点错峰点亮 ---------- */
+    (function () {
+      var svg = document.querySelector('.bp-map svg');
+      if (!svg || REDUCED || !('IntersectionObserver' in window)) return;
+      var lines = svg.querySelectorAll('.bp-links line');
+      var nodes = svg.querySelectorAll('.bp-nodes a');
+      svg.classList.add('bp-armed');
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (!entries[i].isIntersecting) continue;
+          io.disconnect();
+          for (var j = 0; j < lines.length; j++) lines[j].style.transitionDelay = (j * 90) + 'ms';
+          for (var k = 0; k < nodes.length; k++) nodes[k].style.transitionDelay = (k * 90 + 420) + 'ms';
+          svg.classList.add('bp-drawn');
+          break;
+        }
+      }, { threshold: 0.35 });
+      io.observe(svg);
+    })();
+
+    /* ---------- Three.js 线框制图台（自托管；THREE 缺失时回退静态 SVG） ---------- */
+    function initHero3D() {
+      var stage = document.getElementById('heroStage');
+      if (!stage) return;
+      var finish = function () { stage.classList.add('on'); };
+      var canvas = document.getElementById('hero3d');
+      var renderer = null;
+      if (window.THREE && canvas) {
+        try {
+          renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        } catch (err) { renderer = null; }
+      }
+      if (!renderer) { stage.classList.add('no3d'); finish(); return; }
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 60);
+      camera.position.set(0, 0.15, 8.2);
+
+      var INK = 0x171208, ORANGE = 0xc65414;
+      var root = new THREE.Group();
+      var spin = new THREE.Group();
+      root.add(spin);
+      scene.add(root);
+
+      function wire(geo, color, opacity) {
+        return new THREE.LineSegments(
+          new THREE.EdgesGeometry(geo),
+          new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity })
+        );
+      }
+      spin.add(wire(new THREE.IcosahedronGeometry(1.5, 0), INK, 0.95));
+      spin.add(wire(new THREE.OctahedronGeometry(0.72, 0), ORANGE, 0.9));
+
+      /* 轨道环：外层 holder 定倾角，环自身绕 z 自转 → 环上小实体沿轨道公转 */
+      function makeOrbit(radius, color, opacity, tiltX, tiltY, satGeo, satColor, satX) {
+        var holder = new THREE.Group();
+        holder.rotation.x = tiltX;
+        holder.rotation.y = tiltY;
+        var pts = [];
+        for (var i = 0; i <= 140; i++) {
+          var a = (i / 140) * Math.PI * 2;
+          pts.push(new THREE.Vector3(Math.cos(a) * radius, Math.sin(a) * radius, 0));
+        }
+        var ring = new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(pts),
+          new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity })
+        );
+        holder.add(ring);
+        var sat = wire(satGeo, satColor, 1);
+        sat.position.set(satX, 0, 0);
+        ring.add(sat);
+        root.add(holder);
+        return ring;
+      }
+      var orbitA = makeOrbit(2.05, INK, 0.45, Math.PI / 2.4, 0.5, new THREE.IcosahedronGeometry(0.07, 0), INK, -2.05);
+      var orbitB = makeOrbit(2.32, ORANGE, 0.62, Math.PI / 1.9, -0.7, new THREE.OctahedronGeometry(0.1, 0), ORANGE, 2.32);
+
+      /* 鼠标视差目标值（仅精确指针设备） */
+      var tx = 0, ty = 0, mx = 0, my = 0;
+      var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      if (fine) {
+        window.addEventListener('mousemove', function (e) {
+          tx = e.clientX / Math.max(1, window.innerWidth) - 0.5;
+          ty = e.clientY / Math.max(1, window.innerHeight) - 0.5;
+        }, { passive: true });
+      }
+
+      function renderStatic() {
+        spin.rotation.y = 0.6;
+        spin.rotation.x = 0.08;
+        orbitA.rotation.z = 1.2;
+        orbitB.rotation.z = 0.4;
+        renderer.render(scene, camera);
+      }
+      function size() {
+        var w = stage.clientWidth || 1;
+        var h = stage.clientHeight || 1;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        if (REDUCED) renderStatic();
+      }
+
+      if (REDUCED) { size(); finish(); return; }
+
+      /* 页面隐藏 / 舞台滚出视口时跳过渲染 */
+      var pageVisible = true, inView = true;
+      document.addEventListener('visibilitychange', function () { pageVisible = !document.hidden; });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          inView = entries[0].isIntersecting;
+        }, { threshold: 0.02 }).observe(stage);
+      }
+
+      var t0 = performance.now();
+      function renderFrame(now) {
+        var t = (now - t0) / 1000;
+        mx += (tx - mx) * 0.045;
+        my += (ty - my) * 0.045;
+        spin.rotation.y = t * 0.28;
+        spin.rotation.x = Math.sin(t * 0.23) * 0.08;
+        orbitA.rotation.z = -t * 0.5;
+        orbitB.rotation.z = t * 0.34;
+        root.rotation.y = mx * 0.55;
+        root.rotation.x = -0.16 + my * 0.35;
+        camera.position.z = 8.2 + Math.sin(t * 0.4) * 0.1;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      function loop(now) {
+        window.requestAnimationFrame(loop);
+        if (pageVisible && inView) renderFrame(now);
+      }
+
+      size();
+      if ('ResizeObserver' in window) new ResizeObserver(size).observe(stage);
+      else window.addEventListener('resize', size);
+      finish();
+      window.requestAnimationFrame(loop);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHero3D);
+    } else {
+      initHero3D();
     }
   })();
   </script>
