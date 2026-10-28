@@ -238,6 +238,7 @@
     .marquee-track .sep { color: var(--accent); padding: 0 18px; }
     @keyframes mq { to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
 
     /* ---------- 通用区块（顶部粗实线 = 图纸分幅线） ---------- */
     .section { padding: 92px 0 100px; border-top: 2px solid var(--ink); }
@@ -387,10 +388,6 @@
     .bp-core rect { fill: rgba(255, 215, 138, .13); stroke: #ffd78a; stroke-width: 1.5; }
     .bp-core text { fill: #ffd78a; font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: .2em; }
 
-    /* ---------- Blog ---------- */
-    .blog-line { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 400; letter-spacing: -.01em; max-width: 24em; line-height: 1.2; }
-    .blog .btn { margin-top: 30px; }
-
     /* ---------- 页脚（链接克制：0 链接） ---------- */
     .site-footer { border-top: 2px solid var(--ink); padding: 30px 0 40px; }
     .footer-inner { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
@@ -410,6 +407,47 @@
       background: var(--accent); transform: scaleX(0); transform-origin: 0 50%;
       z-index: 60; pointer-events: none;
     }
+
+    /* ---------- 智能顶栏：下滑隐藏、上滑浮现（特斯拉式沉浸） ---------- */
+    .site-header { transition: transform .32s ease; will-change: transform; }
+    .site-header.is-hidden { transform: translateY(-100%); }
+    @media (prefers-reduced-motion: reduce) { .site-header { transition: none; } }
+
+    /* ---------- 侧边点导航（difference 混合，明暗底自适应） ---------- */
+    .dot-nav {
+      position: fixed; right: 26px; top: 50%; z-index: 45;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 14px;
+      mix-blend-mode: difference;
+    }
+    .dot-nav a { display: flex; flex-direction: row-reverse; align-items: center; gap: 10px; padding: 4px; }
+    .dot-nav a i {
+      width: 9px; height: 9px; border-radius: 50%; flex: none;
+      border: 1.5px solid #fff;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .dot-nav .dot-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #fff;
+      opacity: 0; transform: translateX(6px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .dot-nav a:hover .dot-label, .dot-nav a:focus-visible .dot-label, .dot-nav a.active .dot-label { opacity: .9; transform: translateX(0); }
+    .dot-nav a.active i { background: #fff; transform: scale(1.3); }
+    @media (max-width: 1100px) { .dot-nav { display: none; } }
+    @media (prefers-reduced-motion: reduce) { .dot-nav a i, .dot-nav .dot-label { transition: none; } }
+
+    /* ---------- #projects 深色索引带：明暗交替的电影感节奏 ---------- */
+    #projects { background: var(--ink); color: var(--paper); border-top: 0; }
+    #projects .sec-num { color: #e8833f; }
+    #projects .sec-sub { color: rgba(243, 239, 229, .55); }
+    #projects .bom { border-top-color: rgba(243, 239, 229, .85); }
+    #projects .bom-head { color: rgba(243, 239, 229, .45); }
+    #projects .bom-row { border-bottom-color: rgba(243, 239, 229, .14); }
+    #projects .bom-row:hover { background: rgba(198, 84, 20, .25); }
+    #projects .bom-no { color: #e8833f; }
+    #projects .bom-desc { color: rgba(243, 239, 229, .68); }
+    #projects .bom-status { border-color: rgba(243, 239, 229, .35); color: rgba(243, 239, 229, .8); }
+    #projects .bom-arr { color: var(--paper); }
 
     /* ---------- 分幕滚动叙事（#work 特斯拉式） ---------- */
     .act {
@@ -552,6 +590,14 @@
     </div>
     <span class="scroll-progress" id="scrollProgress" aria-hidden="true"></span>
   </header>
+
+  <!-- 侧边点导航：Top / Work / Projects / Lab -->
+  <nav class="dot-nav" aria-label="Page sections">
+    <a href="#top"><span class="dot-label">Top</span><i aria-hidden="true"></i></a>
+    <a href="#work"><span class="dot-label">Work</span><i aria-hidden="true"></i></a>
+    <a href="#projects"><span class="dot-label">Projects</span><i aria-hidden="true"></i></a>
+    <a href="#lab"><span class="dot-label">Lab</span><i aria-hidden="true"></i></a>
+  </nav>
 
   <!-- ============== Hero：图纸桌 ============== -->
   <section class="hero" id="top">
@@ -836,18 +882,6 @@
         </div>
       </div>
     </section>
-
-    <!-- ============== 04 · Blog ============== -->
-    <section class="section blog" id="blog">
-      <div class="container">
-        <header class="sec-head reveal">
-          <span class="sec-num" aria-hidden="true">04</span>
-          <h2 class="sec-title" data-i18n="blogTitle">Blog</h2>
-        </header>
-        <p class="blog-line reveal" data-i18n="blogLine">Recent posts, build logs and product thinking.</p>
-        <a class="btn btn-primary reveal" href="https://blog.955827.xyz" target="_blank" rel="noopener"><span data-i18n="blogCta">Visit Blog</span><span class="arr" aria-hidden="true">↗</span></a>
-      </div>
-    </section>
   </main>
 
   <!-- ============== 页脚（链接克制：0 链接） ============== -->
@@ -964,13 +998,6 @@
         en: 'This very site is one of the experiments.',
         ja: 'このサイト自体が、実験のひとつ。'
       },
-      blogTitle: { zh: 'Blog', en: 'Blog', ja: 'Blog' },
-      blogLine: {
-        zh: '近期文章、构建记录与产品思考。',
-        en: 'Recent posts, build logs and product thinking.',
-        ja: '最新記事、構築ログ、プロダクト考察。'
-      },
-      blogCta: { zh: '进入 Blog', en: 'Visit Blog', ja: 'Blog へ' },
       footerPowered: { zh: 'Powered by Cloudflare Pages', en: 'Powered by Cloudflare Pages', ja: 'Powered by Cloudflare Pages' },
       footerNote: { zh: '手工构建，每日验证。', en: 'Built by hand, validated daily.', ja: '手作りで、毎日検証。' }
     };
@@ -1021,18 +1048,26 @@
       showAll();
     }
 
-    /* ---------- 顶栏进度线 + 分幕背景编号视差（单 rAF 滚动通道） ---------- */
+    /* ---------- 顶栏进度线 + 智能顶栏 + 分幕背景编号视差（单 rAF 滚动通道） ---------- */
     var progBar = document.getElementById('scrollProgress');
+    var siteHeader = document.querySelector('.site-header');
     var actNums = document.querySelectorAll('.act-num');
     var scrollTicking = false;
+    var lastY = 0;
     function onScrollFX() {
       scrollTicking = false;
       var doc = document.documentElement;
+      var top = window.pageYOffset || doc.scrollTop || 0;
       if (progBar) {
         var max = doc.scrollHeight - doc.clientHeight;
-        var top = window.pageYOffset || doc.scrollTop || 0;
         progBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, top / max) : 0) + ')';
       }
+      /* 下滑且过 160px 时收起顶栏，上滑或近顶部时浮现 */
+      if (siteHeader) {
+        if (top > 160 && top > lastY + 4) siteHeader.classList.add('is-hidden');
+        else if (top < lastY - 4 || top <= 160) siteHeader.classList.remove('is-hidden');
+      }
+      lastY = top;
       if (!REDUCED && actNums.length) {
         var vh = window.innerHeight || 1;
         for (var i = 0; i < actNums.length; i++) {
@@ -1065,6 +1100,29 @@
         }
       }, { threshold: 0.35 });
       io.observe(svg);
+    })();
+
+    /* ---------- 侧边点导航：当前区块高亮（中带检测，滚动两向均生效） ---------- */
+    (function () {
+      var nav = document.querySelector('.dot-nav');
+      if (!nav || !('IntersectionObserver' in window)) return;
+      var links = nav.querySelectorAll('a');
+      var byId = {};
+      for (var i = 0; i < links.length; i++) {
+        byId[links[i].getAttribute('href').slice(1)] = links[i];
+      }
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (!entries[i].isIntersecting) continue;
+          var id = entries[i].target.id;
+          for (var k in byId) byId[k].classList[k === id ? 'add' : 'remove']('active');
+        }
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      for (var sid in byId) {
+        var sec = document.getElementById(sid);
+        if (sec) io.observe(sec);
+      }
+      if (byId.top) byId.top.classList.add('active');
     })();
 
     /* ---------- Three.js 线框制图台（自托管；THREE 缺失时回退静态 SVG） ---------- */
