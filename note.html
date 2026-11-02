@@ -254,8 +254,36 @@
       cursor: pointer; opacity: 0; transition: opacity .15s, color .15s, background .15s;
       padding: 3px 7px; border-radius: 2px;
     }
-    .note-card:hover .note-del, .note-del:focus-visible { opacity: 1; }
+    .note-edit {
+      position: absolute; top: 8px; right: 30px; z-index: 3;
+      border: none; background: none; color: var(--ink-3);
+      font-size: 14px; line-height: 1;
+      cursor: pointer; opacity: 0; transition: opacity .15s, color .15s, background .15s;
+      padding: 4px 6px; border-radius: 2px;
+    }
+    .note-card:hover .note-del, .note-del:focus-visible,
+    .note-card:hover .note-edit, .note-edit:focus-visible { opacity: 1; }
     .note-del:hover { color: var(--paper); background: var(--accent); }
+    .note-edit:hover { color: var(--paper); background: var(--ink); }
+    .note-card.editing .note-del, .note-card.editing .note-edit { display: none; }
+    .note-card.editing { border-color: var(--accent); --rot: 0deg; }
+
+    /* 就地编辑器 */
+    .edit-ta {
+      width: 100%; min-height: 110px; resize: vertical;
+      border: 1px solid var(--line); border-radius: 2px;
+      background: var(--paper); color: var(--ink);
+      font: inherit; font-size: 14.5px; line-height: 1.7;
+      padding: 8px 10px; outline: none;
+      transition: border-color .15s ease;
+    }
+    .edit-ta:focus { border-color: var(--accent); }
+    .edit-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+    .edit-foot .btn { padding: 8px 18px; font-size: 11px; }
+    .note-edited {
+      color: var(--accent-deep); margin-left: 7px;
+      letter-spacing: .06em;
+    }
 
     .note-empty, .note-loading {
       padding: 64px 0; text-align: center; grid-column: 1 / -1;
@@ -401,14 +429,16 @@
     }
 
     function noteOf(n, num) {
-      const h = hashStr(n.id || '');
+      const h = hashStr(String(n.id == null ? '' : n.id));
       const nc = BAR_COLORS[h % BAR_COLORS.length];
       const no = 'NO.' + String(num).padStart(3, '0');
-      return '<article class="note-card" style="--nc:' + nc + '">'
+      const edited = n.updated_at ? '<span class="note-edited">· EDITED ' + esc(fmtTime(n.updated_at)) + '</span>' : '';
+      return '<article class="note-card" style="--nc:' + nc + '" data-id="' + n.id + '">'
+        + '<button class="note-edit" title="Edit / Annotate" data-id="' + n.id + '">✎</button>'
         + '<button class="note-del" title="Delete" data-id="' + n.id + '">×</button>'
         + '<div class="note-head">'
         + '<span class="note-no"><i aria-hidden="true"></i>' + no + '</span>'
-        + '<span class="note-time">' + esc(fmtTime(n.created_at)) + '</span>'
+        + '<span class="note-time">' + esc(fmtTime(n.created_at)) + edited + '</span>'
         + '</div>'
         + '<div class="note-text">' + esc(n.text) + '</div>'
         + '</article>';
@@ -456,6 +486,9 @@
       el.querySelectorAll('.note-card').forEach((card, i) => { card.style.animationDelay = Math.min(i, 24) * 50 + 'ms'; });
       el.querySelectorAll('.note-del').forEach((b) => {
         b.addEventListener('click', () => del(b.dataset.id));
+      });
+      el.querySelectorAll('.note-edit').forEach((b) => {
+        b.addEventListener('click', () => startEdit(b.closest('.note-card'), b.dataset.id));
       });
     }
 
@@ -531,6 +564,46 @@
       }
       if (r.ok && r.data && r.data.ok) load();
       else alert((r.data && r.data.error) || 'Delete failed');
+    }
+
+    // 就地编辑/批注：卡片变输入框，保存走 PUT（保留原时间，记 EDITED）
+    function startEdit(cardEl, id) {
+      if (!cardEl || cardEl.classList.contains('editing')) return;
+      const note = ALL_NOTES.find((n) => String(n.id) === String(id));
+      if (!note) return;
+      const textEl = cardEl.querySelector('.note-text');
+      if (!textEl) return;
+      cardEl.classList.add('editing');
+      const wrap = document.createElement('div');
+      wrap.className = 'edit-area';
+      wrap.innerHTML = '<textarea class="edit-ta" maxlength="6000"></textarea>'
+        + '<div class="edit-foot">'
+        + '<button class="btn-ghost edit-cancel">Cancel</button>'
+        + '<button class="btn edit-save">Save</button>'
+        + '</div>';
+      const ta = wrap.querySelector('.edit-ta');
+      ta.value = textEl.textContent;
+      textEl.replaceWith(wrap);
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+      wrap.querySelector('.edit-cancel').addEventListener('click', () => render());
+      wrap.querySelector('.edit-save').addEventListener('click', () => saveEdit(id, ta));
+      ta.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveEdit(id, ta);
+        if (e.key === 'Escape') render();
+      });
+    }
+
+    async function saveEdit(id, ta) {
+      const text = ta.value.trim();
+      if (!text) { ta.focus(); return; }
+      let r = await api('PUT', '/api/notes', { id: Number(id), text });
+      if (r.status === 401) {
+        if (!(await requireLogin())) return;
+        r = await api('PUT', '/api/notes', { id: Number(id), text });
+      }
+      if (r.ok && r.data && r.data.ok) load();
+      else alert((r.data && r.data.error) || 'Save failed');
     }
 
     function updateHint(text) {
