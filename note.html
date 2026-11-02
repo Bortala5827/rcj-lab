@@ -197,54 +197,72 @@
       background: transparent; color: var(--ink-2);
       transition: all .15s ease;
     }
+    .chip i {
+      display: inline-block; width: 7px; height: 7px; border-radius: 2px;
+      margin-right: 8px; vertical-align: 1px;
+    }
     .chip:hover { border-color: var(--line-strong); color: var(--ink); }
     .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-    /* ---------- 便签墙：归档索引卡（微倾斜 = 钉在桌面上） ---------- */
+    /* ---------- 便签墙：淡彩纸卡（Keep 式身份色 × 手账胶带） ---------- */
     .board {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
-      gap: 18px;
+      gap: 20px 18px;
       align-items: start; /* 卡片贴合内容高度，不被同行长文拉成等高 */
-      padding: 6px 0 20px;
+      padding: 14px 0 20px; /* 顶部留出胶带空间 */
     }
     .note-card {
       position: relative;
       --rot: 0deg;
-      background: var(--card);
-      border: 1px solid var(--line);
+      --tape: -1.6deg;
+      background: var(--pc, var(--card));
+      border: 1px solid color-mix(in srgb, var(--pc-ink, #171208) 14%, transparent);
       border-radius: 2px;
       padding: 14px 16px 18px;
-      color: var(--ink);
+      color: var(--pc-ink, var(--ink));
       box-shadow: 0 1px 0 rgba(23, 18, 8, .05);
       min-height: 96px;
       transform: rotate(var(--rot));
       transition: translate .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
       animation: noteUp .55s cubic-bezier(.16, 1, .3, 1) both;
     }
-    .note-card:nth-child(3n+1) { --rot: -.35deg; }
-    .note-card:nth-child(3n+2) { --rot: .3deg; }
-    .note-card:nth-child(3n)   { --rot: -.12deg; }
+    .note-card:nth-child(3n+1) { --rot: -.35deg; --tape: -2deg; }
+    .note-card:nth-child(3n+2) { --rot: .3deg; --tape: 1.8deg; }
+    .note-card:nth-child(3n)   { --rot: -.12deg; --tape: -.6deg; }
+    /* 顶部半透明胶带（微旋转，压住卡片上缘） */
+    .note-card::before {
+      content: ""; position: absolute; top: -10px; left: 50%; z-index: 2;
+      width: 78px; height: 20px;
+      transform: translateX(-50%) rotate(var(--tape));
+      background: linear-gradient(180deg, rgba(255, 252, 240, .66), rgba(255, 252, 240, .46));
+      border: 1px solid rgba(23, 18, 8, .06);
+      border-radius: 1px;
+      box-shadow: 0 1px 3px rgba(23, 18, 8, .1);
+      pointer-events: none;
+    }
     .note-card:hover {
       translate: 0 -4px;
-      border-color: var(--line-strong);
-      box-shadow: 0 12px 26px rgba(23, 18, 8, .12), 0 1px 0 rgba(23, 18, 8, .06);
+      border-color: color-mix(in srgb, var(--pc-deep, #171208) 45%, transparent);
+      box-shadow:
+        0 12px 26px color-mix(in srgb, var(--pc-deep, #171208) 16%, rgba(23, 18, 8, .1)),
+        0 1px 0 rgba(23, 18, 8, .06);
     }
     .note-head {
       display: flex; align-items: center; gap: 9px;
       font-family: var(--mono); font-size: 10.5px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
-      margin-bottom: 10px; padding-right: 26px;
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 10px; padding-right: 56px;
     }
-    .note-no { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-2); }
+    .note-no { display: inline-flex; align-items: center; gap: 7px; color: var(--pc-ink, var(--ink-2)); }
     .note-no i {
-      width: 9px; height: 9px; border-radius: 2px; background: var(--nc, var(--accent));
+      width: 9px; height: 9px; border-radius: 2px; background: var(--pc-deep, var(--accent));
       transition: box-shadow .25s ease;
     }
-    .note-card:hover .note-no i { box-shadow: 0 0 0 3px color-mix(in srgb, var(--nc, var(--accent)) 22%, transparent); }
-    .note-time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--ink-3); }
+    .note-card:hover .note-no i { box-shadow: 0 0 0 3px color-mix(in srgb, var(--pc-deep, var(--accent)) 24%, transparent); }
+    .note-time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--pc-sub, var(--ink-3)); }
     .note-text {
-      font-size: 14.5px; line-height: 1.72; color: var(--ink-2);
+      font-size: 14.5px; line-height: 1.72; color: var(--pc-ink, var(--ink-2));
       white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
     }
     .note-del {
@@ -285,6 +303,20 @@
       letter-spacing: .06em;
     }
 
+    /* 保存成功轻提示 */
+    #toast {
+      position: fixed; left: 50%; bottom: 34px; z-index: 60;
+      transform: translateX(-50%) translateY(14px);
+      background: var(--ink); color: var(--paper);
+      font-family: var(--mono); font-size: 11.5px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: 10px 22px; border-radius: 2px;
+      box-shadow: 0 8px 22px rgba(23, 18, 8, .25);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
     .note-empty, .note-loading {
       padding: 64px 0; text-align: center; grid-column: 1 / -1;
       font-family: var(--mono); font-size: 12px; font-weight: 700;
@@ -298,6 +330,7 @@
     @media (prefers-reduced-motion: reduce) {
       .note-card { animation: none; transition: none; }
       .btn:hover, .btn-ghost:hover { transform: none; }
+      #toast { transition: opacity .25s ease; transform: translateX(-50%); }
     }
 
     /* ---------- 页脚（与主站一致，0 链接） ---------- */
@@ -380,8 +413,18 @@
     let ALL_NOTES = [];
     let state = { q: '', year: null };
 
-    // 归档卡左上角标色调色板（暖色系，哈希取色保持每条稳定）
-    const BAR_COLORS = ['#c65414', '#b3401e', '#8a6a1f', '#3f6f4f', '#1a3591', '#6b4a8f', '#8a3b52'];
+    // 淡彩纸色调色板（Keep 式身份色：哈希稳定取色；bg 纸色 / ink 墨 / sub 弱墨 / deep 色标与 glow）
+    const PAPER_TONES = [
+      { bg: '#f9efc8', ink: '#3a3110', sub: '#97884f', deep: '#a8861a' }, // 奶油黄
+      { bg: '#f7e1dd', ink: '#4a2a24', sub: '#a5766e', deep: '#c0574a' }, // 雾粉
+      { bg: '#dfe9f3', ink: '#253648', sub: '#6e86a0', deep: '#3a5f8a' }, // 灰蓝
+      { bg: '#e0ecd9', ink: '#2c4226', sub: '#6f8a66', deep: '#4a7c3f' }, // 豆绿
+      { bg: '#f8e5cb', ink: '#4a331c', sub: '#a6885f', deep: '#c07a2a' }, // 杏橙
+      { bg: '#e9e2f2', ink: '#3b2f52', sub: '#8272a0', deep: '#7458ad' }, // 淡紫
+      { bg: '#fbf8f1', ink: '#3d3626', sub: '#8d8471', deep: '#c65414' }  // 米白（主站纸）
+    ];
+    // 年份筛选色点（与纸色系同族）
+    const YEAR_DOTS = ['#a8861a', '#c0574a', '#3a5f8a', '#4a7c3f', '#7458ad', '#c07a2a'];
 
     function hashStr(s) {
       let h = 0;
@@ -429,11 +472,11 @@
     }
 
     function noteOf(n, num) {
-      const h = hashStr(String(n.id == null ? '' : n.id));
-      const nc = BAR_COLORS[h % BAR_COLORS.length];
+      const t = PAPER_TONES[hashStr(String(n.id == null ? '' : n.id)) % PAPER_TONES.length];
       const no = 'NO.' + String(num).padStart(3, '0');
       const edited = n.updated_at ? '<span class="note-edited">· EDITED ' + esc(fmtTime(n.updated_at)) + '</span>' : '';
-      return '<article class="note-card" style="--nc:' + nc + '" data-id="' + n.id + '">'
+      const vars = '--pc:' + t.bg + ';--pc-ink:' + t.ink + ';--pc-sub:' + t.sub + ';--pc-deep:' + t.deep;
+      return '<article class="note-card" style="' + vars + '" data-id="' + n.id + '">'
         + '<button class="note-edit" title="Edit / Annotate" data-id="' + n.id + '">✎</button>'
         + '<button class="note-del" title="Delete" data-id="' + n.id + '">×</button>'
         + '<div class="note-head">'
@@ -450,7 +493,8 @@
       const items = ['All', ...years];
       wrap.innerHTML = items.map((y) => {
         const active = (y === 'All' && state.year == null) || y === state.year;
-        return '<span class="chip' + (active ? ' active' : '') + '" data-year="' + (y === 'All' ? '' : y) + '">' + y + '</span>';
+        const dot = y === 'All' ? '' : '<i style="background:' + YEAR_DOTS[Number(y) % YEAR_DOTS.length] + '"></i>';
+        return '<span class="chip' + (active ? ' active' : '') + '" data-year="' + (y === 'All' ? '' : y) + '">' + dot + y + '</span>';
       }).join('');
       wrap.querySelectorAll('.chip').forEach((c) => {
         c.addEventListener('click', () => {
@@ -597,19 +641,49 @@
     async function saveEdit(id, ta) {
       const text = ta.value.trim();
       if (!text) { ta.focus(); return; }
+      // 防护：编辑器若已随 DOM 重建失效（卡片被重建/编辑态丢失），提交的将是旧文本——直接拒绝并提示
+      const card = ta.closest('.note-card');
+      if (!ta.isConnected || !card || !card.classList.contains('editing')) {
+        alert('编辑态已失效，请重新点 ✎ 编辑后再保存');
+        return;
+      }
       let r = await api('PUT', '/api/notes', { id: Number(id), text });
       if (r.status === 401) {
-        if (!(await requireLogin())) return;
+        if (!(await requireLogin())) { alert('未登录，保存未完成'); return; }
         r = await api('PUT', '/api/notes', { id: Number(id), text });
       }
-      if (r.ok && r.data && r.data.ok) load();
-      else alert((r.data && r.data.error) || 'Save failed');
+      if (r.ok && r.data && r.data.ok) {
+        // 乐观更新：直接采用服务端回传的行，立即反映修改（不依赖随后的全量拉取）
+        const saved = r.data.note;
+        if (saved) {
+          const n = ALL_NOTES.find((x) => String(x.id) === String(saved.id));
+          if (n) { n.text = saved.text; n.updated_at = saved.updated_at; }
+          render();
+        }
+        load();
+        toast('Saved ✓');
+      } else alert((r.data && r.data.error) || 'Save failed');
     }
 
     function updateHint(text) {
       const h = document.getElementById('hint');
       h.textContent = text || '';
       h.classList.toggle('warn', !!text && /上限|过长|Limit|failed/i.test(text));
+    }
+
+    // 轻提示（保存成功等），2 秒自动消失
+    let toastTimer = null;
+    function toast(msg) {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
     }
 
     document.getElementById('input').addEventListener('keydown', (e) => {

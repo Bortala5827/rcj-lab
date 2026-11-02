@@ -92,11 +92,21 @@ export async function onRequestPut({ request, env }) {
   try {
     await ensureTable(env);
     const updated_at = new Date().toISOString();
-    const r = await env.DB.prepare('UPDATE notes SET text = ?, updated_at = ? WHERE id = ?')
+    const run = () => env.DB.prepare('UPDATE notes SET text = ?, updated_at = ? WHERE id = ?')
       .bind(text, updated_at, id)
       .run();
-    if (!r.meta || r.meta.changes === 0) return json({ ok: false, error: '便签不存在' }, 404);
-    return json({ ok: true });
+    let r;
+    try {
+      r = await run();
+    } catch (e) {
+      // 自愈：老表若缺 updated_at 列（惰性迁移未生效），补列后重试一次
+      if (!/no such column/i.test(e.message || '')) throw e;
+      await env.DB.prepare('ALTER TABLE notes ADD COLUMN updated_at TEXT').run();
+      r = await run();
+    }
+    if (!r.meta || !r.meta.changes) return json({ ok: false, error: '便签不存在' }, 404);
+    // 回传更新后的行：前端直接采用，界面立即反映，不依赖随后的全量拉取
+    return json({ ok: true, note: { id, text, updated_at } });
   } catch (e) {
     return json({ ok: false, error: e.message }, 500);
   }
