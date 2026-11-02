@@ -3,304 +3,321 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b0d16" />
+  <meta name="theme-color" content="#f3efe5" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Notes · RCJ Lab</title>
   <meta name="description" content="Private notes — jotted down as they come." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5b355'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='system-ui' font-size='34' font-weight='800' fill='%2313101a'%3ER%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" href="assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/space-mono-700.woff2" as="font" type="font/woff2" crossorigin />
   <style>
+    /* ============================================================
+       RCJ Lab · /note 改版 2026-11-02「Field Notes · 档案卡片」
+       与主站「Drafting Desk」同语言：纸面排版 + 工程图纸标注
+       字体：Instrument Serif（display）+ Space Mono（标注）+ 系统正文
+       ============================================================ */
+    @font-face {
+      font-family: "Instrument Serif";
+      src: url("assets/fonts/instrument-serif-400.woff2") format("woff2");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("assets/fonts/space-mono-400.woff2") format("woff2");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("assets/fonts/space-mono-700.woff2") format("woff2");
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
     :root {
-      --bg: #0b0d16;
-      --ink: #f4f1ea;
-      --ink-2: #c2bdb2;
-      --ink-3: #8f8a7e;
-      --ink-4: #6b675c;
-      --line: rgba(255, 255, 255, .1);
-      --accent: #f5b355;
-      --accent-bright: #ffd78a;
-      --accent-soft: rgba(245, 179, 85, .12);
-      --accent-line: rgba(245, 179, 85, .38);
-      --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
+      --paper: #f3efe5;
+      --paper-2: #ebe5d6;
+      --card: #fbf8f1;
+      --ink: #171208;
+      --ink-2: #514a3b;
+      --ink-3: #8d8471;
+      --line: rgba(23, 18, 8, .16);
+      --line-strong: rgba(23, 18, 8, .8);
+      --accent: #c65414;
+      --accent-deep: #a03f08;
+      --accent-soft: rgba(198, 84, 20, .08);
+      --serif: "Instrument Serif", Georgia, "Times New Roman", "Noto Serif SC", "Songti SC", "SimSun", serif;
+      --mono: "Space Mono", ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-      --serif: Georgia, "Times New Roman", "Noto Serif SC", "Songti SC", "SimSun", serif;
-      --radius: 18px;
-      --maxw: 1080px;
-      /* 暖色米纸便签 */
-      --paper: linear-gradient(158deg, #fbf6ec 0%, #f5ecda 100%);
-      --paper-ink: #2c2418;
-      --paper-ink-2: #6b5b45;
-      --paper-ink-3: #7e6e56;
-      --paper-ink-4: #a89373;
-      --paper-border: rgba(40, 30, 12, .08);
-      --paper-shadow: 0 12px 28px rgba(0, 0, 0, .34), 0 2px 7px rgba(0, 0, 0, .22);
-      --paper-shadow-hi: 0 20px 42px rgba(0, 0, 0, .44), 0 0 0 1px rgba(245, 179, 85, .28);
+      --maxw: 1160px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--sans);
-      background: var(--bg);
+      background: var(--paper);
       color: var(--ink);
       font-size: 16px;
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
+    /* 图纸底网格（极淡，纯 CSS，零请求） */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(23, 18, 8, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 18, 8, .05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 100%);
+    }
     a { color: inherit; text-decoration: none; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    ::selection { background: var(--accent); color: #fff; }
-    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    ::selection { background: var(--ink); color: var(--paper); }
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
     main { position: relative; z-index: 1; }
 
-    /* ---------- 全站固定深空背景（与主站一致：流动雾 + 密星 + 暖光带 + 星点） ---------- */
-    .cosmos {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-      background:
-        radial-gradient(60% 50% at 22% 16%, rgba(245, 179, 85, .16), transparent 62%),
-        radial-gradient(55% 45% at 82% 32%, rgba(140, 180, 255, .12), transparent 62%),
-        linear-gradient(165deg, #10162a, #0b0e1c 45%, #0b0d16);
-      background-size: 200% 200%, 200% 200%, 220% 220%;
-      animation: nebulaDrift 28s ease-in-out infinite alternate;
-    }
-    .cosmos::before {
-      content: ""; position: absolute; inset: 0;
-      background-image:
-        radial-gradient(rgba(255, 255, 255, .55) 1px, transparent 1.6px),
-        radial-gradient(rgba(255, 255, 255, .38) 1px, transparent 1.5px),
-        radial-gradient(rgba(255, 226, 178, .5) 1.4px, transparent 2.2px);
-      background-size: 233px 233px, 371px 371px, 503px 503px;
-      background-position: 0 0, 61px 117px, 149px 37px;
-      animation: twinkle 4.2s ease-in-out infinite;
-    }
-    .cosmos::after {
-      content: ""; position: absolute; inset: 0;
-      background:
-        linear-gradient(90deg, transparent, rgba(245, 179, 85, .14) 30%, rgba(255, 215, 138, .24) 50%, rgba(245, 179, 85, .14) 70%, transparent);
-      background-repeat: no-repeat; background-position: center 44%;
-      background-size: 100% 130px; filter: blur(26px);
-      animation: bandSlide 16s ease-in-out infinite alternate, bandGlow 7s ease-in-out infinite;
-    }
-    .cosmos .stars-b {
-      position: absolute; inset: -8%;
-      background-image:
-        radial-gradient(rgba(255, 224, 176, .45) 1px, transparent 1.4px),
-        radial-gradient(rgba(255, 255, 255, .3) 1px, transparent 1.5px);
-      background-size: 197px 197px, 431px 431px;
-      background-position: 23px 71px, 131px 13px;
-      animation: twinkle 6.5s ease-in-out infinite reverse, drift 60s linear infinite;
-    }
-    .cosmos .stardust { position: absolute; inset: 0; overflow: hidden; mix-blend-mode: screen; }
-    .sd-travel { position: absolute; top: var(--y); left: var(--x); will-change: transform; }
-    .sd-dot {
-      width: var(--s); height: var(--s); border-radius: 50%;
-      background: var(--c); filter: blur(.4px);
-      box-shadow: 0 0 8px 2px var(--glow), 0 0 18px 5px var(--glow-soft);
-      animation: sd-breathe var(--bd) ease-in-out infinite;
-      animation-delay: var(--bdelay);
-    }
-    @keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
-    @keyframes drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-120px, 80px, 0); } }
-    @keyframes nebulaDrift { 0% { background-position: 0% 0%, 100% 0%, 0% 100%; } 100% { background-position: 100% 100%, 0% 100%, 100% 0%; } }
-    @keyframes sd-breathe { 0%, 100% { opacity: .18; transform: scale(.4); } 50% { opacity: 1; transform: scale(1.3); } }
-    @keyframes sd-f1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(10vw, -14vh); } 66% { transform: translate(-5vw, -18vh); } }
-    @keyframes sd-f2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-11vw, 9vh); } 66% { transform: translate(8vw, 14vh); } }
-    @keyframes sd-f3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(14vw, 13vh); } 66% { transform: translate(-9vw, 5vh); } }
-    @keyframes sd-f4 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-14vw, -9vh); } 66% { transform: translate(9vw, -14vh); } }
-    @keyframes bandSlide { from { transform: translateX(-5%); } to { transform: translateX(5%); } }
-    @keyframes bandGlow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
-
-    /* ---------- 萤火虫暖黄光点层（与主站一致） ---------- */
-    .fireflies { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .fireflies i {
-      position: absolute; bottom: -12px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 238, 196, .98) 0%, rgba(247, 212, 138, .5) 42%, rgba(247, 212, 138, 0) 74%);
-      opacity: 0; will-change: transform, opacity;
-      animation: ffRise var(--t, 11s) ease-in-out var(--d, 0s) infinite;
-    }
-    @keyframes ffRise {
-      0% { transform: translate3d(0, 0, 0) scale(.7); opacity: 0; }
-      14% { opacity: var(--o, .8); }
-      55% { opacity: var(--o2, .4); }
-      100% { transform: translate3d(var(--dx, 30px), -96vh, 0) scale(1.15); opacity: 0; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .cosmos, .cosmos::before, .cosmos::after, .cosmos .stars-b,
-      .cosmos .stardust .sd-travel, .cosmos .stardust .sd-dot, .fireflies, .fireflies i { animation: none; }
-    }
-
-    /* ---------- 顶部导航 ---------- */
+    /* ---------- 顶部导航（与主站一致） ---------- */
     .site-header {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(10, 10, 15, .82);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--line);
+      background: rgba(243, 239, 229, .88);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line-strong);
     }
-    .header-inner { display: flex; align-items: center; gap: 22px; min-height: 66px; }
-    .wordmark { display: flex; align-items: center; gap: 11px; }
-    .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 15px; }
-    .wm-name { font-weight: 800; font-size: 15px; letter-spacing: -.01em; }
-    .wm-sub { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--ink-3); text-transform: uppercase; margin-top: 1px; }
-    .nav-right { margin-left: auto; display: flex; gap: 18px; align-items: center; }
-    .nav-link { font-size: 13.5px; color: var(--ink-2); transition: color .15s; }
+    .header-inner { display: flex; align-items: baseline; gap: 14px; min-height: 64px; align-items: center; }
+    .wordmark { display: flex; align-items: baseline; gap: 14px; }
+    .wm-name { font-family: var(--serif); font-size: 24px; font-weight: 400; letter-spacing: -.01em; }
+    .wm-sub { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase; }
+    .header-reg { margin-left: auto; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--ink-3); }
+    .header-reg b { color: var(--accent); font-weight: 700; }
+    .nav-link { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); transition: color .15s; }
     .nav-link:hover { color: var(--accent); }
 
-    /* ---------- 手记布局 ---------- */
-    .note-wrap { max-width: 940px; margin: 0 auto; padding: 56px 0 72px; }
-    .note-hero { margin-bottom: 26px; }
-    .note-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .3em; color: var(--accent); text-transform: uppercase; font-weight: 700; }
-    .note-hero h1 { font-size: clamp(26px, 3.4vw, 34px); font-weight: 800; letter-spacing: -.02em; margin: 8px 0 6px; }
-    .note-hero p { font-size: 14px; color: var(--ink-3); }
+    /* ---------- 手记区 ---------- */
+    .note-wrap { max-width: 940px; margin: 0 auto; padding: 56px 0 88px; }
 
-    /* 输入卡片：暖米纸 */
+    /* Hero（图纸桌同款：mono-tag + 衬线大标 + 定位十字） */
+    .note-hero { position: relative; margin-bottom: 44px; padding-top: 10px; }
+    .reg { position: absolute; width: 18px; height: 18px; pointer-events: none; }
+    .reg::before, .reg::after { content: ""; position: absolute; background: var(--line-strong); }
+    .reg::before { left: 50%; top: 0; width: 1px; height: 100%; }
+    .reg::after { top: 50%; left: 0; height: 1px; width: 100%; }
+    .reg.tl { top: -14px; left: -34px; } .reg.tr { top: -14px; right: -34px; }
+    .note-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--accent-deep);
+    }
+    .note-eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--accent); }
+    .note-hero h1 {
+      margin-top: 16px;
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2.8rem, 6vw, 4.4rem);
+      line-height: 1.02; letter-spacing: -.02em;
+    }
+    .note-hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-meta-row {
+      display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .hero-sub { font-size: 15.5px; color: var(--ink-2); max-width: 52ch; }
+    .hero-count {
+      font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3);
+      border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px;
+      white-space: nowrap;
+    }
+
+    /* ---------- 输入卡：图纸标注式（legend 压线） ---------- */
     .composer {
-      background: var(--paper);
-      border: 1px solid var(--paper-border);
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      box-shadow: var(--paper-shadow);
-      margin-bottom: 20px;
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--line-strong);
+      border-radius: 2px;
+      padding: 26px 20px 16px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 0 rgba(23, 18, 8, .05);
+      transition: border-color .18s ease, box-shadow .18s ease;
     }
+    .composer:focus-within { border-color: var(--accent); box-shadow: 0 2px 0 rgba(198, 84, 20, .18); }
+    .composer .fig {
+      position: absolute; top: -9px; left: 16px; z-index: 2;
+      background: var(--paper); padding: 0 10px;
+      font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--ink-2);
+    }
+    .composer .fig b { color: var(--accent); }
     .composer textarea {
-      width: 100%; min-height: 76px; border: none; outline: none; resize: vertical;
-      font: inherit; font-size: 15px; line-height: 1.7; color: var(--paper-ink); background: transparent;
+      width: 100%; min-height: 110px; border: none; outline: none; resize: vertical;
+      font: inherit; font-size: 15.5px; line-height: 1.75; color: var(--ink); background: transparent;
     }
-    .composer textarea::placeholder { color: var(--paper-ink-4); }
-    .composer .c-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-    .c-hint { font-size: 12px; color: var(--paper-ink-3); }
-    .c-hint.warn { color: #c0392b; }
-    .btn { padding: 8px 22px; font-size: 14px; font-weight: 700; border: none; border-radius: 11px; background: var(--accent); color: #2c1c08; cursor: pointer; transition: background .15s, transform .15s; }
-    .btn:hover { background: var(--accent-bright); transform: translateY(-1px); }
+    .composer textarea::placeholder { color: var(--ink-3); }
+    .composer .c-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 8px; }
+    .c-hint {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+      color: var(--ink-3); font-variant-numeric: tabular-nums;
+    }
+    .c-hint.warn { color: var(--accent-deep); }
 
-    /* 工具栏 */
-    .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
-    .toolbar .search {
-      flex: 1; min-width: 180px; padding: 10px 14px;
-      border: 1px solid var(--paper-border); border-radius: 11px;
-      font: inherit; font-size: 14px; outline: none;
-      background: var(--paper); color: var(--paper-ink);
-      box-shadow: var(--paper-shadow);
+    /* 按钮（主站同款：mono 大写、直角、反色 hover） */
+    .btn {
+      padding: 11px 26px; border-radius: 2px; cursor: pointer;
+      font-family: var(--mono); font-size: 12px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
     }
-    .toolbar .search:focus { border-color: var(--accent-line); }
-    .toolbar .search::placeholder { color: var(--paper-ink-4); }
+    .btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
     .btn-ghost {
-      padding: 9px 15px; font-size: 13px; font-weight: 600;
-      border: 1px solid var(--paper-border); border-radius: 11px;
-      background: var(--paper); color: var(--paper-ink-2); cursor: pointer; transition: border-color .15s, color .15s;
-      box-shadow: var(--paper-shadow);
+      padding: 9px 16px; border-radius: 2px; cursor: pointer;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border: 1px solid var(--line-strong); background: transparent; color: var(--ink);
+      transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
     }
-    .btn-ghost:hover { border-color: var(--accent-line); color: var(--paper-ink); }
+    .btn-ghost:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
 
-    /* 年份筛选 chips */
-    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+    /* 工具栏：下划线搜索 + 直角导出 */
+    .toolbar { display: flex; gap: 12px; align-items: stretch; margin-bottom: 16px; flex-wrap: wrap; }
+    .toolbar .search {
+      flex: 1; min-width: 200px; padding: 9px 2px;
+      border: none; border-bottom: 1px solid var(--line-strong); border-radius: 0;
+      font-family: var(--mono); font-size: 13px; letter-spacing: .04em; outline: none;
+      background: transparent; color: var(--ink);
+      transition: border-color .18s ease;
+    }
+    .toolbar .search:focus { border-bottom-color: var(--accent); }
+    .toolbar .search::placeholder { color: var(--ink-3); }
+
+    /* 年份筛选 chips（图纸批注小方块） */
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
     .chip {
-      padding: 6px 15px; font-size: 13px;
-      border: 1px solid var(--paper-border); border-radius: 999px;
-      background: var(--paper); color: var(--paper-ink-2); cursor: pointer; transition: all .15s;
-      box-shadow: var(--paper-shadow);
+      padding: 6px 14px; cursor: pointer;
+      font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      border: 1px solid var(--line); border-radius: 2px;
+      background: transparent; color: var(--ink-2);
+      transition: all .15s ease;
     }
-    .chip:hover { color: var(--accent); border-color: var(--accent-line); }
-    .chip.active { background: var(--accent); border-color: var(--accent); color: #2c1c08; font-weight: 700; }
+    .chip:hover { border-color: var(--line-strong); color: var(--ink); }
+    .chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-    /* ---------- 便签墙：网格对齐，暖色米纸卡片 ---------- */
+    /* ---------- 便签墙：归档索引卡（微倾斜 = 钉在桌面上） ---------- */
     .board {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
+      gap: 18px;
+      align-items: start; /* 卡片贴合内容高度，不被同行长文拉成等高 */
       padding: 6px 0 20px;
     }
-
     .note-card {
       position: relative;
-      background: var(--paper);
-      border: 1px solid var(--paper-border);
-      border-radius: var(--radius);
-      padding: 22px 18px 18px;
-      color: var(--paper-ink);
-      box-shadow: var(--paper-shadow);
-      min-height: 92px;
-      transition: transform .35s cubic-bezier(.4, 0, .2, 1), box-shadow .35s cubic-bezier(.4, 0, .2, 1), border-color .3s;
-      animation: noteUp .5s cubic-bezier(.16, 1, .3, 1) both;
+      --rot: 0deg;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      padding: 14px 16px 18px;
+      color: var(--ink);
+      box-shadow: 0 1px 0 rgba(23, 18, 8, .05);
+      min-height: 96px;
+      transform: rotate(var(--rot));
+      transition: translate .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, border-color .3s ease;
+      animation: noteUp .55s cubic-bezier(.16, 1, .3, 1) both;
     }
-    /* 顶部柔和色条：保留色彩身份，但不喧宾夺主（替代原图钉装饰） */
-    .note-card::before {
-      content: ""; position: absolute; left: 18px; right: 18px; top: 0; height: 3px;
-      border-radius: 0 0 3px 3px;
-      background: var(--nc, var(--accent));
-      opacity: .82;
-      transition: opacity .3s, box-shadow .3s;
-    }
+    .note-card:nth-child(3n+1) { --rot: -.35deg; }
+    .note-card:nth-child(3n+2) { --rot: .3deg; }
+    .note-card:nth-child(3n)   { --rot: -.12deg; }
     .note-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--paper-shadow-hi);
+      translate: 0 -4px;
+      border-color: var(--line-strong);
+      box-shadow: 0 12px 26px rgba(23, 18, 8, .12), 0 1px 0 rgba(23, 18, 8, .06);
     }
-    .note-card:hover::before { box-shadow: 0 0 12px var(--nc, var(--accent)); opacity: 1; }
-
-    .note-time {
-      position: relative; font-family: var(--mono); font-size: 11.5px;
-      color: var(--paper-ink-3); font-variant-numeric: tabular-nums; margin-bottom: 9px;
+    .note-head {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+      margin-bottom: 10px; padding-right: 26px;
     }
+    .note-no { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-2); }
+    .note-no i {
+      width: 9px; height: 9px; border-radius: 2px; background: var(--nc, var(--accent));
+      transition: box-shadow .25s ease;
+    }
+    .note-card:hover .note-no i { box-shadow: 0 0 0 3px color-mix(in srgb, var(--nc, var(--accent)) 22%, transparent); }
+    .note-time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--ink-3); }
     .note-text {
-      position: relative; font-size: 14.5px; line-height: 1.72; color: var(--paper-ink);
+      font-size: 14.5px; line-height: 1.72; color: var(--ink-2);
       white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
     }
     .note-del {
-      position: absolute; top: 10px; right: 12px; z-index: 3;
-      border: none; background: none; color: var(--paper-ink-4); font-size: 17px; line-height: 1;
-      cursor: pointer; opacity: 0; transition: opacity .15s, color .15s; padding: 2px 6px; border-radius: 7px;
+      position: absolute; top: 8px; right: 8px; z-index: 3;
+      border: none; background: none; color: var(--ink-3);
+      font-family: var(--mono); font-size: 16px; line-height: 1;
+      cursor: pointer; opacity: 0; transition: opacity .15s, color .15s, background .15s;
+      padding: 3px 7px; border-radius: 2px;
     }
-    .note-card:hover .note-del { opacity: 1; }
-    .note-del:hover { color: #c0392b; background: rgba(192, 57, 43, .1); }
+    .note-card:hover .note-del, .note-del:focus-visible { opacity: 1; }
+    .note-del:hover { color: var(--paper); background: var(--accent); }
 
-    .note-empty { padding: 56px 0; text-align: center; color: var(--ink-3); font-size: 14px; grid-column: 1 / -1; }
-    .note-loading { padding: 56px 0; text-align: center; color: var(--ink-3); font-size: 14px; grid-column: 1 / -1; }
+    .note-empty, .note-loading {
+      padding: 64px 0; text-align: center; grid-column: 1 / -1;
+      font-family: var(--mono); font-size: 12px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3);
+    }
 
     @keyframes noteUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; translate: 0 18px; }
+      to { opacity: 1; translate: 0 0; }
     }
-    @media (prefers-reduced-motion: reduce) { .note-card { animation: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .note-card { animation: none; transition: none; }
+      .btn:hover, .btn-ghost:hover { transform: none; }
+    }
 
-    /* ---------- 页脚 ---------- */
-    .site-footer { border-top: 1px solid var(--line); padding: 26px 0 34px; position: relative; z-index: 1; }
-    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .footer-brand { font-size: 12.5px; color: var(--ink-3); }
-    .footer-powered { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-4); }
+    /* ---------- 页脚（与主站一致，0 链接） ---------- */
+    .site-footer { border-top: 2px solid var(--ink); padding: 30px 0 40px; position: relative; z-index: 1; }
+    .footer-inner {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+    }
+    .footer-brand { font-weight: 700; color: var(--ink); }
+    .footer-inner .sep { color: var(--accent); }
 
     @media (max-width: 640px) {
-      .note-wrap { padding: 40px 0 56px; }
-      .board { gap: 16px; grid-template-columns: 1fr; }
+      .container { padding: 0 20px; }
+      .note-wrap { padding: 40px 0 64px; }
+      .board { gap: 14px; grid-template-columns: 1fr; }
+      .reg.tl, .reg.tr { display: none; }
+      .header-reg { display: none; }
+      .composer { padding-top: 24px; }
     }
   </style>
 </head>
 <body>
-  <!-- 全站固定深空背景（与主站一致） -->
-  <div class="cosmos" aria-hidden="true">
-    <div class="stars-b"></div>
-    <div class="stardust" id="stardust"></div>
-  </div>
-  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
-
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/">
-        <span class="mark">R</span>
         <span class="wm-name">RCJ Lab</span>
+        <span class="wm-sub">Field Notes</span>
       </a>
-      <div class="nav-right">
-        <a class="nav-link" href="https://blog.955827.xyz">Blog</a>
-      </div>
+      <span class="header-reg">SHT. <b>NOTE-01</b> · 2026</span>
+      <a class="nav-link" href="https://blog.955827.xyz">Blog ↗</a>
     </div>
   </header>
 
   <main class="container">
     <div class="note-wrap">
       <div class="note-hero">
-        <p class="note-eyebrow">Private Notes</p>
-        <h1>Notes</h1>
-        <p>Jot down whatever comes to mind — keep it short. The board will look after every note.</p>
+        <span class="reg tl" aria-hidden="true"></span>
+        <span class="reg tr" aria-hidden="true"></span>
+        <p class="note-eyebrow">Archive · Private</p>
+        <h1>Notes <em>on file.</em></h1>
+        <div class="hero-meta-row">
+          <p class="hero-sub">Jot down whatever comes to mind — keep it short. The drawer keeps every card.</p>
+          <span class="hero-count" id="count">— ON FILE</span>
+        </div>
       </div>
 
       <div class="composer">
+        <span class="fig">Fig. <b>01</b> — New Entry</span>
         <textarea id="input" placeholder="Write something… (Ctrl+Enter to save)"></textarea>
         <div class="c-foot">
           <span class="c-hint" id="hint"></span>
@@ -309,7 +326,7 @@
       </div>
 
       <div class="toolbar">
-        <input class="search" id="search" type="search" placeholder="Search notes…" oninput="onSearch(this.value)" />
+        <input class="search" id="search" type="search" placeholder="SEARCH THE DRAWER…" oninput="onSearch(this.value)" />
         <button class="btn-ghost" onclick="exportNotes('json')">Export JSON</button>
         <button class="btn-ghost" onclick="exportNotes('md')">Export MD</button>
       </div>
@@ -321,78 +338,13 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-brand">© 2026 RCJ Lab · Independent Digital Studio</span>
-      <span class="footer-powered">Powered by Cloudflare Pages</span>
+      <span class="footer-brand">© 2026 RCJ Lab</span>
+      <span class="sep" aria-hidden="true">✦</span>
+      <span>Powered by Cloudflare Pages</span>
+      <span class="sep" aria-hidden="true">✦</span>
+      <span>Filed by hand, kept on paper.</span>
     </div>
   </footer>
-
-  <script>
-  (function () {
-    'use strict';
-
-    /* 随机相位冷光星点 + 萤火虫暖黄光点（与主站一致；reduced-motion 不生成） */
-    (function buildStardust() {
-      var box = document.getElementById('stardust');
-      if (!box) return;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var PALETTE = [
-        { c: '#fff3dd', glow: 'rgba(255,230,190,.85)', soft: 'rgba(245,200,130,.35)' },
-        { c: '#ffdfa8', glow: 'rgba(250,205,130,.8)', soft: 'rgba(240,180,90,.3)' },
-        { c: '#f7c566', glow: 'rgba(245,179,85,.8)', soft: 'rgba(230,160,70,.3)' }
-      ];
-      var w = window.innerWidth;
-      var desktop = w >= 640;
-      var N = w < 640 ? 26 : (w >= 1600 ? 90 : 64);
-      var frag = document.createDocumentFragment();
-      for (var i = 0; i < N; i++) {
-        var p = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-        var travel = document.createElement('div');
-        travel.className = 'sd-travel';
-        var size = desktop ? (2.5 + Math.random() * 4) : (2 + Math.random() * 3);
-        var bd = desktop ? (2.5 + Math.random() * 3.5) : (3 + Math.random() * 5);
-        var bdelay = -(Math.random() * 10);
-        var fd = desktop ? (14 + Math.random() * 14) : (16 + Math.random() * 18);
-        var fdelay = -(Math.random() * 20);
-        var path = 'sd-f' + (1 + Math.floor(Math.random() * 4));
-        travel.style.setProperty('--x', (Math.random() * 100) + '%');
-        travel.style.setProperty('--y', (Math.random() * 100) + '%');
-        travel.style.animation = path + ' ' + fd + 's ease-in-out infinite';
-        travel.style.animationDelay = fdelay + 's';
-        var dot = document.createElement('div');
-        dot.className = 'sd-dot';
-        dot.style.setProperty('--s', size + 'px');
-        dot.style.setProperty('--c', p.c);
-        dot.style.setProperty('--glow', p.glow);
-        dot.style.setProperty('--glow-soft', p.soft);
-        dot.style.setProperty('--bd', bd + 's');
-        dot.style.setProperty('--bdelay', bdelay + 's');
-        travel.appendChild(dot);
-        frag.appendChild(travel);
-      }
-      box.appendChild(frag);
-    })();
-
-    (function buildFireflies() {
-      var box = document.getElementById('fireflies');
-      if (!box) return;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var frag = document.createDocumentFragment();
-      var N = window.innerWidth < 640 ? 12 : 20;
-      for (var i = 0; i < N; i++) {
-        var s = document.createElement('i');
-        var size = (2.5 + Math.random() * 4).toFixed(1);
-        s.style.cssText = 'left:' + (Math.random() * 100).toFixed(1) + '%;bottom:-12px;width:' + size + 'px;height:' + size + 'px;' +
-          '--t:' + (9 + Math.random() * 10).toFixed(1) + 's;' +
-          '--d:' + (Math.random() * 7).toFixed(1) + 's;' +
-          '--dx:' + (Math.random() * 140 - 70).toFixed(0) + 'px;' +
-          '--o:' + (0.5 + Math.random() * 0.5).toFixed(2) + ';' +
-          '--o2:' + (0.2 + Math.random() * 0.3).toFixed(2) + ';';
-        frag.appendChild(s);
-      }
-      box.appendChild(frag);
-    })();
-  })();
-  </script>
 
   <script>
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -400,8 +352,8 @@
     let ALL_NOTES = [];
     let state = { q: '', year: null };
 
-    // 便签顶部色条调色板（暖色系，呼应主站琥珀）
-    const BAR_COLORS = ['#f5b355', '#e89ab8', '#7fc9a4', '#7ea8e8', '#b3a1e8', '#e8b27f', '#6fc9c9'];
+    // 归档卡左上角标色调色板（暖色系，哈希取色保持每条稳定）
+    const BAR_COLORS = ['#c65414', '#b3401e', '#8a6a1f', '#3f6f4f', '#1a3591', '#6b4a8f', '#8a3b52'];
 
     function hashStr(s) {
       let h = 0;
@@ -438,20 +390,26 @@
     function fmtTime(iso) {
       const d = new Date(iso);
       if (isNaN(d)) return '';
-      const now = new Date();
       const pad = (n) => (n < 10 ? '0' + n : '' + n);
+      const now = new Date();
       const sameDay = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
-      if (sameDay) return '今天 ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      const hm = pad(d.getHours()) + ':' + pad(d.getMinutes());
+      const md = pad(d.getMonth() + 1) + '.' + pad(d.getDate());
+      if (sameDay) return 'Today ' + hm;
       const sameYear = d.getFullYear() === now.getFullYear();
-      return (sameYear ? '' : d.getFullYear() + '年') + (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      return (sameYear ? '' : d.getFullYear() + '.') + md + ' ' + hm;
     }
 
-    function noteOf(n) {
+    function noteOf(n, num) {
       const h = hashStr(n.id || '');
       const nc = BAR_COLORS[h % BAR_COLORS.length];
+      const no = 'NO.' + String(num).padStart(3, '0');
       return '<article class="note-card" style="--nc:' + nc + '">'
-        + '<button class="note-del" title="删除" data-id="' + n.id + '">×</button>'
-        + '<div class="note-time">' + esc(fmtTime(n.created_at)) + '</div>'
+        + '<button class="note-del" title="Delete" data-id="' + n.id + '">×</button>'
+        + '<div class="note-head">'
+        + '<span class="note-no"><i aria-hidden="true"></i>' + no + '</span>'
+        + '<span class="note-time">' + esc(fmtTime(n.created_at)) + '</span>'
+        + '</div>'
         + '<div class="note-text">' + esc(n.text) + '</div>'
         + '</article>';
     }
@@ -481,22 +439,35 @@
       if (state.year != null) notes = notes.filter((n) => new Date(n.created_at).getFullYear() === state.year);
       if (q) notes = notes.filter((n) => (n.text || '').toLowerCase().includes(q));
 
-      if (!ALL_NOTES.length) { el.innerHTML = '<div class="note-empty">No notes yet — write the first one.</div>'; return; }
-      if (!notes.length) { el.innerHTML = '<div class="note-empty">No matching notes.</div>'; return; }
+      // 稳定编号：全量按旧→新编号（最老 = NO.001），筛选/搜索不改变已有序号
+      const numMap = new Map(
+        [...ALL_NOTES]
+          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+          .map((n, i) => [n.id, i + 1])
+      );
 
-      // 新→旧排列
+      if (!ALL_NOTES.length) { el.innerHTML = '<div class="note-empty">Empty drawer — write the first entry.</div>'; return; }
+      if (!notes.length) { el.innerHTML = '<div class="note-empty">No matching entries.</div>'; return; }
+
+      // 新→旧展示
       const sorted = [...notes].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      el.innerHTML = sorted.map((n) => noteOf(n)).join('');
-      // 交错入场，但不破坏布局
+      el.innerHTML = sorted.map((n) => noteOf(n, numMap.get(n.id) || 0)).join('');
+      // 交错入场，不破坏布局
       el.querySelectorAll('.note-card').forEach((card, i) => { card.style.animationDelay = Math.min(i, 24) * 50 + 'ms'; });
       el.querySelectorAll('.note-del').forEach((b) => {
         b.addEventListener('click', () => del(b.dataset.id));
       });
     }
 
+    function updateCount() {
+      const el = document.getElementById('count');
+      const n = ALL_NOTES.length;
+      el.textContent = n === 0 ? '0 ON FILE' : (n === 1 ? '1 ENTRY ON FILE' : n + ' ENTRIES ON FILE');
+    }
+
     async function load() {
       const el = document.getElementById('list');
-      el.innerHTML = '<div class="note-loading">读取中…</div>';
+      el.innerHTML = '<div class="note-loading">Loading…</div>';
       const r = await api('GET', '/api/notes');
       if (!r.ok || !r.data || !r.data.ok) {
         el.innerHTML = '<div class="note-empty">Failed to load: ' + esc((r.data && r.data.error) || 'Unknown error') + '</div>';
@@ -505,6 +476,7 @@
       ALL_NOTES = r.data.notes || [];
       state.q = ''; state.year = null;
       document.getElementById('search').value = '';
+      updateCount();
       buildChips();
       render();
     }
@@ -564,7 +536,7 @@
     function updateHint(text) {
       const h = document.getElementById('hint');
       h.textContent = text || '';
-      h.classList.toggle('warn', !!text && /上限|过长/.test(text));
+      h.classList.toggle('warn', !!text && /上限|过长|Limit|failed/i.test(text));
     }
 
     document.getElementById('input').addEventListener('keydown', (e) => {
